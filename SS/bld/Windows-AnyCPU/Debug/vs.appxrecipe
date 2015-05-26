@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Machine>LOVELACE</Machine>
+    <WindowsUser>Damian</WindowsUser>
+    <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
+    <SolutionConfiguration>debug|anycpu</SolutionConfiguration>
+    <PackageArchitecture>neutral</PackageArchitecture>
+    <PackageIdentityName>io.cordova.myapp2c64515190b44251ad401b7589cc1d2e</PackageIdentityName>
+    <IntermediateOutputPath>C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\build\windows\bld\</IntermediateOutputPath>
+    <RegisteredManifestChecksum>C85C57A4061946633A3655B1D1A82C282007BEA1451251BAE12820D414AB731B</RegisteredManifestChecksum>
+    <RegisteredPackageMoniker>io.cordova.myapp2c64515190b44251ad401b7589cc1d2e_1.0.0.0_neutral__54dbk1tt7zbhy</RegisteredPackageMoniker>
+    <RegisteredUserModeAppID>io.cordova.myapp2c64515190b44251ad401b7589cc1d2e_54dbk1tt7zbhy!io.cordova.myapp2c64515190b44251ad401b7589cc1d2e</RegisteredUserModeAppID>
+    <RegisteredPackageID>io.cordova.myapp2c64515190b44251ad401b7589cc1d2e</RegisteredPackageID>
+    <RegisteredPackagePublisher>CN=Apache Cordova Temp Cert</RegisteredPackagePublisher>
+    <RegisteredVersion>1.0.0.0</RegisteredVersion>
+    <JitOptimizationSuppressed>True</JitOptimizationSuppressed>
+  </PropertyGroup>
+  <ItemGroup>
+    <AppXManifest Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\build\windows\debug\anycpu\AppxManifest.xml">
+      <PackagePath>AppxManifest.xml</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2015-05-26T01:02:41.054</Modified>
+    </AppXManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\images\SplashScreen.scale-100.png">
+      <PackagePath>images\SplashScreen.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2015-05-26T01:02:38.666</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\images\Square150x150Logo.scale-100.png">
+      <PackagePath>images\Square150x150Logo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2015-05-26T01:02:38.587</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\images\Square30x30Logo.scale-100.png">
+      <PackagePath>images\Square30x30Logo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2015-05-26T01:02:38.596</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\images\Square310x310Logo.scale-100.png">
+      <PackagePath>images\Square310x310Logo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2015-05-26T01:01:48.917</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\images\Square70x70Logo.scale-100.png">
+      <PackagePath>images\Square70x70Logo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2015-05-26T01:02:38.612</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\images\StoreLogo.scale-100.png">
+      <PackagePath>images\StoreLogo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2015-05-26T01:02:38.616</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\images\Wide310x150Logo.scale-100.png">
+      <PackagePath>images\Wide310x150Logo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2015-05-26T01:02:38.647</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\arrows.png">
+      <PackagePath>www\images\arrows.png</PackagePath>
+      <Modified>2015-05-26T01:02:36.955</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\charStatDown.png">
+      <PackagePath>www\images\charStatDown.png</PackagePath>
+      <Modified>2015-05-26T01:02:36.978</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\charStatLeft.png">
+      <PackagePath>www\images\charStatLeft.png</PackagePath>
+      <Modified>2015-05-26T01:02:36.986</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\charStatUp.png">
+      <PackagePath>www\images\charStatUp.png</PackagePath>
+      <Modified>2015-05-26T01:02:36.988</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\empty.png">
+      <PackagePath>www\images\empty.png</PackagePath>
+      <Modified>2015-05-26T01:02:36.990</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\filled.png">
+      <PackagePath>www\images\filled.png</PackagePath>
+      <Modified>2015-05-26T01:02:37.007</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\floors.png">
+      <PackagePath>www\images\floors.png</PackagePath>
+      <Modified>2015-05-26T01:02:37.010</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\none.png">
+      <PackagePath>www\images\none.png</PackagePath>
+      <Modified>2015-05-26T01:02:37.024</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\npcFollower.png">
+      <PackagePath>www\images\npcFollower.png</PackagePath>
+      <Modified>2015-05-26T01:02:37.027</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\npcStatDown.png">
+      <PackagePath>www\images\npcStatDown.png</PackagePath>
+      <Modified>2015-05-26T01:02:37.041</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\npcStatDownArrow.png">
+      <PackagePath>www\images\npcStatDownArrow.png</PackagePath>
+      <Modified>2015-05-26T01:02:37.060</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\npcStatLeft.png">
+      <PackagePath>www\images\npcStatLeft.png</PackagePath>
+      <Modified>2015-05-26T01:02:37.062</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\npcStatLeftArrow.png">
+      <PackagePath>www\images\npcStatLeftArrow.png</PackagePath>
+      <Modified>2015-05-26T01:02:37.073</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\npcStatRight.png">
+      <PackagePath>www\images\npcStatRight.png</PackagePath>
+      <Modified>2015-05-26T01:02:37.099</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\npcStatRightArrow.png">
+      <PackagePath>www\images\npcStatRightArrow.png</PackagePath>
+      <Modified>2015-05-26T01:02:37.121</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\npcStatUp.png">
+      <PackagePath>www\images\npcStatUp.png</PackagePath>
+      <Modified>2015-05-26T01:02:37.124</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\npcStatUpArrow.png">
+      <PackagePath>www\images\npcStatUpArrow.png</PackagePath>
+      <Modified>2015-05-26T01:02:37.133</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\teleporter-old.png">
+      <PackagePath>www\images\teleporter-old.png</PackagePath>
+      <Modified>2015-05-26T01:02:37.154</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\teleporter.png">
+      <PackagePath>www\images\teleporter.png</PackagePath>
+      <Modified>2015-05-26T01:02:37.175</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\walls.png">
+      <PackagePath>www\images\walls.png</PackagePath>
+      <Modified>2015-05-26T01:02:37.221</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\cordova.js">
+      <PackagePath>www\cordova.js</PackagePath>
+      <Modified>2015-05-26T01:02:37.746</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\cordova_plugins.js">
+      <PackagePath>www\cordova_plugins.js</PackagePath>
+      <Modified>2015-05-26T01:02:37.801</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\js\ArgyleEngine.js">
+      <PackagePath>www\js\ArgyleEngine.js</PackagePath>
+      <Modified>2015-05-26T01:02:37.283</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\js\game.js">
+      <PackagePath>www\js\game.js</PackagePath>
+      <Modified>2015-05-26T01:02:37.813</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\js\hud.js">
+      <PackagePath>www\js\hud.js</PackagePath>
+      <Modified>2015-05-26T01:02:37.331</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\js\NPC.js">
+      <PackagePath>www\js\NPC.js</PackagePath>
+      <Modified>2015-05-26T01:02:37.366</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\js\player.js">
+      <PackagePath>www\js\player.js</PackagePath>
+      <Modified>2015-05-26T01:02:37.385</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\js\Teleporter.js">
+      <PackagePath>www\js\Teleporter.js</PackagePath>
+      <Modified>2015-05-26T01:02:37.408</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\lib\jquery.js">
+      <PackagePath>www\lib\jquery.js</PackagePath>
+      <Modified>2015-05-26T01:02:37.843</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\scripts\appBundle.js">
+      <PackagePath>www\scripts\appBundle.js</PackagePath>
+      <Modified>2015-05-26T01:02:37.853</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\scripts\index.js">
+      <PackagePath>www\scripts\index.js</PackagePath>
+      <Modified>2015-05-26T01:02:37.527</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\scripts\platformOverrides.js">
+      <PackagePath>www\scripts\platformOverrides.js</PackagePath>
+      <Modified>2015-05-26T01:02:37.653</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\scripts\winstore-jscompat.js">
+      <PackagePath>www\scripts\winstore-jscompat.js</PackagePath>
+      <Modified>2015-05-26T01:02:37.679</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\css\index.css">
+      <PackagePath>www\css\index.css</PackagePath>
+      <Modified>2015-05-26T01:02:37.805</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\images\Thumbs.db">
+      <PackagePath>www\images\Thumbs.db</PackagePath>
+      <Modified>2015-05-26T01:02:37.219</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\index.html">
+      <PackagePath>www\index.html</PackagePath>
+      <Modified>2015-05-26T01:02:37.260</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\js\ArgyleEngine.js.map">
+      <PackagePath>www\js\ArgyleEngine.js.map</PackagePath>
+      <Modified>2015-05-26T01:02:37.287</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\js\game.js.map">
+      <PackagePath>www\js\game.js.map</PackagePath>
+      <Modified>2015-05-26T01:02:37.320</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\js\hud.js.map">
+      <PackagePath>www\js\hud.js.map</PackagePath>
+      <Modified>2015-05-26T01:02:37.334</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\js\NPC.js.map">
+      <PackagePath>www\js\NPC.js.map</PackagePath>
+      <Modified>2015-05-26T01:02:37.367</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\js\player.js.map">
+      <PackagePath>www\js\player.js.map</PackagePath>
+      <Modified>2015-05-26T01:02:37.387</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\js\Teleporter.js.map">
+      <PackagePath>www\js\Teleporter.js.map</PackagePath>
+      <Modified>2015-05-26T01:02:37.411</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\scripts\appBundle.js.map">
+      <PackagePath>www\scripts\appBundle.js.map</PackagePath>
+      <Modified>2015-05-26T01:02:37.495</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\js\ArgyleEngine.ts">
+      <PackagePath>www\js\ArgyleEngine.ts</PackagePath>
+      <Modified>2015-05-26T01:02:37.295</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\js\game.ts">
+      <PackagePath>www\js\game.ts</PackagePath>
+      <Modified>2015-05-26T01:02:37.326</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\js\hud.ts">
+      <PackagePath>www\js\hud.ts</PackagePath>
+      <Modified>2015-05-26T01:02:37.335</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\js\NPC.ts">
+      <PackagePath>www\js\NPC.ts</PackagePath>
+      <Modified>2015-05-26T01:02:37.369</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\js\player.ts">
+      <PackagePath>www\js\player.ts</PackagePath>
+      <Modified>2015-05-26T01:02:37.393</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\js\Teleporter.ts">
+      <PackagePath>www\js\Teleporter.ts</PackagePath>
+      <Modified>2015-05-26T01:02:37.412</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\lib\jquery.d.ts">
+      <PackagePath>www\lib\jquery.d.ts</PackagePath>
+      <Modified>2015-05-26T01:02:37.423</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\sounds\SneakySnake Theme.wav">
+      <PackagePath>www\sounds\SneakySnake Theme.wav</PackagePath>
+      <Modified>2015-05-26T01:02:37.617</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\www\sounds\walking-1.mp3">
+      <PackagePath>www\sounds\walking-1.mp3</PackagePath>
+      <Modified>2015-05-26T01:02:37.645</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\config.xml">
+      <PackagePath>config.xml</PackagePath>
+      <Modified>2015-05-26T01:02:40.520</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\build\windows\debug\anycpu\resources.pri">
+      <PackagePath>resources.pri</PackagePath>
+      <Modified>2015-05-26T01:02:40.888</Modified>
+    </AppxPackagedFile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResolvedSDKReference Include="C:\Program Files %28x86%29\Microsoft SDKs\Windows\v8.1\ExtensionSDKs\Microsoft.WinJS.2.0\1.0\">
+      <Name>Microsoft.WinJS.2.0</Name>
+      <Version>1.0.9600.16408</Version>
+      <Architecture>Neutral</Architecture>
+      <FrameworkIdentity>Name=Microsoft.WinJS.2.0, MinVersion=1.0.9600.16408</FrameworkIdentity>
+      <AppxLocation>C:\Program Files %28x86%29\Microsoft SDKs\Windows\v8.1\ExtensionSDKs\Microsoft.WinJS.2.0\1.0\Microsoft.WinJS.2.0.appx</AppxLocation>
+      <MoreInfo>http://go.microsoft.com/fwlink/%3fLinkId=260891</MoreInfo>
+    </ResolvedSDKReference>
+  </ItemGroup>
+</Project>
