@@ -6,7 +6,7 @@ class NPC extends Interactable {
     private followIndex: number;
     public interactable: boolean = true;
     private sightType: number;
-    private turning: number;
+    private turnCounter: number;
     public rot: number;
     public gPos: Vector2;
     private temp: Vector2;
@@ -14,6 +14,8 @@ class NPC extends Interactable {
     private superTemp: number = 0;
     private tempi: number = 0;
     private sight: number = 4;
+	private static turnMin = 20;
+	private static turnMax = 200;
 
     // Function to see if the player has crossed the npc's vision and to change the anim
     private look(target: Vector2, collision: any) {
@@ -81,24 +83,20 @@ class NPC extends Interactable {
 
     // Pseudo-randomly rotate the npc's in either a clockwise, anti-clockwise, or random direction
     private rotate() {
-        this.turning = Math.floor(Math.random() * 125);
-        if (this.turning == 0) {
+        if (this.turnCounter == 0) {
             if (this.sightType == 0) {
-                this.rot++;
-                if (this.rot > 3)
-                    this.rot = 0;
+                this.rot = ++this.rot % 4;
             } else if (this.sightType == 1) {
-                this.rot--;
-                if (this.rot < 0)
-                    this.rot = 3;
+                this.rot = --this.rot % 4;
             } else if (this.sightType == 2) {
                 this.rot += (Math.round(Math.random())) ? 1 : -1;
-                if (this.rot < 0)
-                    this.rot = 3;
-                else if (this.rot > 3)
-                    this.rot = 0;
-            }
-        }
+                this.rot %= 4;
+			}
+            else if (this.rot > 3)
+                this.rot = 0;
+			this.turnCounter = randBetween(NPC.turnMin, NPC.turnMax, true);
+        } else
+			this.turnCounter--;
     }
 
     // Change the anim to the correct idle anim
@@ -156,6 +154,7 @@ class NPC extends Interactable {
         this.followIndex = -5;
         this.rot = 0;
         this.seen = false;
+		this.turnCounter = randBetween(NPC.turnMin, NPC.turnMax, true);
 
         // Pick a random turn type
         this.sightType = Math.floor(Math.random() * 3); // 0 = cw, 1 = ccw, 2 = rand

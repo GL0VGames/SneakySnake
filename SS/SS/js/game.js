@@ -62,15 +62,15 @@ var OHDHGame = (function () {
         for (var y = 0; y < floor.grid.length; y++) {
             for (var x = 0; x < floor.grid[y].length; x++) {
                 var screen_coords = gridToScreen(x, y);
-                if (floor.grid[x][y].type == 0 /* FLOOR */) {
+                if (floor.grid[x][y].type == RTypes.FLOOR) {
                     var tile = new FloorTile(screen_coords.x, screen_coords.y);
                     tile.setZ(-1);
                     this.staticObjs.push(tile);
                 }
-                else if (floor.grid[x][y].type == 1 /* WALL */) {
+                else if (floor.grid[x][y].type == RTypes.WALL) {
                     this.staticObjs.push(new WallTile(screen_coords.x, screen_coords.y));
                 }
-                else if (floor.grid[x][y].type == 2 /* DOOR */) {
+                else if (floor.grid[x][y].type == RTypes.DOOR) {
                     this.staticObjs.push(new FloorTile(screen_coords.x, screen_coords.y));
                 }
             }
@@ -78,7 +78,7 @@ var OHDHGame = (function () {
         // Spawn teleporter to next level
         tempx = Math.floor(Math.random() * this.floorSize);
         tempy = Math.floor(Math.random() * this.floorSize);
-        while (floor.grid[tempx][tempy].type == 1 /* WALL */) {
+        while (floor.grid[tempx][tempy].type == RTypes.WALL) {
             tempx = Math.floor(Math.random() * this.floorSize);
             tempy = Math.floor(Math.random() * this.floorSize);
         }
@@ -100,7 +100,7 @@ var OHDHGame = (function () {
             tempx = Math.floor(Math.random() * this.floorSize);
             tempy = Math.floor(Math.random() * this.floorSize);
             tempVect = new Vector2(tempx, tempy);
-            while (floor.grid[tempx][tempy].type == 1 /* WALL */ || collide(tempVect, this.NPCs) || cmpVector2(gridToScreen(tempVect), this.currTeleporter.pos) || (tempVect.x < 6 && tempVect.y == 1) || (tempVect.x == 1 && tempVect.y < 6)) {
+            while (floor.grid[tempx][tempy].type == RTypes.WALL || collide(tempVect, this.NPCs) || cmpVector2(gridToScreen(tempVect), this.currTeleporter.pos) || (tempVect.x < 6 && tempVect.y == 1) || (tempVect.x == 1 && tempVect.y < 6)) {
                 tempx = Math.floor(Math.random() * this.floorSize);
                 tempy = Math.floor(Math.random() * this.floorSize);
                 tempVect = new Vector2(tempx, tempy);

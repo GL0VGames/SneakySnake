@@ -24,6 +24,7 @@ var NPC = (function (_super) {
         this.followIndex = -5;
         this.rot = 0;
         this.seen = false;
+        this.turnCounter = randBetween(NPC.turnMin, NPC.turnMax, true);
         // Pick a random turn type
         this.sightType = Math.floor(Math.random() * 3); // 0 = cw, 1 = ccw, 2 = rand
     }
@@ -90,26 +91,23 @@ var NPC = (function (_super) {
     };
     // Pseudo-randomly rotate the npc's in either a clockwise, anti-clockwise, or random direction
     NPC.prototype.rotate = function () {
-        this.turning = Math.floor(Math.random() * 125);
-        if (this.turning == 0) {
+        if (this.turnCounter == 0) {
             if (this.sightType == 0) {
-                this.rot++;
-                if (this.rot > 3)
-                    this.rot = 0;
+                this.rot = ++this.rot % 4;
             }
             else if (this.sightType == 1) {
-                this.rot--;
-                if (this.rot < 0)
-                    this.rot = 3;
+                this.rot = --this.rot % 4;
             }
             else if (this.sightType == 2) {
                 this.rot += (Math.round(Math.random())) ? 1 : -1;
-                if (this.rot < 0)
-                    this.rot = 3;
-                else if (this.rot > 3)
-                    this.rot = 0;
+                this.rot %= 4;
             }
+            else if (this.rot > 3)
+                this.rot = 0;
+            this.turnCounter = randBetween(NPC.turnMin, NPC.turnMax, true);
         }
+        else
+            this.turnCounter--;
     };
     // Change the anim to the correct idle anim
     NPC.prototype.changeAnim = function (anim) {
@@ -148,6 +146,8 @@ var NPC = (function (_super) {
                 this.look(p.following[this.tempi].gPos, collision);
         }
     };
+    NPC.turnMin = 20;
+    NPC.turnMax = 200;
     return NPC;
 })(Interactable);
 //# sourceMappingURL=NPC.js.map
