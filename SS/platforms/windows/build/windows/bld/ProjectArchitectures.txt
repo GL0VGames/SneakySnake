@@ -1,1 +1,0 @@
-C:\Users\Damian\Documents\gl0v\SS\SS\SS\platforms\windows\CordovaApp.Windows.jsproj;neutral
