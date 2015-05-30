@@ -96,7 +96,7 @@ var NPC = (function (_super) {
                 this.rot = ++this.rot % 4;
             }
             else if (this.sightType == 1) {
-                this.rot = --this.rot % 4;
+                this.rot = (this.rot + 3) % 4;
             }
             else if (this.sightType == 2) {
                 this.rot += (Math.round(Math.random())) ? 1 : -1;

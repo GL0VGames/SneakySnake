@@ -62,15 +62,15 @@ var OHDHGame = (function () {
         for (var y = 0; y < floor.grid.length; y++) {
             for (var x = 0; x < floor.grid[y].length; x++) {
                 var screen_coords = gridToScreen(x, y);
-                if (floor.grid[x][y].type == RTypes.FLOOR) {
+                if (floor.grid[x][y].type == 0 /* FLOOR */) {
                     var tile = new FloorTile(screen_coords.x, screen_coords.y);
                     tile.setZ(-1);
                     this.staticObjs.push(tile);
                 }
-                else if (floor.grid[x][y].type == RTypes.WALL) {
+                else if (floor.grid[x][y].type == 1 /* WALL */) {
                     this.staticObjs.push(new WallTile(screen_coords.x, screen_coords.y));
                 }
-                else if (floor.grid[x][y].type == RTypes.DOOR) {
+                else if (floor.grid[x][y].type == 2 /* DOOR */) {
                     this.staticObjs.push(new FloorTile(screen_coords.x, screen_coords.y));
                 }
             }
@@ -78,7 +78,7 @@ var OHDHGame = (function () {
         // Spawn teleporter to next level
         tempx = Math.floor(Math.random() * this.floorSize);
         tempy = Math.floor(Math.random() * this.floorSize);
-        while (floor.grid[tempx][tempy].type == RTypes.WALL) {
+        while (floor.grid[tempx][tempy].type == 1 /* WALL */) {
             tempx = Math.floor(Math.random() * this.floorSize);
             tempy = Math.floor(Math.random() * this.floorSize);
         }
@@ -100,7 +100,7 @@ var OHDHGame = (function () {
             tempx = Math.floor(Math.random() * this.floorSize);
             tempy = Math.floor(Math.random() * this.floorSize);
             tempVect = new Vector2(tempx, tempy);
-            while (floor.grid[tempx][tempy].type == RTypes.WALL || collide(tempVect, this.NPCs) || cmpVector2(gridToScreen(tempVect), this.currTeleporter.pos) || (tempVect.x < 6 && tempVect.y == 1) || (tempVect.x == 1 && tempVect.y < 6)) {
+            while (floor.grid[tempx][tempy].type == 1 /* WALL */ || collide(tempVect, this.NPCs) || cmpVector2(gridToScreen(tempVect), this.currTeleporter.pos) || (tempVect.x < 6 && tempVect.y == 1) || (tempVect.x == 1 && tempVect.y < 6)) {
                 tempx = Math.floor(Math.random() * this.floorSize);
                 tempy = Math.floor(Math.random() * this.floorSize);
                 tempVect = new Vector2(tempx, tempy);
@@ -200,12 +200,31 @@ var OHDHGame = (function () {
         if (this.player.health <= 0) {
             clearInterval(this.tickID);
             var that = this;
+            var highscore;
+            var sHighscore;
+            // Save highscore
+            if (typeof (localStorage["highscore"]) == "undefined") {
+                highscore = [that.player.following.length];
+                sHighscore = JSON.stringify(highscore);
+                localStorage.setItem("highscore", sHighscore);
+            }
+            else {
+                highscore = JSON.parse(localStorage.getItem("highscore"));
+                highscore.push(that.player.following.length);
+                highscore = highscore.sort(function (a, b) {
+                    return a - b;
+                }); // The function allows the sort to be on numbers instead of strings... I know it's dumb but that's how it works
+                sHighscore = JSON.stringify(highscore);
+                localStorage.setItem("highscore", sHighscore);
+            }
+            // Show stuff on screen
             setTimeout(function () {
                 that.renderer.ctx.fillStyle = "#DD1321";
                 that.renderer.ctx.font = "6.5em Inconsolata";
                 that.renderer.ctx.fillText("You've been seen!", that.renderer.canvas.width / 8, that.renderer.canvas.height / 2);
                 that.renderer.ctx.font = "3em Incosolata";
                 that.renderer.ctx.fillText("Score: " + that.player.following.length, that.renderer.canvas.width / 2.4, that.renderer.canvas.height / 1.5);
+                that.renderer.ctx.fillText("Highscore: " + highscore[highscore.length - 1], that.renderer.canvas.width / 2.8, that.renderer.canvas.height / 1.25);
             }, 400);
         }
     };
