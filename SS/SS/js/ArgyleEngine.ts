@@ -41,24 +41,32 @@ class Input {
 }
 
 class Animation {
-    bStatic: boolean;
-    frameSize: Vector2;
-    offset: Vector2;
-    image: HTMLImageElement;
-    sheetWidth: number;
+    public bStatic: boolean;
+    public frameSize: Vector2;
+    public offset: Vector2;
+    public image: HTMLImageElement;
+    public sheetWidth: number;
+	public name: string;
+	// For automatic anims
+	public frameCount: number = 0;
+	public frameCounterMax: number;
 
     public translate(ofst: Vector2) {
         this.offset = ofst;
     }
 
-    constructor(st: boolean, width: number, height: number, off_x: number, off_y: number) {
+	// Frames must be greater than 0 for animations
+    constructor(st: boolean, width: number, height: number, off_x: number, off_y: number, frames: number, name: string) {
         this.bStatic = st;
         this.frameSize = new Vector2(width, height);
         this.offset = new Vector2(off_x, off_y);
+		this.frameCounterMax = frames;
+		this.name = name;
     }
     public setImage(img) {
         this.image = img;
         this.sheetWidth = Math.floor(img.width / this.frameSize.x);
+		console.log(this.name + "= width: " + img.width + " framesize: " + this.frameSize.x + " divide: " + img.width / this.frameSize.x + " floor: " + Math.floor(img.width / this.frameSize.x) + " sheetWidth: " + this.sheetWidth);
     }
 }
 
@@ -67,7 +75,7 @@ class Obj {
     pos: Vector2;
     gPos: Vector2;
     currAnim: string;
-    animFrame: number;
+	animMan: AnimationManager;
     zIndex: number;
     interactable: boolean;
     // The "?" denotes an optional parameter, for those objects that don't need a vector2 it's not passed in
@@ -78,19 +86,19 @@ class Obj {
     public setZ(z): void {
         this.zIndex = z;
     }
-    constructor(x: number, y: number, anim?: string) {
+    constructor(x: number, y: number, anims: Array<Animation>, sAnim?: string) {
         this.pos = new Vector2(x, y);
-        this.currAnim = anim;
-        this.animFrame = 0;
+        this.currAnim = sAnim;
         this.zIndex = 0;
         this.interactable = false;
+		this.animMan = new AnimationManager(anims);
     }
 }
 
 class Interactable extends Obj {
     // Other stuff maybe, idk
-    constructor(x: number, y: number, z: number) {
-        super(x, y);
+    constructor(x: number, y: number, z: number, anims: Array<Animation>) {
+        super(x, y, anims);
         this.interactable = true;
         this.bStatic = true;
         this.zIndex = z;
@@ -99,9 +107,8 @@ class Interactable extends Obj {
 
 class CollisionTile extends Obj {
     bStatic = true;
-    constructor(x: number, y: number, anim: string) {
-        super(x, y);
-        this.currAnim = anim;
+    constructor(x: number, y: number, anims: Array<Animation>) {
+        super(x, y, anims);
         this.zIndex = 3;
     }
 }
@@ -111,16 +118,16 @@ class FloorTile extends Obj {
     public tick() {
         this.pos.x++;
     }
-    constructor(x: number, y: number) {
-        super(x, y);
+    constructor(x: number, y: number, anims: Array<Animation>) {
+        super(x, y, anims);
         this.currAnim = "floor";
     }
 }
 
 class WallTile extends Obj {
     bStatic = true;
-    constructor(x: number, y: number) {
-        super(x, y);
+    constructor(x: number, y: number, anims: Array<Animation>) {
+        super(x, y, anims);
         this.currAnim = "wall";
         this.zIndex = 5;
     }
@@ -128,8 +135,8 @@ class WallTile extends Obj {
 
 class DoorTile extends Obj {
     bStatic = true;
-    constructor(x: number, y: number) {
-        super(x, y);
+    constructor(x: number, y: number, anims: Array<Animation>) {
+        super(x, y, anims);
         this.currAnim = "door";
         this.zIndex = 5;
     }
@@ -197,40 +204,37 @@ class AssetManager {
         filled: "images/filled.png",
         empty: "images/empty.png",
         npcFollow: "images/npcFollower.png",
-        npcIdleD: "images/npcStatDown.png",
-        npcIdleL: "images/npcStatLeft.png",
-        npcIdleU: "images/npcStatUp.png",
-        npcIdleR: "images/npcStatRight.png",
+		npcFollowAnim: "images/npcFollowerAnim.png",
+		npcAll: "images/npcAll.png",
         npcIdleDSeen: "images/npcStatDown.png",
         npcIdleLSeen: "images/npcStatLeft.png",
         npcIdleUSeen: "images/npcStatUp.png",
         npcIdleRSeen: "images/npcStatRight.png",
-
+		testAnim: "images/testAnim.png",
     };
     public anims: { [index: string]: Animation; } = { //index matches imageURL index
-        none: new Animation(true, 64, 32, 32, 16),
-        floor: new Animation(true, 64, 32, 32, 16),
-        wall: new Animation(true, 64, 64, 32, 48),
-        teleporter: new Animation(true, 64, 48, 32, 32),
-        playerIdleD: new Animation(true, 64, 64, 32, 44),
-        playerIdleL: new Animation(true, 64, 64, 32, 44),
-        playerIdleU: new Animation(true, 64, 64, 32, 44),
-        playerWalkD: new Animation(true, 64, 64, 32, 64),
-        playerWalkL: new Animation(true, 64, 64, 32, 64),
-        playerWalkU: new Animation(true, 64, 64, 32, 64),
-        filled: new Animation(true, 64, 32, 32, 16),
-        empty: new Animation(true, 64, 32, 32, 16),
-        npcFollow: new Animation(true, 64, 64, 32, 40),
-        npcIdleD: new Animation(true, 64, 64, 32, 40),
-        npcIdleL: new Animation(true, 64, 64, 32, 40),
-        npcIdleU: new Animation(true, 64, 64, 32, 40),
-        npcIdleR: new Animation(true, 64, 64, 32, 40),
-        npcIdleDSeen: new Animation(true, 64, 64, 32, 60),
-        npcIdleLSeen: new Animation(true, 64, 64, 32, 60),
-        npcIdleUSeen: new Animation(true, 64, 64, 32, 60),
-        npcIdleRSeen: new Animation(true, 64, 64, 32, 60),
+        none: new Animation(true, 64, 32, 32, 16, 0, "none"),
+        floor: new Animation(true, 64, 32, 32, 16, 0, "floor"),
+        wall: new Animation(true, 64, 64, 32, 48, 0, "wall"),
+        teleporter: new Animation(true, 64, 48, 32, 32, 0, "teleporter"),
+        playerIdleD: new Animation(true, 64, 64, 32, 44, 0, "playerIdleD"),
+        playerIdleL: new Animation(true, 64, 64, 32, 44, 0, "playerIdleL"),
+        playerIdleU: new Animation(true, 64, 64, 32, 44, 0, "playerIdleU"),
+        playerWalkD: new Animation(true, 64, 64, 32, 64, 0, "playerWalkD"),
+        playerWalkL: new Animation(true, 64, 64, 32, 64, 0, "playerWalkL"),
+        playerWalkU: new Animation(true, 64, 64, 32, 64, 0, "playerWalkU"),
+        filled: new Animation(true, 64, 32, 32, 16, 0, "filled"),
+        empty: new Animation(true, 64, 32, 32, 16, 0, "empty"),
+        npcFollow: new Animation(true, 64, 64, 32, 40, 0, "npcFollow"),
+		npcFollowAnim: new Animation(false, 64, 64, 32, 40, 60, "npcFollowAnim"),
+		npcAll: new Animation(false, 64, 64, 32, 40, -1, "npcAll"),
+        npcIdleDSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleDSeen"),
+        npcIdleLSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleLSeen"),
+        npcIdleUSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleUSeen"),
+        npcIdleRSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleRSeen"),
+		testAnim: new Animation(false, 13, 32, 13, 32, 60, "testAnim"),
     };
-    public audio: any = {}; // Can't do : Array<HTMLAudioElement> because that doesn't support .addEventListener() for some odd reason
+    public audio: any = {}; // Can't do : Array<HTMLAudioElement> because that doesn't support .addEventListenerxr some odd reason
     private audioURLs: any = {
         "main": "sounds/SneakySnake Theme.wav",
 
@@ -244,6 +248,7 @@ class AssetManager {
     // Updates the loading bar when asset is loaded
     updateBar(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
         this.curr++;
+		var that = this;
 
         // Loading bar
         this.totalBar += this.barTickSize;
@@ -253,25 +258,31 @@ class AssetManager {
         ctx.fillRect(this.x, this.y, width, this.height);
 
         // Custom even handled in game.ts to start the game when all assets have loaded
-        $("body").trigger("assetLoaded", { "num": this.curr });
+        $("body").trigger("assetLoaded", {
+			"num": this.curr
+		});
+		$("body").on("assetLoaded", function (e, d) {
+			if (d.num >= that.total) {
+				// Assign image to anim
+				for (var j in that.anims)
+					that.anims[j].setImage(that.images[j]);
+				$("body").trigger("assetsFinished");
+			}
+		});
     }
 
     private preloader(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement): void {
         var that = this;
 
-        // Preload all images
-        for (var i in this.imageURLs) {
+        // Preload all images and put into anims
+        for (var i in this.anims) {
             this.images[i] = new Image();
             this.images[i].onload = function (): void {
                 that.updateBar(ctx, canvas);
             }
             this.images[i].src = this.imageURLs[i];
             this.imagesLength++;
-        }
 
-        // Assign Animation objects
-        for (var i in this.anims) {
-            this.anims[i].setImage(this.images[i])
         }
 
         // Preload all sounds
@@ -320,6 +331,7 @@ class AssetManager {
 class Renderer {
     public canvas: HTMLCanvasElement;
     public ctx: CanvasRenderingContext2D;
+	private assets: AssetManager;
     public draw(objs: Array<Obj>, anims: { [index: string]: Animation; }) {
 
         // draw background
@@ -337,14 +349,21 @@ class Renderer {
         });
         for (var i: number = 0; i < objs.length; i++) {
             var obj: Obj = objs[i];
-            var anim: Animation = anims[obj.currAnim];
-            var framePosition: Vector2 = new Vector2(0, 0);
-            if (!anim.bStatic) {
-                framePosition.x = obj.animFrame % anim.sheetWidth;
-                framePosition.y = Math.floor(obj.animFrame / anim.sheetWidth);
+            var anim: Animation;
+			if (typeof (obj.currAnim) !== "undefined")
+				anim = anims[obj.currAnim];
+			else
+				anim = obj.animMan.anims[obj.animMan.currentAnim];
+
+			// For automatic anims only (so not npc's or the player or anything like that atm)
+            if (!anim.bStatic && anim.frameCounterMax > 0 && anim.frameCount == (anim.frameCounterMax - 1)) {
+				obj.animMan.rightFrame();
             }
-            this.ctx.drawImage(anim.image,
-                framePosition.x, framePosition.y,
+
+			anim.frameCount = (anim.frameCount + 1) % anim.frameCounterMax;
+
+			this.ctx.drawImage(anim.image,
+                obj.animMan.framePosition.x, obj.animMan.framePosition.y,
                 anim.frameSize.x, anim.frameSize.y,
                 obj.pos.x - anim.offset.x, obj.pos.y - anim.offset.y,
                 anim.frameSize.x, anim.frameSize.y);
@@ -357,6 +376,58 @@ class Renderer {
         $(this.canvas).css({"display":"block","width":"1024","height":"600","margin-left":"auto", "margin-right":"auto"});
         this.ctx = this.canvas.getContext("2d");
     }
+}
+
+class AnimationManager {
+	public frame: number = 1;
+	public framePosition: Vector2;
+	public anims: Array<Animation>;
+	public currentAnim: number;
+
+	public nextAnim() {
+		this.frame = 1;
+		this.currentAnim = (this.currentAnim + 1) % this.anims.length;
+	}
+
+	public gotoNamedAnim(name: string) {
+		for (var x: number = 0; x < this.anims.length; x++) {
+			if (name == this.anims[x].name) {
+				this.currentAnim = x;
+				this.frame = 1;
+				break;
+			}
+		}
+	}
+
+	public rightFrame() {
+		if (!this.anims[this.currentAnim].bStatic) {
+			this.frame = (this.frame + 1) % this.anims[this.currentAnim].sheetWidth;
+			this.framePosition.x = this.frame * this.anims[this.currentAnim].frameSize.x;
+			this.framePosition.y = Math.floor(this.frame / this.anims[this.currentAnim].sheetWidth);
+		}
+	}
+
+	public leftFrame() {
+		if (!this.anims[this.currentAnim].bStatic) {
+			this.frame = (this.frame + 3) % this.anims[this.currentAnim].sheetWidth;
+			this.framePosition.x = this.frame * this.anims[this.currentAnim].frameSize.x;
+			this.framePosition.y = Math.floor(this.frame / this.anims[this.currentAnim].sheetWidth);
+		}
+	}
+
+	public gotoFrame(frame: number) {
+		if (frame > 0 && frame < this.anims[this.currentAnim].sheetWidth && !this.anims[this.currentAnim].bStatic) {
+			this.frame = frame;
+			this.framePosition.x = this.frame * this.anims[this.currentAnim].frameSize.x;
+			this.framePosition.y = Math.floor(this.frame / this.anims[this.currentAnim].sheetWidth);
+		}
+	}
+
+	constructor(anims: Array<Animation>, currentAnim?: number) {
+		this.anims = anims;
+		this.currentAnim = (typeof (currentAnim) !== "undefined") ? currentAnim : 0;
+		this.framePosition = new Vector2(0, 0);
+	}
 }
 
 // Basic tile for each grid point on a floor
@@ -569,7 +640,7 @@ class Building {
     numFloors: number;
     collisionMap: Array<Array<Array<string>>>;
 
-    constructor(floorSize: number) {
+    constructor(floorSize: number, assets: AssetManager) {
         this.floors = [];
         this.numFloors = (Math.floor(Math.random() * 8)) + 10; // Anywhere from 10-18 floors
 
@@ -584,7 +655,7 @@ class Building {
             this.collisionMap[i] = [];
             for (var x = 0; x < this.floors[i].grid.length; x++) {
                 for (var y = 0; y < this.floors[i].grid.length; y++) {
-                    tempCollish.push((this.floors[i].grid[y][x].type == RTypes.WALL) ? new CollisionTile(gridToScreen(y, x).x, gridToScreen(y, x).y, "filled") : new CollisionTile(gridToScreen(y, x).x, gridToScreen(y, x).y, "empty"));
+                    tempCollish.push((this.floors[i].grid[y][x].type == RTypes.WALL) ? new CollisionTile(gridToScreen(y, x).x, gridToScreen(y, x).y, [assets.anims["filled"]]) : new CollisionTile(gridToScreen(y, x).x, gridToScreen(y, x).y, [assets.anims["empty"]]));
                 }
                 this.collisionMap[i].push(tempCollish);
                 tempCollish = [];

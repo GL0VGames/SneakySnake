@@ -4,7 +4,7 @@ class Player extends Obj {
     public gDestination: Vector2;
     public sDestination: Vector2;
     public tempDestination: Vector2;
-    public speed: number = 2.5;
+    public speed: number = .14;// Usually 2.5 is fine, for some reason .14 is necessary now
     public bCanLerp: boolean;
     public previousLoc: Array<Vector2>;
     public following: Array<NPC>;
@@ -19,7 +19,7 @@ class Player extends Obj {
             this.gDestination.y = this.tempDestination.y;
             if (!cmpVector2(this.gDestination, this.previousLoc[0]))
                 this.previousLoc = new Array(new Vector2(this.gDestination.x, this.gDestination.y)).concat(this.previousLoc.slice());//.push(new Vector2(this.gDestination.x, this.gDestination.y));
-            if (this.previousLoc.length > 500) // This means you can only have 500 little guys following you
+            if (this.previousLoc.length > 500) // This means you can only have 500 little guys following you, :( oh darn
                 this.previousLoc.splice(0, 1); // FIFO, remove the first if the array is too long to prevent memory leaks
             this.sDestination = gridToScreen(this.gDestination.x, this.gDestination.y);
             if (!cmpVector2(this.pos, this.sDestination)) {
@@ -88,15 +88,14 @@ class Player extends Obj {
         }
         
     }
-    constructor(x: number, y: number) {
-        super(x, y);
+    constructor(x: number, y: number, anims: Array<Animation>) {
+        super(x, y, anims);
         this.pos = new Vector2(x, y);
         this.gDestination = new Vector2(1, 1);
         this.sDestination = new Vector2(x, y);
         this.tempDestination = new Vector2(1, 1);
         this.previousLoc = [new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1)];
         this.currAnim = "playerIdleD";
-        this.animFrame = 0;
         this.zIndex = 5;
         this.bCanLerp = true;
         this.following = [];

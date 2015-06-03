@@ -2,7 +2,7 @@
 /// <reference path="player.ts"/>
 /// <reference path="NPC.ts"/>
 /// <reference path="Teleporter.ts"/>
-class OHDHGame{
+class SneakySnake{
     public world: Building;
     public currentFloor: number;
     public floorSize: number;
@@ -12,7 +12,7 @@ class OHDHGame{
     public dynamicObjs: Array<Obj>; // Tick calls
     public pickupObjs: Array<Obj>; // No tick calls
     public interactableObjs: Array<Obj>; // Tick calls when player is standing on it
-    public interval: number = 15;
+    public interval: number = 15; // 15ms between frames, 66.6666666666667 frames/second
     public tickID: any; // ID to clear for tick function when restarting game
     public player: Player;
     public input: Input;
@@ -39,13 +39,13 @@ class OHDHGame{
             for (var x = 0; x < floor.grid[y].length; x++) {
                 var screen_coords = gridToScreen(x, y);
                 if (floor.grid[x][y].type == RTypes.FLOOR) {
-                    var tile = new FloorTile(screen_coords.x, screen_coords.y);
+                    var tile = new FloorTile(screen_coords.x, screen_coords.y, [this.assetmanager.anims["floor"]]);
                     tile.setZ(-1);
                     this.staticObjs.push(tile);
                 } else if (floor.grid[x][y].type == RTypes.WALL) {
-                    this.staticObjs.push(new WallTile(screen_coords.x, screen_coords.y));
+                    this.staticObjs.push(new WallTile(screen_coords.x, screen_coords.y, [this.assetmanager.anims["wall"]]));
                 } else if (floor.grid[x][y].type == RTypes.DOOR) {
-                    this.staticObjs.push(new FloorTile(screen_coords.x, screen_coords.y));
+                    this.staticObjs.push(new FloorTile(screen_coords.x, screen_coords.y, [this.assetmanager.anims["floor"]]));
                 }
             }
         }
@@ -58,7 +58,7 @@ class OHDHGame{
             tempy = Math.floor(Math.random() * this.floorSize);
         }
         this.tempi = gridToScreen(tempx, tempy);
-        this.currTeleporter = new Teleporter(this.tempi.x, this.tempi.y, "teleporter");
+        this.currTeleporter = new Teleporter(this.tempi.x, this.tempi.y, [this.assetmanager.anims["teleporter"]]);
 
         // Spawn NPC's
         var tempx = Math.floor(Math.random() * this.floorSize);
@@ -76,7 +76,7 @@ class OHDHGame{
         var tempVect: Vector2 = new Vector2(0, 0);
 
         // Check if colliding with anything and if not then place
-        for (var i: number = randBetween(this.numNPC, this.numNPC - 3); i > 0; i--) {
+        for (var i: number = randBetween(this.numNPC, this.numNPC - 3, true); i > 0; i--) {
             tempx = Math.floor(Math.random() * this.floorSize);
             tempy = Math.floor(Math.random() * this.floorSize);
             tempVect = new Vector2(tempx, tempy);
@@ -87,7 +87,7 @@ class OHDHGame{
             }
             
             this.tempi = gridToScreen(tempx, tempy);
-            this.NPCs.push(new NPC(this.tempi.x, this.tempi.y, tempx, tempy, 5));
+            this.NPCs.push(new NPC(this.tempi.x, this.tempi.y, tempx, tempy, 5, [this.assetmanager.anims["npcAll"], this.assetmanager.anims["npcFollowAnim"], this.assetmanager.anims["npcIdleDSeen"], this.assetmanager.anims["npcIdleLSeen"], this.assetmanager.anims["npcIdleUSeen"], this.assetmanager.anims["npcIdleRSeen"]]));
         }
     }
 
@@ -122,7 +122,7 @@ class OHDHGame{
 
     public worldGen(): Building {
         // Makes a new world
-        return new Building(this.floorSize);
+        return new Building(this.floorSize, this.assetmanager);
     }
     public viewWorld(w: Building): void {
         var wall: string = "id ='wall";
@@ -191,7 +191,7 @@ class OHDHGame{
         this.player.tick(this.input, this.collisionMap);
 
         // Dissallows the player from moving through walls
-        if (this.collisionMap[this.currentFloor][this.player.tempDestination.y][this.player.tempDestination.x].currAnim !== "filled")
+        if (this.collisionMap[this.currentFloor][this.player.tempDestination.y][this.player.tempDestination.x].animMan.anims[0].name !== "filled")
             this.player.bCanLerp = true;
         else
             this.player.bCanLerp = false;
@@ -236,7 +236,7 @@ class OHDHGame{
     public startGame(): void {
         // Create the player
         var playerLocation: Vector2 = gridToScreen(1, 1);
-        this.player = new Player(playerLocation.x, playerLocation.y);
+        this.player = new Player(playerLocation.x, playerLocation.y, [this.assetmanager.anims["playerIdleD"]]);
 
         // set up floor
         this.setupFloor();
@@ -249,12 +249,12 @@ class OHDHGame{
         $(this.renderer.canvas).unbind("click");
     }
     constructor() {
+        this.renderer = new Renderer();
+        this.assetmanager = new AssetManager(this.renderer.ctx, this.renderer.canvas);
         this.currentFloor = 0;
         this.floorSize = 15;
         this.world = this.worldGen();
         this.viewWorld(this.world);
-        this.renderer = new Renderer();
-        this.assetmanager = new AssetManager(this.renderer.ctx, this.renderer.canvas);
         this.staticObjs = [];
         this.dynamicObjs = [];
         this.pickupObjs = [];
@@ -296,7 +296,7 @@ class OHDHGame{
 }
 $(function game(): void {
 
-    var game = new OHDHGame();
+    var game = new SneakySnake();
     $(".new").click(function () {
         // Restart the game if the button is pressed
         game.restartGame();
@@ -305,19 +305,15 @@ $(function game(): void {
         // Change control scheme from w moving to upper right to w moving to upper left
         game.toggleControls();
     });
-
-
-    
+	    
     // Start game when all assets are loaded
-    $("body").on("assetLoaded", function (e, d) {
-        if (d.num >= game.assetmanager.total) {
-            game.assetmanager.audio.main.addEventListener('ended', function () {
-                this.currentTime = 0;
-                this.play();
-            }, false);
-            game.assetmanager.audio.main.play();
-            game.startGame();
-        }
+    $("body").on("assetsFinished", function () {
+        game.assetmanager.audio.main.addEventListener('ended', function () {
+            this.currentTime = 0;
+            this.play();
+        }, false);
+        game.assetmanager.audio.main.play();
+        game.startGame();
     });
 
     

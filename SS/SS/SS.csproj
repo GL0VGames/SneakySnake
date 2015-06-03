@@ -31,15 +31,12 @@
     <Content Include="images\filled.png" />
     <Content Include="images\floors.png" />
     <Content Include="images\none.png" />
+    <Content Include="images\npcAll.png" />
     <Content Include="images\npcFollower.png" />
     <Content Include="images\npcStatDown.png" />
-    <Content Include="images\npcStatDownArrow.png" />
     <Content Include="images\npcStatLeft.png" />
-    <Content Include="images\npcStatLeftArrow.png" />
     <Content Include="images\npcStatRight.png" />
-    <Content Include="images\npcStatRightArrow.png" />
     <Content Include="images\npcStatUp.png" />
-    <Content Include="images\npcStatUpArrow.png" />
     <Content Include="images\teleporter.png" />
     <Content Include="images\walls.png" />
     <Content Include="index.html" />

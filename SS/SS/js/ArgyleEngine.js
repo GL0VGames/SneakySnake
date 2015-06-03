@@ -41,10 +41,15 @@ var Input = (function () {
     return Input;
 })();
 var Animation = (function () {
-    function Animation(st, width, height, off_x, off_y) {
+    // Frames must be greater than 0 for animations
+    function Animation(st, width, height, off_x, off_y, frames, name) {
+        // For automatic anims
+        this.frameCount = 0;
         this.bStatic = st;
         this.frameSize = new Vector2(width, height);
         this.offset = new Vector2(off_x, off_y);
+        this.frameCounterMax = frames;
+        this.name = name;
     }
     Animation.prototype.translate = function (ofst) {
         this.offset = ofst;
@@ -52,16 +57,17 @@ var Animation = (function () {
     Animation.prototype.setImage = function (img) {
         this.image = img;
         this.sheetWidth = Math.floor(img.width / this.frameSize.x);
+        console.log(this.name + "= width: " + img.width + " framesize: " + this.frameSize.x + " divide: " + img.width / this.frameSize.x + " floor: " + Math.floor(img.width / this.frameSize.x) + " sheetWidth: " + this.sheetWidth);
     };
     return Animation;
 })();
 var Obj = (function () {
-    function Obj(x, y, anim) {
+    function Obj(x, y, anims, sAnim) {
         this.pos = new Vector2(x, y);
-        this.currAnim = anim;
-        this.animFrame = 0;
+        this.currAnim = sAnim;
         this.zIndex = 0;
         this.interactable = false;
+        this.animMan = new AnimationManager(anims);
     }
     // The "?" denotes an optional parameter, for those objects that don't need a vector2 it's not passed in
     Obj.prototype.tick = function (input, astar, p) {
@@ -75,8 +81,8 @@ var Obj = (function () {
 var Interactable = (function (_super) {
     __extends(Interactable, _super);
     // Other stuff maybe, idk
-    function Interactable(x, y, z) {
-        _super.call(this, x, y);
+    function Interactable(x, y, z, anims) {
+        _super.call(this, x, y, anims);
         this.interactable = true;
         this.bStatic = true;
         this.zIndex = z;
@@ -85,18 +91,17 @@ var Interactable = (function (_super) {
 })(Obj);
 var CollisionTile = (function (_super) {
     __extends(CollisionTile, _super);
-    function CollisionTile(x, y, anim) {
-        _super.call(this, x, y);
+    function CollisionTile(x, y, anims) {
+        _super.call(this, x, y, anims);
         this.bStatic = true;
-        this.currAnim = anim;
         this.zIndex = 3;
     }
     return CollisionTile;
 })(Obj);
 var FloorTile = (function (_super) {
     __extends(FloorTile, _super);
-    function FloorTile(x, y) {
-        _super.call(this, x, y);
+    function FloorTile(x, y, anims) {
+        _super.call(this, x, y, anims);
         this.bStatic = true;
         this.currAnim = "floor";
     }
@@ -107,8 +112,8 @@ var FloorTile = (function (_super) {
 })(Obj);
 var WallTile = (function (_super) {
     __extends(WallTile, _super);
-    function WallTile(x, y) {
-        _super.call(this, x, y);
+    function WallTile(x, y, anims) {
+        _super.call(this, x, y, anims);
         this.bStatic = true;
         this.currAnim = "wall";
         this.zIndex = 5;
@@ -117,8 +122,8 @@ var WallTile = (function (_super) {
 })(Obj);
 var DoorTile = (function (_super) {
     __extends(DoorTile, _super);
-    function DoorTile(x, y) {
-        _super.call(this, x, y);
+    function DoorTile(x, y, anims) {
+        _super.call(this, x, y, anims);
         this.bStatic = true;
         this.currAnim = "door";
         this.zIndex = 5;
@@ -184,39 +189,37 @@ var AssetManager = (function () {
             filled: "images/filled.png",
             empty: "images/empty.png",
             npcFollow: "images/npcFollower.png",
-            npcIdleD: "images/npcStatDown.png",
-            npcIdleL: "images/npcStatLeft.png",
-            npcIdleU: "images/npcStatUp.png",
-            npcIdleR: "images/npcStatRight.png",
+            npcFollowAnim: "images/npcFollowerAnim.png",
+            npcAll: "images/npcAll.png",
             npcIdleDSeen: "images/npcStatDown.png",
             npcIdleLSeen: "images/npcStatLeft.png",
             npcIdleUSeen: "images/npcStatUp.png",
             npcIdleRSeen: "images/npcStatRight.png",
+            testAnim: "images/testAnim.png",
         };
         this.anims = {
-            none: new Animation(true, 64, 32, 32, 16),
-            floor: new Animation(true, 64, 32, 32, 16),
-            wall: new Animation(true, 64, 64, 32, 48),
-            teleporter: new Animation(true, 64, 48, 32, 32),
-            playerIdleD: new Animation(true, 64, 64, 32, 44),
-            playerIdleL: new Animation(true, 64, 64, 32, 44),
-            playerIdleU: new Animation(true, 64, 64, 32, 44),
-            playerWalkD: new Animation(true, 64, 64, 32, 64),
-            playerWalkL: new Animation(true, 64, 64, 32, 64),
-            playerWalkU: new Animation(true, 64, 64, 32, 64),
-            filled: new Animation(true, 64, 32, 32, 16),
-            empty: new Animation(true, 64, 32, 32, 16),
-            npcFollow: new Animation(true, 64, 64, 32, 40),
-            npcIdleD: new Animation(true, 64, 64, 32, 40),
-            npcIdleL: new Animation(true, 64, 64, 32, 40),
-            npcIdleU: new Animation(true, 64, 64, 32, 40),
-            npcIdleR: new Animation(true, 64, 64, 32, 40),
-            npcIdleDSeen: new Animation(true, 64, 64, 32, 60),
-            npcIdleLSeen: new Animation(true, 64, 64, 32, 60),
-            npcIdleUSeen: new Animation(true, 64, 64, 32, 60),
-            npcIdleRSeen: new Animation(true, 64, 64, 32, 60),
+            none: new Animation(true, 64, 32, 32, 16, 0, "none"),
+            floor: new Animation(true, 64, 32, 32, 16, 0, "floor"),
+            wall: new Animation(true, 64, 64, 32, 48, 0, "wall"),
+            teleporter: new Animation(true, 64, 48, 32, 32, 0, "teleporter"),
+            playerIdleD: new Animation(true, 64, 64, 32, 44, 0, "playerIdleD"),
+            playerIdleL: new Animation(true, 64, 64, 32, 44, 0, "playerIdleL"),
+            playerIdleU: new Animation(true, 64, 64, 32, 44, 0, "playerIdleU"),
+            playerWalkD: new Animation(true, 64, 64, 32, 64, 0, "playerWalkD"),
+            playerWalkL: new Animation(true, 64, 64, 32, 64, 0, "playerWalkL"),
+            playerWalkU: new Animation(true, 64, 64, 32, 64, 0, "playerWalkU"),
+            filled: new Animation(true, 64, 32, 32, 16, 0, "filled"),
+            empty: new Animation(true, 64, 32, 32, 16, 0, "empty"),
+            npcFollow: new Animation(true, 64, 64, 32, 40, 0, "npcFollow"),
+            npcFollowAnim: new Animation(false, 64, 64, 32, 40, 60, "npcFollowAnim"),
+            npcAll: new Animation(false, 64, 64, 32, 40, -1, "npcAll"),
+            npcIdleDSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleDSeen"),
+            npcIdleLSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleLSeen"),
+            npcIdleUSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleUSeen"),
+            npcIdleRSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleRSeen"),
+            testAnim: new Animation(false, 13, 32, 13, 32, 60, "testAnim"),
         };
-        this.audio = {}; // Can't do : Array<HTMLAudioElement> because that doesn't support .addEventListener() for some odd reason
+        this.audio = {}; // Can't do : Array<HTMLAudioElement> because that doesn't support .addEventListenerxr some odd reason
         this.audioURLs = {
             "main": "sounds/SneakySnake Theme.wav",
         };
@@ -244,6 +247,7 @@ var AssetManager = (function () {
     // Updates the loading bar when asset is loaded
     AssetManager.prototype.updateBar = function (ctx, canvas) {
         this.curr++;
+        var that = this;
         // Loading bar
         this.totalBar += this.barTickSize;
         ctx.fillStyle = "black";
@@ -252,20 +256,26 @@ var AssetManager = (function () {
             width += this.remainder;
         ctx.fillRect(this.x, this.y, width, this.height);
         // Custom even handled in game.ts to start the game when all assets have loaded
-        $("body").trigger("assetLoaded", { "num": this.curr });
+        $("body").trigger("assetLoaded", {
+            "num": this.curr
+        });
+        $("body").on("assetLoaded", function (e, d) {
+            if (d.num >= that.total) {
+                for (var j in that.anims)
+                    that.anims[j].setImage(that.images[j]);
+                $("body").trigger("assetsFinished");
+            }
+        });
     };
     AssetManager.prototype.preloader = function (ctx, canvas) {
         var that = this;
-        for (var i in this.imageURLs) {
+        for (var i in this.anims) {
             this.images[i] = new Image();
             this.images[i].onload = function () {
                 that.updateBar(ctx, canvas);
             };
             this.images[i].src = this.imageURLs[i];
             this.imagesLength++;
-        }
-        for (var i in this.anims) {
-            this.anims[i].setImage(this.images[i]);
         }
         for (var i in this.audioURLs) {
             this.audio[i] = new Audio();
@@ -310,16 +320,63 @@ var Renderer = (function () {
         });
         for (var i = 0; i < objs.length; i++) {
             var obj = objs[i];
-            var anim = anims[obj.currAnim];
-            var framePosition = new Vector2(0, 0);
-            if (!anim.bStatic) {
-                framePosition.x = obj.animFrame % anim.sheetWidth;
-                framePosition.y = Math.floor(obj.animFrame / anim.sheetWidth);
+            var anim;
+            if (typeof (obj.currAnim) !== "undefined")
+                anim = anims[obj.currAnim];
+            else
+                anim = obj.animMan.anims[obj.animMan.currentAnim];
+            // For automatic anims only (so not npc's or the player or anything like that atm)
+            if (!anim.bStatic && anim.frameCounterMax > 0 && anim.frameCount == (anim.frameCounterMax - 1)) {
+                obj.animMan.rightFrame();
             }
-            this.ctx.drawImage(anim.image, framePosition.x, framePosition.y, anim.frameSize.x, anim.frameSize.y, obj.pos.x - anim.offset.x, obj.pos.y - anim.offset.y, anim.frameSize.x, anim.frameSize.y);
+            anim.frameCount = (anim.frameCount + 1) % anim.frameCounterMax;
+            this.ctx.drawImage(anim.image, obj.animMan.framePosition.x, obj.animMan.framePosition.y, anim.frameSize.x, anim.frameSize.y, obj.pos.x - anim.offset.x, obj.pos.y - anim.offset.y, anim.frameSize.x, anim.frameSize.y);
         }
     };
     return Renderer;
+})();
+var AnimationManager = (function () {
+    function AnimationManager(anims, currentAnim) {
+        this.frame = 1;
+        this.anims = anims;
+        this.currentAnim = (typeof (currentAnim) !== "undefined") ? currentAnim : 0;
+        this.framePosition = new Vector2(0, 0);
+    }
+    AnimationManager.prototype.nextAnim = function () {
+        this.frame = 1;
+        this.currentAnim = (this.currentAnim + 1) % this.anims.length;
+    };
+    AnimationManager.prototype.gotoNamedAnim = function (name) {
+        for (var x = 0; x < this.anims.length; x++) {
+            if (name == this.anims[x].name) {
+                this.currentAnim = x;
+                this.frame = 1;
+                break;
+            }
+        }
+    };
+    AnimationManager.prototype.rightFrame = function () {
+        if (!this.anims[this.currentAnim].bStatic) {
+            this.frame = (this.frame + 1) % this.anims[this.currentAnim].sheetWidth;
+            this.framePosition.x = this.frame * this.anims[this.currentAnim].frameSize.x;
+            this.framePosition.y = Math.floor(this.frame / this.anims[this.currentAnim].sheetWidth);
+        }
+    };
+    AnimationManager.prototype.leftFrame = function () {
+        if (!this.anims[this.currentAnim].bStatic) {
+            this.frame = (this.frame + 3) % this.anims[this.currentAnim].sheetWidth;
+            this.framePosition.x = this.frame * this.anims[this.currentAnim].frameSize.x;
+            this.framePosition.y = Math.floor(this.frame / this.anims[this.currentAnim].sheetWidth);
+        }
+    };
+    AnimationManager.prototype.gotoFrame = function (frame) {
+        if (frame > 0 && frame < this.anims[this.currentAnim].sheetWidth && !this.anims[this.currentAnim].bStatic) {
+            this.frame = frame;
+            this.framePosition.x = this.frame * this.anims[this.currentAnim].frameSize.x;
+            this.framePosition.y = Math.floor(this.frame / this.anims[this.currentAnim].sheetWidth);
+        }
+    };
+    return AnimationManager;
 })();
 // Basic tile for each grid point on a floor
 var GridTile = (function () {
@@ -519,7 +576,7 @@ var Floor = (function () {
 })();
 // Top level object, post: building complete with floors and rooms
 var Building = (function () {
-    function Building(floorSize) {
+    function Building(floorSize, assets) {
         this.floors = [];
         this.numFloors = (Math.floor(Math.random() * 8)) + 10; // Anywhere from 10-18 floors
         for (var i = 0; i < this.numFloors; i++) {
@@ -532,7 +589,7 @@ var Building = (function () {
             this.collisionMap[i] = [];
             for (var x = 0; x < this.floors[i].grid.length; x++) {
                 for (var y = 0; y < this.floors[i].grid.length; y++) {
-                    tempCollish.push((this.floors[i].grid[y][x].type == 1 /* WALL */) ? new CollisionTile(gridToScreen(y, x).x, gridToScreen(y, x).y, "filled") : new CollisionTile(gridToScreen(y, x).x, gridToScreen(y, x).y, "empty"));
+                    tempCollish.push((this.floors[i].grid[y][x].type == 1 /* WALL */) ? new CollisionTile(gridToScreen(y, x).x, gridToScreen(y, x).y, [assets.anims["filled"]]) : new CollisionTile(gridToScreen(y, x).x, gridToScreen(y, x).y, [assets.anims["empty"]]));
                 }
                 this.collisionMap[i].push(tempCollish);
                 tempCollish = [];

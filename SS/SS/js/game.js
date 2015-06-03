@@ -2,15 +2,15 @@
 /// <reference path="player.ts"/>
 /// <reference path="NPC.ts"/>
 /// <reference path="Teleporter.ts"/>
-var OHDHGame = (function () {
-    function OHDHGame() {
-        this.interval = 15;
+var SneakySnake = (function () {
+    function SneakySnake() {
+        this.interval = 15; // 15ms between frames, 66.6666666666667 frames/second
+        this.renderer = new Renderer();
+        this.assetmanager = new AssetManager(this.renderer.ctx, this.renderer.canvas);
         this.currentFloor = 0;
         this.floorSize = 15;
         this.world = this.worldGen();
         this.viewWorld(this.world);
-        this.renderer = new Renderer();
-        this.assetmanager = new AssetManager(this.renderer.ctx, this.renderer.canvas);
         this.staticObjs = [];
         this.dynamicObjs = [];
         this.pickupObjs = [];
@@ -48,7 +48,7 @@ var OHDHGame = (function () {
                 that.toggleControls();
         });
     }
-    OHDHGame.prototype.setupFloor = function () {
+    SneakySnake.prototype.setupFloor = function () {
         this.player.pos = gridToScreen(1, 1);
         this.player.sDestination = gridToScreen(1, 1);
         this.player.gDestination = new Vector2(1, 1);
@@ -63,15 +63,15 @@ var OHDHGame = (function () {
             for (var x = 0; x < floor.grid[y].length; x++) {
                 var screen_coords = gridToScreen(x, y);
                 if (floor.grid[x][y].type == 0 /* FLOOR */) {
-                    var tile = new FloorTile(screen_coords.x, screen_coords.y);
+                    var tile = new FloorTile(screen_coords.x, screen_coords.y, [this.assetmanager.anims["floor"]]);
                     tile.setZ(-1);
                     this.staticObjs.push(tile);
                 }
                 else if (floor.grid[x][y].type == 1 /* WALL */) {
-                    this.staticObjs.push(new WallTile(screen_coords.x, screen_coords.y));
+                    this.staticObjs.push(new WallTile(screen_coords.x, screen_coords.y, [this.assetmanager.anims["wall"]]));
                 }
                 else if (floor.grid[x][y].type == 2 /* DOOR */) {
-                    this.staticObjs.push(new FloorTile(screen_coords.x, screen_coords.y));
+                    this.staticObjs.push(new FloorTile(screen_coords.x, screen_coords.y, [this.assetmanager.anims["floor"]]));
                 }
             }
         }
@@ -83,7 +83,7 @@ var OHDHGame = (function () {
             tempy = Math.floor(Math.random() * this.floorSize);
         }
         this.tempi = gridToScreen(tempx, tempy);
-        this.currTeleporter = new Teleporter(this.tempi.x, this.tempi.y, "teleporter");
+        this.currTeleporter = new Teleporter(this.tempi.x, this.tempi.y, [this.assetmanager.anims["teleporter"]]);
         // Spawn NPC's
         var tempx = Math.floor(Math.random() * this.floorSize);
         var tempy = Math.floor(Math.random() * this.floorSize);
@@ -96,7 +96,7 @@ var OHDHGame = (function () {
             }
         this.NPCs = tempNPC;
         var tempVect = new Vector2(0, 0);
-        for (var i = randBetween(this.numNPC, this.numNPC - 3); i > 0; i--) {
+        for (var i = randBetween(this.numNPC, this.numNPC - 3, true); i > 0; i--) {
             tempx = Math.floor(Math.random() * this.floorSize);
             tempy = Math.floor(Math.random() * this.floorSize);
             tempVect = new Vector2(tempx, tempy);
@@ -106,16 +106,16 @@ var OHDHGame = (function () {
                 tempVect = new Vector2(tempx, tempy);
             }
             this.tempi = gridToScreen(tempx, tempy);
-            this.NPCs.push(new NPC(this.tempi.x, this.tempi.y, tempx, tempy, 5));
+            this.NPCs.push(new NPC(this.tempi.x, this.tempi.y, tempx, tempy, 5, [this.assetmanager.anims["npcAll"], this.assetmanager.anims["npcFollowAnim"], this.assetmanager.anims["npcIdleDSeen"], this.assetmanager.anims["npcIdleLSeen"], this.assetmanager.anims["npcIdleUSeen"], this.assetmanager.anims["npcIdleRSeen"]]));
         }
     };
-    OHDHGame.prototype.toggleControls = function () {
+    SneakySnake.prototype.toggleControls = function () {
         if (this.player.controls[0] == "s")
             this.player.controls = ["a", "w", "d", "s"];
         else
             this.player.controls = ["s", "a", "w", "d"];
     };
-    OHDHGame.prototype.restartGame = function () {
+    SneakySnake.prototype.restartGame = function () {
         // Stop the tick function from ticking
         clearInterval(this.tickID);
         // Make new world
@@ -134,11 +134,11 @@ var OHDHGame = (function () {
         // Run the function to start a new game
         this.startGame();
     };
-    OHDHGame.prototype.worldGen = function () {
+    SneakySnake.prototype.worldGen = function () {
         // Makes a new world
-        return new Building(this.floorSize);
+        return new Building(this.floorSize, this.assetmanager);
     };
-    OHDHGame.prototype.viewWorld = function (w) {
+    SneakySnake.prototype.viewWorld = function (w) {
         var wall = "id ='wall";
         var door = "id ='door";
         for (var y = 0; y <= this.floorSize; y++) {
@@ -164,7 +164,7 @@ var OHDHGame = (function () {
             color: "#CF000F"
         });
     };
-    OHDHGame.prototype.tick = function () {
+    SneakySnake.prototype.tick = function () {
         //game logic loop
         // Resets world if player is on a teleporter and thus needs to go to the next level
         if (cmpVector2(this.player.pos, this.player.sDestination) && cmpVector2(this.player.pos, this.currTeleporter.pos)) {
@@ -188,7 +188,7 @@ var OHDHGame = (function () {
         // Tick player
         this.player.tick(this.input, this.collisionMap);
         // Dissallows the player from moving through walls
-        if (this.collisionMap[this.currentFloor][this.player.tempDestination.y][this.player.tempDestination.x].currAnim !== "filled")
+        if (this.collisionMap[this.currentFloor][this.player.tempDestination.y][this.player.tempDestination.x].animMan.anims[0].name !== "filled")
             this.player.bCanLerp = true;
         else
             this.player.bCanLerp = false;
@@ -228,10 +228,10 @@ var OHDHGame = (function () {
             }, 400);
         }
     };
-    OHDHGame.prototype.startGame = function () {
+    SneakySnake.prototype.startGame = function () {
         // Create the player
         var playerLocation = gridToScreen(1, 1);
-        this.player = new Player(playerLocation.x, playerLocation.y);
+        this.player = new Player(playerLocation.x, playerLocation.y, [this.assetmanager.anims["playerIdleD"]]);
         // set up floor
         this.setupFloor();
         // Start tick function
@@ -240,13 +240,13 @@ var OHDHGame = (function () {
             self.tick();
         }, this.interval);
     };
-    OHDHGame.prototype.unsubscribeClick = function () {
+    SneakySnake.prototype.unsubscribeClick = function () {
         $(this.renderer.canvas).unbind("click");
     };
-    return OHDHGame;
+    return SneakySnake;
 })();
 $(function game() {
-    var game = new OHDHGame();
+    var game = new SneakySnake();
     $(".new").click(function () {
         // Restart the game if the button is pressed
         game.restartGame();
@@ -256,15 +256,13 @@ $(function game() {
         game.toggleControls();
     });
     // Start game when all assets are loaded
-    $("body").on("assetLoaded", function (e, d) {
-        if (d.num >= game.assetmanager.total) {
-            game.assetmanager.audio.main.addEventListener('ended', function () {
-                this.currentTime = 0;
-                this.play();
-            }, false);
-            game.assetmanager.audio.main.play();
-            game.startGame();
-        }
+    $("body").on("assetsFinished", function () {
+        game.assetmanager.audio.main.addEventListener('ended', function () {
+            this.currentTime = 0;
+            this.play();
+        }, false);
+        game.assetmanager.audio.main.play();
+        game.startGame();
     });
 });
 //# sourceMappingURL=game.js.map

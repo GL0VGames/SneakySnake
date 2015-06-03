@@ -8,8 +8,8 @@ var __extends = this.__extends || function (d, b) {
 var Teleporter = (function (_super) {
     __extends(Teleporter, _super);
     // Pretty basic, just needs to be here for clarity in the rest of the code, maybe it'll have code of it's own at some point but not for now
-    function Teleporter(x, y, anim) {
-        _super.call(this, x, y, anim);
+    function Teleporter(x, y, anims) {
+        _super.call(this, x, y, anims);
         this.zIndex = 5;
     }
     return Teleporter;
