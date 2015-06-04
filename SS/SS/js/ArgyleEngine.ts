@@ -74,7 +74,6 @@ class Obj {
     bStatic: boolean;
     pos: Vector2;
     gPos: Vector2;
-    currAnim: string;
 	animMan: AnimationManager;
     zIndex: number;
     interactable: boolean;
@@ -86,9 +85,8 @@ class Obj {
     public setZ(z): void {
         this.zIndex = z;
     }
-    constructor(x: number, y: number, anims: Array<Animation>, sAnim?: string) {
+    constructor(x: number, y: number, anims: Array<Animation>) {
         this.pos = new Vector2(x, y);
-        this.currAnim = sAnim;
         this.zIndex = 0;
         this.interactable = false;
 		this.animMan = new AnimationManager(anims);
@@ -120,7 +118,6 @@ class FloorTile extends Obj {
     }
     constructor(x: number, y: number, anims: Array<Animation>) {
         super(x, y, anims);
-        this.currAnim = "floor";
     }
 }
 
@@ -128,7 +125,6 @@ class WallTile extends Obj {
     bStatic = true;
     constructor(x: number, y: number, anims: Array<Animation>) {
         super(x, y, anims);
-        this.currAnim = "wall";
         this.zIndex = 5;
     }
 }
@@ -137,7 +133,6 @@ class DoorTile extends Obj {
     bStatic = true;
     constructor(x: number, y: number, anims: Array<Animation>) {
         super(x, y, anims);
-        this.currAnim = "door";
         this.zIndex = 5;
     }
 }
@@ -187,6 +182,7 @@ class AssetManager {
     private remainder: number = 0;
     private curr: number = 0;
     private imagesLength: number;
+	private doneLoading: boolean = false;
 
     // Arrays of anims, images, and audio
     public images: { [index: string]: HTMLImageElement; } = {};
@@ -237,7 +233,6 @@ class AssetManager {
     public audio: any = {}; // Can't do : Array<HTMLAudioElement> because that doesn't support .addEventListenerxr some odd reason
     private audioURLs: any = {
         "main": "sounds/SneakySnake Theme.wav",
-
     };
 
     // Loading bar canvas vars;
@@ -262,7 +257,8 @@ class AssetManager {
 			"num": this.curr
 		});
 		$("body").on("assetLoaded", function (e, d) {
-			if (d.num >= that.total) {
+			if (d.num >= that.total && !that.doneLoading) {
+				that.doneLoading = true;
 				// Assign image to anim
 				for (var j in that.anims)
 					that.anims[j].setImage(that.images[j]);
@@ -332,7 +328,8 @@ class Renderer {
     public canvas: HTMLCanvasElement;
     public ctx: CanvasRenderingContext2D;
 	private assets: AssetManager;
-    public draw(objs: Array<Obj>, anims: { [index: string]: Animation; }) {
+
+    public draw(objs: Array<Obj>, anims: { [index: string]: Animation; }, fps?: number) {
 
         // draw background
         this.ctx.fillStyle = "black";
@@ -349,11 +346,7 @@ class Renderer {
         });
         for (var i: number = 0; i < objs.length; i++) {
             var obj: Obj = objs[i];
-            var anim: Animation;
-			if (typeof (obj.currAnim) !== "undefined")
-				anim = anims[obj.currAnim];
-			else
-				anim = obj.animMan.anims[obj.animMan.currentAnim];
+            var anim: Animation = obj.animMan.anims[obj.animMan.currentAnim];
 
 			// For automatic anims only (so not npc's or the player or anything like that atm)
             if (!anim.bStatic && anim.frameCounterMax > 0 && anim.frameCount == (anim.frameCounterMax - 1)) {
@@ -368,6 +361,11 @@ class Renderer {
                 obj.pos.x - anim.offset.x, obj.pos.y - anim.offset.y,
                 anim.frameSize.x, anim.frameSize.y);
         }
+
+		// FPS Counter
+		this.ctx.fillStyle = "#DD1321";
+		this.ctx.font = "2em Inconsolata";
+		this.ctx.fillText("fps: " + JSON.stringify(fps), this.canvas.width/11, this.canvas.height/11);
     }
     constructor() {
         this.canvas = <HTMLCanvasElement> document.getElementById("canvas");

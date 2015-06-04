@@ -22,6 +22,9 @@ class SneakySnake{
     public NPCs: Array<NPC>;
     private numNPC: number;
     private currTeleporter: Teleporter;
+	public fps: number = 0;
+	public lastFPS: number = 0;
+	public fpsID: number;
 
     private setupFloor() {
         this.player.pos = gridToScreen(1, 1);
@@ -154,6 +157,7 @@ class SneakySnake{
 
     public tick(): void {
         //game logic loop
+		this.fps++;
 
         // Resets world if player is on a teleporter and thus needs to go to the next level
         if (cmpVector2(this.player.pos, this.player.sDestination) && cmpVector2(this.player.pos, this.currTeleporter.pos)) {
@@ -184,7 +188,6 @@ class SneakySnake{
                 }
                 break;
             }
-
         }
 
         // Tick player
@@ -197,7 +200,7 @@ class SneakySnake{
             this.player.bCanLerp = false;
 
         // Render everything
-        this.renderer.draw(this.tempTick, this.assetmanager.anims);
+        this.renderer.draw(this.tempTick, this.assetmanager.anims, this.lastFPS);
 
         // Clear inputs
         this.input.bMouseClicked = false;
@@ -205,6 +208,7 @@ class SneakySnake{
         // Check end game (player has no health)
         if (this.player.health <= 0) {
             clearInterval(this.tickID);
+			clearInterval(this.fpsID);
             var that = this;
 			var highscore;
 			var sHighscore;
@@ -236,7 +240,7 @@ class SneakySnake{
     public startGame(): void {
         // Create the player
         var playerLocation: Vector2 = gridToScreen(1, 1);
-        this.player = new Player(playerLocation.x, playerLocation.y, [this.assetmanager.anims["playerIdleD"]]);
+        this.player = new Player(playerLocation.x, playerLocation.y, [this.assetmanager.anims["playerIdleD"], this.assetmanager.anims["playerIdleL"], this.assetmanager.anims["playerIdleU"], this.assetmanager.anims["playerWalkD"], this.assetmanager.anims["playerWalkL"], this.assetmanager.anims["playerWalkU"]]);
 
         // set up floor
         this.setupFloor();
@@ -244,6 +248,10 @@ class SneakySnake{
         // Start tick function
         var self = this;
         this.tickID = setInterval(function () { self.tick() }, this.interval);
+		this.fpsID = setInterval(function () {
+			self.lastFPS = self.fps;
+			self.fps = 0;
+		}, 1000);
     }
     public unsubscribeClick() {
         $(this.renderer.canvas).unbind("click");
@@ -287,9 +295,9 @@ class SneakySnake{
                     that.assetmanager.audio.main.play();
                 else that.assetmanager.audio.main.pause();
             }
-            else if (e.which == 82)
+            else if (e.which == 82) //r
                 that.restartGame();
-            else if (e.which == 84)
+            else if (e.which == 84) //t
                 that.toggleControls();
         });
     }

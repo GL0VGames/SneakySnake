@@ -13,7 +13,6 @@ class NPC extends Interactable {
     public seen: boolean;
     private superTemp: number = 0;
     private tempi: number = 0;
-    private sight: number = 4;
 	public framePosition: Vector2;
 	private static turnMin = 20;
 	private static turnMax = 200;
@@ -26,46 +25,45 @@ class NPC extends Interactable {
                 // Make sure the npc can actually see the player, no walls in the way and not out of range ( 4 )
                 if (target.x > this.gPos.x && target.y == this.gPos.y) {
                     this.superTemp = 0;
-                    for (this.temp.x, this.superTemp; target.x > this.temp.x && this.superTemp <= this.sight; this.temp.x++, this.superTemp++) {
-                        if (collision[this.temp.y][this.temp.x].animMan.anims[collision[this.temp.y][this.temp.x].animMan.currentAnim].name === "filled" || this.superTemp === this.sight)
+                    for (this.temp.x, this.superTemp; target.x > this.temp.x; this.temp.x++, this.superTemp++) {
+                        if (collision[this.temp.y][this.temp.x].animMan.anims[collision[this.temp.y][this.temp.x].animMan.currentAnim].name === "filled")
                             return;
                     }
                     // If the npc can actually see the player, change the anim to the seen anim and set the flag
                     this.seen = true;
-                    this.currAnim = "npcIdleDSeen";
+                    this.animMan.gotoNamedAnim("npcIdleDSeen");
                 }
                 break;
             case 1:
                 if (target.x == this.gPos.x && target.y > this.gPos.y) {
-                    this.superTemp = 0;
-                    for (this.temp.y; target.y > this.temp.y && this.superTemp <= this.sight; this.temp.y++, this.superTemp++) {
-                        if (collision[this.temp.y][this.temp.x].animMan.anims[collision[this.temp.y][this.temp.x].animMan.currentAnim].name === "filled" || this.superTemp === this.sight)
+                    for (this.temp.y; target.y > this.temp.y; this.temp.y++, this.superTemp++) {
+                        if (collision[this.temp.y][this.temp.x].animMan.anims[collision[this.temp.y][this.temp.x].animMan.currentAnim].name === "filled")
                             return;
                     }
                     this.seen = true;
-                    this.currAnim = "npcIdleLSeen";
+                    this.animMan.gotoNamedAnim("npcIdleLSeen");
                 }
                 break;
             case 2:
                 if (target.x == this.gPos.x && target.y < this.gPos.y) {
                     this.superTemp = 0;
-                    for (this.temp.y; target.y < this.temp.y && this.superTemp <= this.sight; this.temp.y-- , this.superTemp++) {
-                        if (collision[this.temp.y][this.temp.x].animMan.anims[collision[this.temp.y][this.temp.x].animMan.currentAnim].name === "filled" || this.superTemp === this.sight)
+                    for (this.temp.y; target.y < this.temp.y; this.temp.y-- , this.superTemp++) {
+                        if (collision[this.temp.y][this.temp.x].animMan.anims[collision[this.temp.y][this.temp.x].animMan.currentAnim].name === "filled")
                             return;
                     }
                     this.seen = true;
-                    this.currAnim = "npcIdleRSeen";
+                    this.animMan.gotoNamedAnim("npcIdleRSeen");
                 }
                 break;
             case 3:
                 if (target.x < this.gPos.x && target.y == this.gPos.y) {
                     this.superTemp = 0;
-                    for (this.temp.x; target.x < this.temp.x && this.superTemp <= this.sight; this.temp.x--, this.superTemp++) {
-                        if (collision[this.temp.y][this.temp.x].animMan.anims[collision[this.temp.y][this.temp.x].animMan.currentAnim].name === "filled" || this.superTemp === this.sight)
+                    for (this.temp.x; target.x < this.temp.x; this.temp.x--, this.superTemp++) {
+                        if (collision[this.temp.y][this.temp.x].animMan.anims[collision[this.temp.y][this.temp.x].animMan.currentAnim].name === "filled")
                             return;
                     }
                     this.seen = true;
-                    this.currAnim ="npcIdleUSeen";
+                    this.animMan.gotoNamedAnim("npcIdleUSeen");
                 }
                 break;
         }

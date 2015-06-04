@@ -5,6 +5,8 @@
 var SneakySnake = (function () {
     function SneakySnake() {
         this.interval = 15; // 15ms between frames, 66.6666666666667 frames/second
+        this.fps = 0;
+        this.lastFPS = 0;
         this.renderer = new Renderer();
         this.assetmanager = new AssetManager(this.renderer.ctx, this.renderer.canvas);
         this.currentFloor = 0;
@@ -166,6 +168,7 @@ var SneakySnake = (function () {
     };
     SneakySnake.prototype.tick = function () {
         //game logic loop
+        this.fps++;
         // Resets world if player is on a teleporter and thus needs to go to the next level
         if (cmpVector2(this.player.pos, this.player.sDestination) && cmpVector2(this.player.pos, this.currTeleporter.pos)) {
             this.currentFloor++;
@@ -193,12 +196,13 @@ var SneakySnake = (function () {
         else
             this.player.bCanLerp = false;
         // Render everything
-        this.renderer.draw(this.tempTick, this.assetmanager.anims);
+        this.renderer.draw(this.tempTick, this.assetmanager.anims, this.lastFPS);
         // Clear inputs
         this.input.bMouseClicked = false;
         // Check end game (player has no health)
         if (this.player.health <= 0) {
             clearInterval(this.tickID);
+            clearInterval(this.fpsID);
             var that = this;
             var highscore;
             var sHighscore;
@@ -231,7 +235,7 @@ var SneakySnake = (function () {
     SneakySnake.prototype.startGame = function () {
         // Create the player
         var playerLocation = gridToScreen(1, 1);
-        this.player = new Player(playerLocation.x, playerLocation.y, [this.assetmanager.anims["playerIdleD"]]);
+        this.player = new Player(playerLocation.x, playerLocation.y, [this.assetmanager.anims["playerIdleD"], this.assetmanager.anims["playerIdleL"], this.assetmanager.anims["playerIdleU"], this.assetmanager.anims["playerWalkD"], this.assetmanager.anims["playerWalkL"], this.assetmanager.anims["playerWalkU"]]);
         // set up floor
         this.setupFloor();
         // Start tick function
@@ -239,6 +243,10 @@ var SneakySnake = (function () {
         this.tickID = setInterval(function () {
             self.tick();
         }, this.interval);
+        this.fpsID = setInterval(function () {
+            self.lastFPS = self.fps;
+            self.fps = 0;
+        }, 1000);
     };
     SneakySnake.prototype.unsubscribeClick = function () {
         $(this.renderer.canvas).unbind("click");

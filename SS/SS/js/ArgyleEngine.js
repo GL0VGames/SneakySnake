@@ -62,9 +62,8 @@ var Animation = (function () {
     return Animation;
 })();
 var Obj = (function () {
-    function Obj(x, y, anims, sAnim) {
+    function Obj(x, y, anims) {
         this.pos = new Vector2(x, y);
-        this.currAnim = sAnim;
         this.zIndex = 0;
         this.interactable = false;
         this.animMan = new AnimationManager(anims);
@@ -103,7 +102,6 @@ var FloorTile = (function (_super) {
     function FloorTile(x, y, anims) {
         _super.call(this, x, y, anims);
         this.bStatic = true;
-        this.currAnim = "floor";
     }
     FloorTile.prototype.tick = function () {
         this.pos.x++;
@@ -115,7 +113,6 @@ var WallTile = (function (_super) {
     function WallTile(x, y, anims) {
         _super.call(this, x, y, anims);
         this.bStatic = true;
-        this.currAnim = "wall";
         this.zIndex = 5;
     }
     return WallTile;
@@ -125,7 +122,6 @@ var DoorTile = (function (_super) {
     function DoorTile(x, y, anims) {
         _super.call(this, x, y, anims);
         this.bStatic = true;
-        this.currAnim = "door";
         this.zIndex = 5;
     }
     return DoorTile;
@@ -173,6 +169,7 @@ var AssetManager = (function () {
         this.total = 0;
         this.remainder = 0;
         this.curr = 0;
+        this.doneLoading = false;
         // Arrays of anims, images, and audio
         this.images = {};
         this.imageURLs = {
@@ -260,7 +257,8 @@ var AssetManager = (function () {
             "num": this.curr
         });
         $("body").on("assetLoaded", function (e, d) {
-            if (d.num >= that.total) {
+            if (d.num >= that.total && !that.doneLoading) {
+                that.doneLoading = true;
                 for (var j in that.anims)
                     that.anims[j].setImage(that.images[j]);
                 $("body").trigger("assetsFinished");
@@ -304,7 +302,7 @@ var Renderer = (function () {
         $(this.canvas).css({ "display": "block", "width": "1024", "height": "600", "margin-left": "auto", "margin-right": "auto" });
         this.ctx = this.canvas.getContext("2d");
     }
-    Renderer.prototype.draw = function (objs, anims) {
+    Renderer.prototype.draw = function (objs, anims, fps) {
         // draw background
         this.ctx.fillStyle = "black";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -320,11 +318,7 @@ var Renderer = (function () {
         });
         for (var i = 0; i < objs.length; i++) {
             var obj = objs[i];
-            var anim;
-            if (typeof (obj.currAnim) !== "undefined")
-                anim = anims[obj.currAnim];
-            else
-                anim = obj.animMan.anims[obj.animMan.currentAnim];
+            var anim = obj.animMan.anims[obj.animMan.currentAnim];
             // For automatic anims only (so not npc's or the player or anything like that atm)
             if (!anim.bStatic && anim.frameCounterMax > 0 && anim.frameCount == (anim.frameCounterMax - 1)) {
                 obj.animMan.rightFrame();
@@ -332,6 +326,10 @@ var Renderer = (function () {
             anim.frameCount = (anim.frameCount + 1) % anim.frameCounterMax;
             this.ctx.drawImage(anim.image, obj.animMan.framePosition.x, obj.animMan.framePosition.y, anim.frameSize.x, anim.frameSize.y, obj.pos.x - anim.offset.x, obj.pos.y - anim.offset.y, anim.frameSize.x, anim.frameSize.y);
         }
+        // FPS Counter
+        this.ctx.fillStyle = "#DD1321";
+        this.ctx.font = "2em Inconsolata";
+        this.ctx.fillText("fps: " + JSON.stringify(fps), this.canvas.width / 11, this.canvas.height / 11);
     };
     return Renderer;
 })();

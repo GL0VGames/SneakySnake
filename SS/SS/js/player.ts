@@ -4,7 +4,7 @@ class Player extends Obj {
     public gDestination: Vector2;
     public sDestination: Vector2;
     public tempDestination: Vector2;
-    public speed: number = .14;// Usually 2.5 is fine, for some reason .14 is necessary now
+    public speed: number = 2.5;// Usually 2.5 is fine, for some reason .14 is necessary now
     public bCanLerp: boolean;
     public previousLoc: Array<Vector2>;
     public following: Array<NPC>;
@@ -25,13 +25,13 @@ class Player extends Obj {
             if (!cmpVector2(this.pos, this.sDestination)) {
                 // Change the animation depending on which way the character is moving
                 if (this.lastKey === this.controls[0])
-                    this.currAnim = "playerWalkL";
+                    this.animMan.gotoNamedAnim("playerWalkL");
                 else if (this.lastKey === this.controls[1])
-                    this.currAnim = "playerWalkU";
+                    this.animMan.gotoNamedAnim("playerWalkU");
                 else if (this.lastKey === this.controls[2])
-                    this.currAnim = "playerWalkU";
+                    this.animMan.gotoNamedAnim("playerWalkU");
                 else if (this.lastKey === this.controls[3])
-                    this.currAnim = "playerWalkD";
+                    this.animMan.gotoNamedAnim("playerWalkD");
                 this.pos = lerp(this.pos, this.sDestination, this.speed);
             }
             else {
@@ -40,13 +40,13 @@ class Player extends Obj {
                     this.tempDestination.x = this.gDestination.x;
                     this.tempDestination.y = this.gDestination.y;
                     if (this.lastKey === this.controls[0])
-                        this.currAnim = "playerIdleL";
+                        this.animMan.gotoNamedAnim("playerIdleL");
                     else if (this.lastKey === this.controls[1])
-                        this.currAnim = "playerIdleU";
+                        this.animMan.gotoNamedAnim("playerIdleU");
                     else if (this.lastKey === this.controls[2])
-                        this.currAnim = "playerIdleU";
+                        this.animMan.gotoNamedAnim("playerIdleU");
                     else if (this.lastKey === this.controls[3])
-                        this.currAnim = "playerIdleD";
+                        this.animMan.gotoNamedAnim("playerIdleD");
                 }
             }
         } else {
@@ -55,13 +55,13 @@ class Player extends Obj {
                 this.tempDestination.x = this.gDestination.x;
                 this.tempDestination.y = this.gDestination.y;
                 if (this.lastKey === this.controls[0])
-                    this.currAnim = "playerIdleL";
+                    this.animMan.gotoNamedAnim("playerIdleL");
                 else if (this.lastKey === this.controls[1])
-                    this.currAnim = "playerIdleU";
+                    this.animMan.gotoNamedAnim("playerIdleU");
                 else if (this.lastKey === this.controls[2])
-                    this.currAnim = "playerIdleU";
+                    this.animMan.gotoNamedAnim("playerIdleU");
                 else if (this.lastKey === this.controls[3])
-                    this.currAnim = "playerIdleD";
+                    this.animMan.gotoNamedAnim("playerIdleD");
             }
         }
 
@@ -95,7 +95,6 @@ class Player extends Obj {
         this.sDestination = new Vector2(x, y);
         this.tempDestination = new Vector2(1, 1);
         this.previousLoc = [new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1)];
-        this.currAnim = "playerIdleD";
         this.zIndex = 5;
         this.bCanLerp = true;
         this.following = [];

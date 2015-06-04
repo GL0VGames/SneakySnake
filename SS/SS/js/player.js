@@ -10,7 +10,7 @@ var Player = (function (_super) {
     function Player(x, y, anims) {
         _super.call(this, x, y, anims);
         this.bStatic = false;
-        this.speed = .14; // Usually 2.5 is fine, for some reason .14 is necessary now
+        this.speed = 2.5; // Usually 2.5 is fine, for some reason .14 is necessary now
         this.health = 1;
         this.controls = ["s", "a", "w", "d"];
         this.pos = new Vector2(x, y);
@@ -18,7 +18,6 @@ var Player = (function (_super) {
         this.sDestination = new Vector2(x, y);
         this.tempDestination = new Vector2(1, 1);
         this.previousLoc = [new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1)];
-        this.currAnim = "playerIdleD";
         this.zIndex = 5;
         this.bCanLerp = true;
         this.following = [];
@@ -36,13 +35,13 @@ var Player = (function (_super) {
             if (!cmpVector2(this.pos, this.sDestination)) {
                 // Change the animation depending on which way the character is moving
                 if (this.lastKey === this.controls[0])
-                    this.currAnim = "playerWalkL";
+                    this.animMan.gotoNamedAnim("playerWalkL");
                 else if (this.lastKey === this.controls[1])
-                    this.currAnim = "playerWalkU";
+                    this.animMan.gotoNamedAnim("playerWalkU");
                 else if (this.lastKey === this.controls[2])
-                    this.currAnim = "playerWalkU";
+                    this.animMan.gotoNamedAnim("playerWalkU");
                 else if (this.lastKey === this.controls[3])
-                    this.currAnim = "playerWalkD";
+                    this.animMan.gotoNamedAnim("playerWalkD");
                 this.pos = lerp(this.pos, this.sDestination, this.speed);
             }
             else {
@@ -51,13 +50,13 @@ var Player = (function (_super) {
                     this.tempDestination.x = this.gDestination.x;
                     this.tempDestination.y = this.gDestination.y;
                     if (this.lastKey === this.controls[0])
-                        this.currAnim = "playerIdleL";
+                        this.animMan.gotoNamedAnim("playerIdleL");
                     else if (this.lastKey === this.controls[1])
-                        this.currAnim = "playerIdleU";
+                        this.animMan.gotoNamedAnim("playerIdleU");
                     else if (this.lastKey === this.controls[2])
-                        this.currAnim = "playerIdleU";
+                        this.animMan.gotoNamedAnim("playerIdleU");
                     else if (this.lastKey === this.controls[3])
-                        this.currAnim = "playerIdleD";
+                        this.animMan.gotoNamedAnim("playerIdleD");
                 }
             }
         }
@@ -67,13 +66,13 @@ var Player = (function (_super) {
                 this.tempDestination.x = this.gDestination.x;
                 this.tempDestination.y = this.gDestination.y;
                 if (this.lastKey === this.controls[0])
-                    this.currAnim = "playerIdleL";
+                    this.animMan.gotoNamedAnim("playerIdleL");
                 else if (this.lastKey === this.controls[1])
-                    this.currAnim = "playerIdleU";
+                    this.animMan.gotoNamedAnim("playerIdleU");
                 else if (this.lastKey === this.controls[2])
-                    this.currAnim = "playerIdleU";
+                    this.animMan.gotoNamedAnim("playerIdleU");
                 else if (this.lastKey === this.controls[3])
-                    this.currAnim = "playerIdleD";
+                    this.animMan.gotoNamedAnim("playerIdleD");
             }
         }
         if (input.keyPresses.length > 0 && cmpVector2(this.pos, this.sDestination)) {
