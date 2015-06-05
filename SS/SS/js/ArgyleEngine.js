@@ -18,6 +18,10 @@ function cmpVector2(a, b) {
         return true;
     return false;
 }
+// Finds difference between a and b (a-b) and returns vector2
+function difVector2(a, b) {
+    return new Vector2(a.x - b.x, a.y - b.y);
+}
 function collide(temp, NPCs) {
     for (var ind = 0; ind < NPCs.length; ind++) {
         if (cmpVector2(temp, NPCs[ind].gPos))
@@ -65,7 +69,6 @@ var Obj = (function () {
     function Obj(x, y, anims) {
         this.pos = new Vector2(x, y);
         this.zIndex = 0;
-        this.interactable = false;
         this.animMan = new AnimationManager(anims);
     }
     // The "?" denotes an optional parameter, for those objects that don't need a vector2 it's not passed in
@@ -79,7 +82,6 @@ var Obj = (function () {
 })();
 var Interactable = (function (_super) {
     __extends(Interactable, _super);
-    // Other stuff maybe, idk
     function Interactable(x, y, z, anims) {
         _super.call(this, x, y, anims);
         this.interactable = true;
@@ -138,7 +140,10 @@ function div(a, b) {
     return (~~(a / b)) * b;
 }
 //function screenToGrid(x: number, y: number) {
-//    var out = new Vector2(Math.round((((x / 32) - 18.75 + (y / 16)) / 2) - 2.72), Math.round(((18.75 + (y / 16) - (x / 32)) / 2)) - 2.75);
+//	var xg = Math.round((((x / 32) - 18.75 + (y / 16)) / 2) - 2.72);
+//	xg = x - 513 
+//	var y = Math.round(((18.75 + (y / 16) - (x / 32)) / 2)) - 2.75);
+//    var out = new Vector2(xg, yg);
 //    return out;
 //}
 function lerp(start, end, speed) {
@@ -327,28 +332,32 @@ var Renderer = (function () {
             this.ctx.drawImage(anim.image, obj.animMan.framePosition.x, obj.animMan.framePosition.y, anim.frameSize.x, anim.frameSize.y, obj.pos.x - anim.offset.x, obj.pos.y - anim.offset.y, anim.frameSize.x, anim.frameSize.y);
         }
         // FPS Counter
-        this.ctx.fillStyle = "#DD1321";
-        this.ctx.font = "2em Inconsolata";
-        this.ctx.fillText("fps: " + JSON.stringify(fps), this.canvas.width / 11, this.canvas.height / 11);
+        if (typeof (fps) !== undefined && fps != -1) {
+            this.ctx.fillStyle = "#DD1321";
+            this.ctx.font = "2em Inconsolata";
+            this.ctx.fillText("fps: " + JSON.stringify(fps), this.canvas.width / 11, this.canvas.height / 11);
+        }
     };
     return Renderer;
 })();
 var AnimationManager = (function () {
     function AnimationManager(anims, currentAnim) {
-        this.frame = 1;
+        this.frame = 0;
         this.anims = anims;
         this.currentAnim = (typeof (currentAnim) !== "undefined") ? currentAnim : 0;
         this.framePosition = new Vector2(0, 0);
     }
     AnimationManager.prototype.nextAnim = function () {
-        this.frame = 1;
+        this.frame = 0;
         this.currentAnim = (this.currentAnim + 1) % this.anims.length;
     };
     AnimationManager.prototype.gotoNamedAnim = function (name) {
         for (var x = 0; x < this.anims.length; x++) {
             if (name == this.anims[x].name) {
                 this.currentAnim = x;
-                this.frame = 1;
+                this.frame = 0;
+                this.framePosition.x = this.frame * this.anims[this.currentAnim].frameSize.x;
+                this.framePosition.y = Math.floor(this.frame / this.anims[this.currentAnim].sheetWidth);
                 break;
             }
         }

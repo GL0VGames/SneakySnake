@@ -7,6 +7,7 @@ var SneakySnake = (function () {
         this.interval = 15; // 15ms between frames, 66.6666666666667 frames/second
         this.fps = 0;
         this.lastFPS = 0;
+        this.bFPS = false;
         this.renderer = new Renderer();
         this.assetmanager = new AssetManager(this.renderer.ctx, this.renderer.canvas);
         this.currentFloor = 0;
@@ -48,6 +49,8 @@ var SneakySnake = (function () {
                 that.restartGame();
             else if (e.which == 84)
                 that.toggleControls();
+            else if (e.which == 70)
+                that.bFPS = !that.bFPS;
         });
     }
     SneakySnake.prototype.setupFloor = function () {
@@ -120,6 +123,7 @@ var SneakySnake = (function () {
     SneakySnake.prototype.restartGame = function () {
         // Stop the tick function from ticking
         clearInterval(this.tickID);
+        clearInterval(this.fpsID);
         // Make new world
         this.world = this.worldGen();
         // Reset everything
@@ -182,9 +186,8 @@ var SneakySnake = (function () {
         for (this.tempi = 0; this.tempi < this.NPCs.length; this.tempi++) {
             this.NPCs[this.tempi].tick(this.input, this.player, this.collisionMap[this.currentFloor]);
             if (this.NPCs[this.tempi].seen) {
-                if (cmpVector2(this.player.pos, this.player.sDestination) && !cmpVector2(this.player.gDestination, this.NPCs[this.tempi].gPos)) {
+                if (cmpVector2(this.player.sDestination, this.player.pos))
                     this.player.health -= 1;
-                }
                 break;
             }
         }
@@ -196,7 +199,7 @@ var SneakySnake = (function () {
         else
             this.player.bCanLerp = false;
         // Render everything
-        this.renderer.draw(this.tempTick, this.assetmanager.anims, this.lastFPS);
+        this.renderer.draw(this.tempTick, this.assetmanager.anims, (this.bFPS) ? this.lastFPS : -1);
         // Clear inputs
         this.input.bMouseClicked = false;
         // Check end game (player has no health)

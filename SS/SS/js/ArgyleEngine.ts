@@ -12,6 +12,11 @@ function cmpVector2(a: Vector2, b: Vector2): boolean {
     return false;
 }
 
+// Finds difference between a and b (a-b) and returns vector2
+function difVector2(a: Vector2, b: Vector2): Vector2 {
+	return new Vector2(a.x - b.x, a.y - b.y);
+}
+
 function collide(temp: Vector2, NPCs: Array<Obj>): boolean {
     for (var ind: number = 0; ind < NPCs.length; ind++) {
         if (cmpVector2(temp, NPCs[ind].gPos))
@@ -76,7 +81,6 @@ class Obj {
     gPos: Vector2;
 	animMan: AnimationManager;
     zIndex: number;
-    interactable: boolean;
     // The "?" denotes an optional parameter, for those objects that don't need a vector2 it's not passed in
     public tick(input?: Input, astar?: any, p?: Player): void {
         console.warn("calling undefined behavior");
@@ -88,13 +92,14 @@ class Obj {
     constructor(x: number, y: number, anims: Array<Animation>) {
         this.pos = new Vector2(x, y);
         this.zIndex = 0;
-        this.interactable = false;
 		this.animMan = new AnimationManager(anims);
     }
 }
 
 class Interactable extends Obj {
     // Other stuff maybe, idk
+	public interactable: boolean;
+	 
     constructor(x: number, y: number, z: number, anims: Array<Animation>) {
         super(x, y, anims);
         this.interactable = true;
@@ -153,7 +158,10 @@ function div(a: number, b: number): number {
 }
 
 //function screenToGrid(x: number, y: number) {
-//    var out = new Vector2(Math.round((((x / 32) - 18.75 + (y / 16)) / 2) - 2.72), Math.round(((18.75 + (y / 16) - (x / 32)) / 2)) - 2.75);
+//	var xg = Math.round((((x / 32) - 18.75 + (y / 16)) / 2) - 2.72);
+//	xg = x - 513 
+//	var y = Math.round(((18.75 + (y / 16) - (x / 32)) / 2)) - 2.75);
+//    var out = new Vector2(xg, yg);
 //    return out;
 //}
 
@@ -363,10 +371,13 @@ class Renderer {
         }
 
 		// FPS Counter
-		this.ctx.fillStyle = "#DD1321";
-		this.ctx.font = "2em Inconsolata";
-		this.ctx.fillText("fps: " + JSON.stringify(fps), this.canvas.width/11, this.canvas.height/11);
-    }
+		if (typeof (fps) !== undefined && fps != -1) {
+			this.ctx.fillStyle = "#DD1321";
+			this.ctx.font = "2em Inconsolata";
+			this.ctx.fillText("fps: " + JSON.stringify(fps), this.canvas.width / 11, this.canvas.height / 11);
+		}
+
+	}
     constructor() {
         this.canvas = <HTMLCanvasElement> document.getElementById("canvas");
         this.canvas.width = 1024;
@@ -377,13 +388,13 @@ class Renderer {
 }
 
 class AnimationManager {
-	public frame: number = 1;
+	public frame: number = 0;
 	public framePosition: Vector2;
 	public anims: Array<Animation>;
 	public currentAnim: number;
 
 	public nextAnim() {
-		this.frame = 1;
+		this.frame = 0;
 		this.currentAnim = (this.currentAnim + 1) % this.anims.length;
 	}
 
@@ -391,7 +402,9 @@ class AnimationManager {
 		for (var x: number = 0; x < this.anims.length; x++) {
 			if (name == this.anims[x].name) {
 				this.currentAnim = x;
-				this.frame = 1;
+				this.frame = 0;
+				this.framePosition.x = this.frame * this.anims[this.currentAnim].frameSize.x;
+				this.framePosition.y = Math.floor(this.frame / this.anims[this.currentAnim].sheetWidth);
 				break;
 			}
 		}

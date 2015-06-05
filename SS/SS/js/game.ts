@@ -25,6 +25,7 @@ class SneakySnake{
 	public fps: number = 0;
 	public lastFPS: number = 0;
 	public fpsID: number;
+	private bFPS: boolean = false;
 
     private setupFloor() {
         this.player.pos = gridToScreen(1, 1);
@@ -104,6 +105,7 @@ class SneakySnake{
     public restartGame() {
         // Stop the tick function from ticking
         clearInterval(this.tickID);
+		clearInterval(this.fpsID);
 
         // Make new world
         this.world = this.worldGen();
@@ -183,9 +185,9 @@ class SneakySnake{
         for (this.tempi = 0; this.tempi < this.NPCs.length; this.tempi++) {
             this.NPCs[this.tempi].tick(this.input, this.player, this.collisionMap[this.currentFloor]);            
             if (this.NPCs[this.tempi].seen) {
-                if (cmpVector2(this.player.pos, this.player.sDestination) && !cmpVector2(this.player.gDestination, this.NPCs[this.tempi].gPos)) {
-                    this.player.health -= 1;
-                }
+				
+					if (cmpVector2(this.player.sDestination, this.player.pos))
+						this.player.health -= 1;
                 break;
             }
         }
@@ -200,7 +202,7 @@ class SneakySnake{
             this.player.bCanLerp = false;
 
         // Render everything
-        this.renderer.draw(this.tempTick, this.assetmanager.anims, this.lastFPS);
+        this.renderer.draw(this.tempTick, this.assetmanager.anims, (this.bFPS) ? this.lastFPS : -1);
 
         // Clear inputs
         this.input.bMouseClicked = false;
@@ -299,6 +301,8 @@ class SneakySnake{
                 that.restartGame();
             else if (e.which == 84) //t
                 that.toggleControls();
+			else if (e.which == 70) //f
+				that.bFPS = !that.bFPS;
         });
     }
 }

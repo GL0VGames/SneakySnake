@@ -13,9 +13,7 @@ var NPC = (function (_super) {
         this.bStatic = false;
         this.bStartFollowing = false;
         this.bFollowing = false;
-        this.interactable = true;
         this.superTemp = 0;
-        this.tempi = 0;
         this.gPos = new Vector2(gx, gy);
         this.pos = new Vector2(x, y);
         this.zIndex = 5;
@@ -23,59 +21,71 @@ var NPC = (function (_super) {
         this.seen = false;
         this.turnCounter = randBetween(NPC.turnMin, NPC.turnMax, true);
         this.animMan = new AnimationManager(anims);
+        this.animMan.frame = randBetween(0, 3, true);
         // Pick a random turn type
         this.sightType = randBetween(0, 2, true); // 0 = cw, 1 = ccw, 2 = rand
     }
     // Function to see if the player has crossed the npc's vision and to change the anim
     NPC.prototype.look = function (target, collision) {
-        this.temp = new Vector2(this.gPos.x, this.gPos.y);
-        switch (this.animMan.frame) {
-            case 0:
-                // Make sure the npc can actually see the player, no walls in the way and not out of range ( 4 )
-                if (target.x > this.gPos.x && target.y == this.gPos.y) {
-                    this.superTemp = 0;
-                    for (this.temp.x, this.superTemp; target.x > this.temp.x; this.temp.x++, this.superTemp++) {
-                        if (collision[this.temp.y][this.temp.x].animMan.anims[collision[this.temp.y][this.temp.x].animMan.currentAnim].name === "filled")
-                            return;
+        this.temp = this.gPos; // Because you can't decrease this.gPos
+        this.tempVec = difVector2(target, this.gPos);
+        this.tempVec.x = Math.abs(this.tempVec.x);
+        this.tempVec.y = Math.abs(this.tempVec.y);
+        if (this.tempVec.x > 4 && this.tempVec.y > 4)
+            return;
+        else if (this.tempVec.x < 4 && (this.animMan.frame == 0 || this.animMan.frame == 2))
+            switch (this.animMan.frame) {
+                case 0:
+                    // Make sure the npc can actually see the player, no walls in the way and not out of range ( 4 )
+                    if (target.x > this.temp.x && target.y == this.temp.y) {
+                        this.superTemp = 0;
+                        for (this.temp.x; target.x > this.temp.x; this.temp.x++, this.superTemp++) {
+                            if (collision[this.temp.y][this.temp.x].animMan.anims[collision[this.temp.y][this.temp.x].animMan.currentAnim].name === "filled")
+                                return;
+                        }
+                        // If the npc can actually see the player, change the anim to the seen anim and set the flag
+                        this.seen = true;
+                        this.animMan.gotoNamedAnim("npcIdleDSeen");
                     }
-                    // If the npc can actually see the player, change the anim to the seen anim and set the flag
-                    this.seen = true;
-                    this.animMan.gotoNamedAnim("npcIdleDSeen");
-                }
-                break;
-            case 1:
-                if (target.x == this.gPos.x && target.y > this.gPos.y) {
-                    for (this.temp.y; target.y > this.temp.y; this.temp.y++, this.superTemp++) {
-                        if (collision[this.temp.y][this.temp.x].animMan.anims[collision[this.temp.y][this.temp.x].animMan.currentAnim].name === "filled")
-                            return;
+                    break;
+                case 2:
+                    if (target.x < this.temp.x && target.y == this.temp.y) {
+                        this.superTemp = 0;
+                        for (this.temp.x; target.x < this.temp.x; this.temp.x--, this.superTemp++) {
+                            if (collision[this.temp.y][this.temp.x].animMan.anims[collision[this.temp.y][this.temp.x].animMan.currentAnim].name === "filled")
+                                return;
+                        }
+                        this.seen = true;
+                        this.animMan.gotoNamedAnim("npcIdleUSeen");
                     }
-                    this.seen = true;
-                    this.animMan.gotoNamedAnim("npcIdleLSeen");
-                }
-                break;
-            case 2:
-                if (target.x == this.gPos.x && target.y < this.gPos.y) {
-                    this.superTemp = 0;
-                    for (this.temp.y; target.y < this.temp.y; this.temp.y--, this.superTemp++) {
-                        if (collision[this.temp.y][this.temp.x].animMan.anims[collision[this.temp.y][this.temp.x].animMan.currentAnim].name === "filled")
-                            return;
+                    break;
+            }
+        else if (this.tempVec.y < 4 && (this.animMan.frame == 1 || this.animMan.frame == 3))
+            switch (this.animMan.frame) {
+                case 1:
+                    if (target.x == this.temp.x && target.y > this.temp.y) {
+                        for (this.temp.y; target.y > this.temp.y; this.temp.y++, this.superTemp++) {
+                            if (collision[this.temp.y][this.temp.x].animMan.anims[collision[this.temp.y][this.temp.x].animMan.currentAnim].name === "filled")
+                                return;
+                        }
+                        this.seen = true;
+                        this.animMan.gotoNamedAnim("npcIdleLSeen");
                     }
-                    this.seen = true;
-                    this.animMan.gotoNamedAnim("npcIdleRSeen");
-                }
-                break;
-            case 3:
-                if (target.x < this.gPos.x && target.y == this.gPos.y) {
-                    this.superTemp = 0;
-                    for (this.temp.x; target.x < this.temp.x; this.temp.x--, this.superTemp++) {
-                        if (collision[this.temp.y][this.temp.x].animMan.anims[collision[this.temp.y][this.temp.x].animMan.currentAnim].name === "filled")
-                            return;
+                    break;
+                case 3:
+                    if (target.x == this.temp.x && target.y < this.temp.y) {
+                        this.superTemp = 0;
+                        for (this.temp.y; target.y < this.temp.y; this.temp.y--, this.superTemp++) {
+                            if (collision[this.temp.y][this.temp.x].animMan.anims[collision[this.temp.y][this.temp.x].animMan.currentAnim].name === "filled")
+                                return;
+                        }
+                        this.seen = true;
+                        this.animMan.gotoNamedAnim("npcIdleRSeen");
                     }
-                    this.seen = true;
-                    this.animMan.gotoNamedAnim("npcIdleUSeen");
-                }
-                break;
-        }
+                    break;
+            }
+        if (this.animMan.frame < 0)
+            this.animMan.frame = 0;
     };
     // Set the index in the players last positions array that the npc is supposed to look at
     NPC.prototype.setfollowIndex = function (i) {
@@ -115,8 +125,7 @@ var NPC = (function (_super) {
             this.bFollowing = true;
             p.speed += .1;
         }
-        // If the npc is supposed to be following the player, change the anim to the following anim
-        if (this.bFollowing) {
+        else if (this.bFollowing) {
             this.followPlayer(p);
             if (!this.bStartFollowing) {
                 this.animMan.gotoNamedAnim("npcFollowAnim");
@@ -128,12 +137,13 @@ var NPC = (function (_super) {
             this.rotate();
             // check if can see player or any part of tail
             this.look(p.gDestination, collision);
-            for (this.tempi = 0; this.tempi < p.following.length; this.tempi++)
-                this.look(p.following[this.tempi].gPos, collision);
+            for (this.temp = 0; this.temp < p.following.length; this.temp++)
+                this.look(p.following[this.temp].gPos, collision);
         }
     };
     NPC.turnMin = 20;
     NPC.turnMax = 200;
+    NPC.visionMax = 4;
     return NPC;
 })(Interactable);
 //# sourceMappingURL=NPC.js.map
