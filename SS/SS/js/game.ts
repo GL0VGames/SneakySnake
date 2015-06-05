@@ -1,8 +1,8 @@
 /// <reference path="ArgyleEngine.ts"/>
-/// <reference path="player.ts"/>
+/// <reference path="Player.ts"/>
 /// <reference path="NPC.ts"/>
 /// <reference path="Teleporter.ts"/>
-class SneakySnake{
+class SneakySnakeGame {
     public world: Building;
     public currentFloor: number;
     public floorSize: number;
@@ -10,8 +10,6 @@ class SneakySnake{
     public assetmanager: AssetManager;
     public staticObjs: Array<Obj>; // No tick calls
     public dynamicObjs: Array<Obj>; // Tick calls
-    public pickupObjs: Array<Obj>; // No tick calls
-    public interactableObjs: Array<Obj>; // Tick calls when player is standing on it
     public interval: number = 15; // 15ms between frames, 66.6666666666667 frames/second
     public tickID: any; // ID to clear for tick function when restarting game
     public player: Player;
@@ -111,13 +109,11 @@ class SneakySnake{
         // Reset everything
         this.staticObjs = [];
         this.dynamicObjs = [];
-        this.pickupObjs = [];
-        this.interactableObjs = [];
         this.collisionMap = this.world.collisionMap;
         this.numNPC = 3;
         this.NPCs = [];
         this.currentFloor = 0;
-        this.input.keyPresses = [];;
+        this.input.keyPresses = [];
 
         // Run the function to start a new game
         this.startGame();
@@ -168,7 +164,7 @@ class SneakySnake{
         }
 
         // Draw objects
-        this.tempTick = this.staticObjs.concat(this.dynamicObjs).concat(this.pickupObjs).concat(this.NPCs).concat(this.currTeleporter);
+        this.tempTick = this.staticObjs.concat(this.dynamicObjs).concat(this.NPCs).concat(this.currTeleporter);
         this.tempTick.push(this.player);
 
         // show collision map
@@ -193,7 +189,7 @@ class SneakySnake{
         // Tick player
         this.player.tick(this.input, this.collisionMap);
 
-        // Dissallows the player from moving through walls
+        // Disallows the player from moving through walls
         if (this.collisionMap[this.currentFloor][this.player.tempDestination.y][this.player.tempDestination.x].animMan.anims[0].name !== "filled")
             this.player.bCanLerp = true;
         else
@@ -241,8 +237,7 @@ class SneakySnake{
         // Create the player
         var playerLocation: Vector2 = gridToScreen(1, 1);
         this.player = new Player(playerLocation.x, playerLocation.y, [this.assetmanager.anims["playerIdleD"], this.assetmanager.anims["playerIdleL"], this.assetmanager.anims["playerIdleU"], this.assetmanager.anims["playerWalkD"], this.assetmanager.anims["playerWalkL"], this.assetmanager.anims["playerWalkU"]]);
-
-        // set up floor
+        
         this.setupFloor();
 
         // Start tick function
@@ -265,22 +260,19 @@ class SneakySnake{
         this.viewWorld(this.world);
         this.staticObjs = [];
         this.dynamicObjs = [];
-        this.pickupObjs = [];
-        this.interactableObjs = [];
         this.collisionMap = this.world.collisionMap;
         this.numNPC = 3;
         this.NPCs = [];
 
         var that = this;
+        
+        // Bind inputs
         this.input = new Input;
-        // Handle input
         $(this.renderer.canvas).click(function (e) {
             that.input.bMouseClicked = true;
             that.input.mouseClickPos.x = e.pageX;
             that.input.mouseClickPos.y = e.pageY;
         });
-
-        // Bind key inputs
         $(window).keyup(function (e) {
             if (e.which == 87)
                 that.input.keyPresses.push("w");
@@ -295,16 +287,16 @@ class SneakySnake{
                     that.assetmanager.audio.main.play();
                 else that.assetmanager.audio.main.pause();
             }
-            else if (e.which == 82) //r
+            else if (e.which == 82) // R //
                 that.restartGame();
-            else if (e.which == 84) //t
+            else if (e.which == 84) // T //
                 that.toggleControls();
         });
     }
 }
 $(function game(): void {
 
-    var game = new SneakySnake();
+    var game = new SneakySnakeGame();
     $(".new").click(function () {
         // Restart the game if the button is pressed
         game.restartGame();

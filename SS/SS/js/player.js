@@ -9,11 +9,10 @@ var Player = (function (_super) {
     __extends(Player, _super);
     function Player(x, y, anims) {
         _super.call(this, x, y, anims);
-        this.bStatic = false;
-        this.speed = 2.5; // Usually 2.5 is fine, for some reason .14 is necessary now
+        this.speed = 2.5;
         this.health = 1;
-        this.controls = ["s", "a", "w", "d"];
-        this.pos = new Vector2(x, y);
+        this.controls = ["s", "a", "w", "d"]; // Indexed by enum Direction
+        this.bStatic = false;
         this.gDestination = new Vector2(1, 1);
         this.sDestination = new Vector2(x, y);
         this.tempDestination = new Vector2(1, 1);

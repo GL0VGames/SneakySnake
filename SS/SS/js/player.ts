@@ -1,16 +1,27 @@
 ﻿/// <reference path="ArgyleEngine.ts"/>
 class Player extends Obj {
-    public bStatic: boolean = false;
     public gDestination: Vector2;
     public sDestination: Vector2;
     public tempDestination: Vector2;
-    public speed: number = 2.5;// Usually 2.5 is fine, for some reason .14 is necessary now
+    public speed: number = 2.5;
     public bCanLerp: boolean;
     public previousLoc: Array<Vector2>;
     public following: Array<NPC>;
     private lastKey: string;
     public health: number = 1;
-    public controls: Array<string> = ["s", "a", "w", "d"];
+    public controls: Array<string> = ["s", "a", "w", "d"]; // Indexed by enum Direction
+
+    constructor(x: number, y: number, anims: Array<Animation>) {
+        super(x, y, anims);
+        this.bStatic = false;
+        this.gDestination = new Vector2(1, 1);
+        this.sDestination = new Vector2(x, y);
+        this.tempDestination = new Vector2(1, 1);
+        this.previousLoc = [new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1)];
+        this.zIndex = 5;
+        this.bCanLerp = true;
+        this.following = [];
+    }
 
     public tick(input: Input, collisionmap: any): void {
         // Make sure the player is allowed to  move right now
@@ -87,16 +98,5 @@ class Player extends Obj {
             input.keyPresses.pop();  
         }
         
-    }
-    constructor(x: number, y: number, anims: Array<Animation>) {
-        super(x, y, anims);
-        this.pos = new Vector2(x, y);
-        this.gDestination = new Vector2(1, 1);
-        this.sDestination = new Vector2(x, y);
-        this.tempDestination = new Vector2(1, 1);
-        this.previousLoc = [new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1)];
-        this.zIndex = 5;
-        this.bCanLerp = true;
-        this.following = [];
     }
 } 

@@ -93,16 +93,6 @@ class Obj {
     }
 }
 
-class Interactable extends Obj {
-    // Other stuff maybe, idk
-    constructor(x: number, y: number, z: number, anims: Array<Animation>) {
-        super(x, y, anims);
-        this.interactable = true;
-        this.bStatic = true;
-        this.zIndex = z;
-    }
-}
-
 class CollisionTile extends Obj {
     bStatic = true;
     constructor(x: number, y: number, anims: Array<Animation>) {
@@ -170,8 +160,7 @@ function lerp(start: Vector2, end: Vector2, speed: number) {
     }
 }
 
-
-
+enum Direction { DL, UL, UR, DR };
 enum RTypes { FLOOR, WALL, DOOR };
 
 class AssetManager {
