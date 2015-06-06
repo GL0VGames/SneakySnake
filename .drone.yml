@@ -1,4 +1,4 @@
-image: bradrydzewski/node:0.10
+image: https://raw.githubusercontent.com/docker-library/official-images/master/library/node
 script:
 	-	npm install
 	-	gulp
