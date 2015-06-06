@@ -119,6 +119,7 @@ class SneakySnakeGame {
         // Makes a new world
         return new Building(this.floorSize, this.assetmanager);
     }
+
     public viewWorld(w: Building): void {
         var wall: string = "id ='wall";
         var door: string = "id ='door"
@@ -175,9 +176,8 @@ class SneakySnakeGame {
         for (this.tempi = 0; this.tempi < this.NPCs.length; this.tempi++) {
             this.NPCs[this.tempi].tick(this.input, this.player, this.collisionMap[this.currentFloor]);            
             if (this.NPCs[this.tempi].seen) {
-				
-					if (cmpVector2(this.player.sDestination, this.player.pos))
-						this.player.health -= 1;
+				if (cmpVector2(this.player.sDestination, this.player.pos))
+					this.player.health -= 1;
                 break;
             }
         }
@@ -229,6 +229,7 @@ class SneakySnakeGame {
             }, 400);
 		}
     }
+
     public startGame(): void {
         // Create the player
         var playerLocation: Vector2 = gridToScreen(1, 1);
@@ -244,9 +245,11 @@ class SneakySnakeGame {
 			self.fps = 0;
 		}, 1000);
     }
+
     public unsubscribeClick() {
         $(this.renderer.canvas).unbind("click");
     }
+
     constructor() {
         this.renderer = new Renderer();
         this.assetmanager = new AssetManager(this.renderer.ctx, this.renderer.canvas);

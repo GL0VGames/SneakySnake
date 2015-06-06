@@ -12,13 +12,12 @@ class Player extends Obj {
     public controls: Array<string> = ["s", "a", "w", "d"]; // Indexed by enum Direction
 
     constructor(x: number, y: number, anims: Array<Animation>) {
-        super(x, y, anims);
+        super(x, y, anims, 5);
         this.bStatic = false;
         this.gDestination = new Vector2(1, 1);
         this.sDestination = new Vector2(x, y);
         this.tempDestination = new Vector2(1, 1);
         this.previousLoc = [new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1)];
-        this.zIndex = 5;
         this.bCanLerp = true;
         this.following = [];
     }

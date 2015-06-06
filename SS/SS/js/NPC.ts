@@ -140,10 +140,9 @@ class NPC extends Obj {
     }
 
     constructor(sVect: Vector2, gVect: Vector2, z: number, anims: Array<Animation>) {
-        super(sVect.x, sVect.y, z, anims);
+        super(sVect.x, sVect.y, anims, z);
         this.gPos = gVect;
         this.pos = sVect;
-        this.zIndex = 5;
         this.followIndex = -5;
         this.seen = false;
 		this.turnCounter = randBetween(NPC.turnMin, NPC.turnMax, true);

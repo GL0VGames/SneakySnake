@@ -8,7 +8,7 @@ var __extends = this.__extends || function (d, b) {
 var Player = (function (_super) {
     __extends(Player, _super);
     function Player(x, y, anims) {
-        _super.call(this, x, y, anims);
+        _super.call(this, x, y, anims, 5);
         this.speed = 2.5;
         this.health = 1;
         this.controls = ["s", "a", "w", "d"]; // Indexed by enum Direction
@@ -17,7 +17,6 @@ var Player = (function (_super) {
         this.sDestination = new Vector2(x, y);
         this.tempDestination = new Vector2(1, 1);
         this.previousLoc = [new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1)];
-        this.zIndex = 5;
         this.bCanLerp = true;
         this.following = [];
     }
@@ -97,4 +96,4 @@ var Player = (function (_super) {
     };
     return Player;
 })(Obj);
-//# sourceMappingURL=player.js.map
+//# sourceMappingURL=Player.js.map

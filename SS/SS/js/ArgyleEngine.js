@@ -69,30 +69,19 @@ var Animation = (function () {
     return Animation;
 })();
 var Obj = (function () {
-    function Obj(x, y, anims) {
+    function Obj(x, y, anims, z) {
+        this.zIndex = 5;
         this.pos = new Vector2(x, y);
         this.zIndex = 0;
         this.animMan = new AnimationManager(anims);
+        if (typeof (z) !== undefined)
+            this.zIndex = z;
     }
-    // The "?" denotes an optional parameter, for those objects that don't need a vector2 it's not passed in
-    Obj.prototype.tick = function (input, astar, p) {
-        console.warn("calling undefined behavior");
-    };
     Obj.prototype.setZ = function (z) {
         this.zIndex = z;
     };
     return Obj;
 })();
-var Interactable = (function (_super) {
-    __extends(Interactable, _super);
-    function Interactable(x, y, z, anims) {
-        _super.call(this, x, y, anims);
-        this.interactable = true;
-        this.bStatic = true;
-        this.zIndex = z;
-    }
-    return Interactable;
-})(Obj);
 var CollisionTile = (function (_super) {
     __extends(CollisionTile, _super);
     function CollisionTile(x, y, anims) {
@@ -162,6 +151,14 @@ function lerp(start, end, speed) {
         return new Vector2(start.x + dx, start.y + dy);
     }
 }
+var Direction;
+(function (Direction) {
+    Direction[Direction["DL"] = 0] = "DL";
+    Direction[Direction["UL"] = 1] = "UL";
+    Direction[Direction["UR"] = 2] = "UR";
+    Direction[Direction["DR"] = 3] = "DR";
+})(Direction || (Direction = {}));
+;
 var RTypes;
 (function (RTypes) {
     RTypes[RTypes["FLOOR"] = 0] = "FLOOR";

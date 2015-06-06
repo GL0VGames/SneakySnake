@@ -27,7 +27,7 @@ function collide(obj: Vector2, NPCs: Array<Obj>): boolean {
             return true;
     }
         return false;
-    }
+}
 
 class Vector2 {
     x: number;
@@ -84,19 +84,17 @@ class Obj {
     pos: Vector2;
     gPos: Vector2;
 	animMan: AnimationManager;
-    zIndex: number;
-    // The "?" denotes an optional parameter, for those objects that don't need a vector2 it's not passed in
-    public tick(input?: Input, astar?: any, p?: Player): void {
-        console.warn("calling undefined behavior");
-    }
+    zIndex: number = 5;
 
     public setZ(z): void {
         this.zIndex = z;
     }
-    constructor(x: number, y: number, anims: Array<Animation>) {
+    constructor(x: number, y: number, anims: Array<Animation>, z?: number) {
         this.pos = new Vector2(x, y);
         this.zIndex = 0;
 		this.animMan = new AnimationManager(anims);
+		if (typeof (z) !== undefined)
+			this.zIndex = z;
     }
 }
 
