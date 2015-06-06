@@ -1,6 +1,6 @@
 ﻿/// <reference path="ArgyleEngine.ts"/>
-/// <reference path="player.ts"/>
-class NPC extends Interactable {
+/// <reference path="Player.ts"/>
+class NPC extends Obj {
     public bStatic: boolean = false;
 	public bStartFollowing: boolean = false;
     public bFollowing: boolean = false;

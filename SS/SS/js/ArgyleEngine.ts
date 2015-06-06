@@ -26,8 +26,8 @@ function collide(obj: Vector2, NPCs: Array<Obj>): boolean {
         if (cmpVector2(obj, NPCs[ind].gPos))
             return true;
     }
-    return false;
-}
+        return false;
+    }
 
 class Vector2 {
     x: number;
@@ -97,18 +97,6 @@ class Obj {
         this.pos = new Vector2(x, y);
         this.zIndex = 0;
 		this.animMan = new AnimationManager(anims);
-    }
-}
-
-class Interactable extends Obj {
-    // Other stuff maybe, idk
-	public interactable: boolean;
-	 
-    constructor(x: number, y: number, z: number, anims: Array<Animation>) {
-        super(x, y, anims);
-        this.interactable = true;
-        this.bStatic = true;
-        this.zIndex = z;
     }
 }
 
@@ -182,6 +170,7 @@ function lerp(start: Vector2, end: Vector2, speed: number) {
     }
 }
 
+enum Direction { DL, UL, UR, DR };
 enum RTypes { FLOOR, WALL, DOOR };
 
 class AssetManager {
@@ -374,12 +363,12 @@ class Renderer {
 
 		// FPS Counter
 		if (typeof (fps) !== undefined && fps != -1) {
-			this.ctx.fillStyle = "#DD1321";
-			this.ctx.font = "2em Inconsolata";
+		this.ctx.fillStyle = "#DD1321";
+		this.ctx.font = "2em Inconsolata";
 			this.ctx.fillText("fps: " + JSON.stringify(fps), this.canvas.width / 11, this.canvas.height / 11);
 		}
 
-	}
+    }
     constructor() {
         this.canvas = <HTMLCanvasElement> document.getElementById("canvas");
         this.canvas.width = 1024;
