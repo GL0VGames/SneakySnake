@@ -96,6 +96,7 @@ var FloorTile = (function (_super) {
     function FloorTile(x, y, anims) {
         _super.call(this, x, y, anims);
         this.bStatic = true;
+        this.zIndex = 0;
     }
     FloorTile.prototype.tick = function () {
         this.pos.x++;

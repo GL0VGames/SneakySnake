@@ -113,6 +113,7 @@ class FloorTile extends Obj {
     }
     constructor(x: number, y: number, anims: Array<Animation>) {
         super(x, y, anims);
+        this.zIndex = 0;
     }
 }
 
