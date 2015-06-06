@@ -13,6 +13,9 @@ function randBetween(low, high, int) {
         return Math.floor(Math.random() * (high - low + 1) + low);
     }
 }
+function randVector2(xMax, yMax) {
+    return new Vector2(randBetween(0, xMax, true), randBetween(0, yMax, true));
+}
 function cmpVector2(a, b) {
     if (a.x == b.x && a.y == b.y)
         return true;
@@ -22,12 +25,12 @@ function cmpVector2(a, b) {
 function difVector2(a, b) {
     return new Vector2(a.x - b.x, a.y - b.y);
 }
-function collide(temp, NPCs) {
+function collide(obj, NPCs) {
     for (var ind = 0; ind < NPCs.length; ind++) {
-        if (cmpVector2(temp, NPCs[ind].gPos))
+        if (cmpVector2(obj, NPCs[ind].gPos))
             return true;
-        return false;
     }
+    return false;
 }
 var Vector2 = (function () {
     function Vector2(x, y) {
@@ -66,30 +69,19 @@ var Animation = (function () {
     return Animation;
 })();
 var Obj = (function () {
-    function Obj(x, y, anims) {
+    function Obj(x, y, anims, z) {
+        this.zIndex = 5;
         this.pos = new Vector2(x, y);
         this.zIndex = 0;
         this.animMan = new AnimationManager(anims);
+        if (typeof (z) !== undefined)
+            this.zIndex = z;
     }
-    // The "?" denotes an optional parameter, for those objects that don't need a vector2 it's not passed in
-    Obj.prototype.tick = function (input, astar, p) {
-        console.warn("calling undefined behavior");
-    };
     Obj.prototype.setZ = function (z) {
         this.zIndex = z;
     };
     return Obj;
 })();
-var Interactable = (function (_super) {
-    __extends(Interactable, _super);
-    function Interactable(x, y, z, anims) {
-        _super.call(this, x, y, anims);
-        this.interactable = true;
-        this.bStatic = true;
-        this.zIndex = z;
-    }
-    return Interactable;
-})(Obj);
 var CollisionTile = (function (_super) {
     __extends(CollisionTile, _super);
     function CollisionTile(x, y, anims) {
@@ -104,6 +96,7 @@ var FloorTile = (function (_super) {
     function FloorTile(x, y, anims) {
         _super.call(this, x, y, anims);
         this.bStatic = true;
+        this.zIndex = 0;
     }
     FloorTile.prototype.tick = function () {
         this.pos.x++;
@@ -159,6 +152,14 @@ function lerp(start, end, speed) {
         return new Vector2(start.x + dx, start.y + dy);
     }
 }
+var Direction;
+(function (Direction) {
+    Direction[Direction["DL"] = 0] = "DL";
+    Direction[Direction["UL"] = 1] = "UL";
+    Direction[Direction["UR"] = 2] = "UR";
+    Direction[Direction["DR"] = 3] = "DR";
+})(Direction || (Direction = {}));
+;
 var RTypes;
 (function (RTypes) {
     RTypes[RTypes["FLOOR"] = 0] = "FLOOR";

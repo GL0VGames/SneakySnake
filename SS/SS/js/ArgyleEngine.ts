@@ -6,6 +6,10 @@
     }
 }
 
+function randVector2(xMax: number, yMax: number): Vector2 {
+	return new Vector2(randBetween(0, xMax, true), randBetween(0, yMax, true));
+}
+
 function cmpVector2(a: Vector2, b: Vector2): boolean {
     if (a.x == b.x && a.y == b.y)
         return true;
@@ -17,12 +21,12 @@ function difVector2(a: Vector2, b: Vector2): Vector2 {
 	return new Vector2(a.x - b.x, a.y - b.y);
 }
 
-function collide(temp: Vector2, NPCs: Array<Obj>): boolean {
+function collide(obj: Vector2, NPCs: Array<Obj>): boolean {
     for (var ind: number = 0; ind < NPCs.length; ind++) {
-        if (cmpVector2(temp, NPCs[ind].gPos))
+        if (cmpVector2(obj, NPCs[ind].gPos))
             return true;
-        return false;
     }
+        return false;
 }
 
 class Vector2 {
@@ -80,31 +84,17 @@ class Obj {
     pos: Vector2;
     gPos: Vector2;
 	animMan: AnimationManager;
-    zIndex: number;
-    // The "?" denotes an optional parameter, for those objects that don't need a vector2 it's not passed in
-    public tick(input?: Input, astar?: any, p?: Player): void {
-        console.warn("calling undefined behavior");
-    }
+    zIndex: number = 5;
 
     public setZ(z): void {
         this.zIndex = z;
     }
-    constructor(x: number, y: number, anims: Array<Animation>) {
+    constructor(x: number, y: number, anims: Array<Animation>, z?: number) {
         this.pos = new Vector2(x, y);
         this.zIndex = 0;
 		this.animMan = new AnimationManager(anims);
-    }
-}
-
-class Interactable extends Obj {
-    // Other stuff maybe, idk
-	public interactable: boolean;
-	 
-    constructor(x: number, y: number, z: number, anims: Array<Animation>) {
-        super(x, y, anims);
-        this.interactable = true;
-        this.bStatic = true;
-        this.zIndex = z;
+		if (typeof (z) !== undefined)
+			this.zIndex = z;
     }
 }
 
@@ -123,6 +113,7 @@ class FloorTile extends Obj {
     }
     constructor(x: number, y: number, anims: Array<Animation>) {
         super(x, y, anims);
+        this.zIndex = 0;
     }
 }
 
@@ -178,8 +169,7 @@ function lerp(start: Vector2, end: Vector2, speed: number) {
     }
 }
 
-
-
+enum Direction { DL, UL, UR, DR };
 enum RTypes { FLOOR, WALL, DOOR };
 
 class AssetManager {
@@ -372,12 +362,12 @@ class Renderer {
 
 		// FPS Counter
 		if (typeof (fps) !== undefined && fps != -1) {
-			this.ctx.fillStyle = "#DD1321";
-			this.ctx.font = "2em Inconsolata";
+		this.ctx.fillStyle = "#DD1321";
+		this.ctx.font = "2em Inconsolata";
 			this.ctx.fillText("fps: " + JSON.stringify(fps), this.canvas.width / 11, this.canvas.height / 11);
 		}
 
-	}
+    }
     constructor() {
         this.canvas = <HTMLCanvasElement> document.getElementById("canvas");
         this.canvas.width = 1024;

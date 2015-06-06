@@ -1,6 +1,6 @@
 ﻿/// <reference path="ArgyleEngine.ts"/>
-/// <reference path="player.ts"/>
-class NPC extends Interactable {
+/// <reference path="Player.ts"/>
+class NPC extends Obj {
     public bStatic: boolean = false;
 	public bStartFollowing: boolean = false;
     public bFollowing: boolean = false;
@@ -139,11 +139,10 @@ class NPC extends Interactable {
         }
     }
 
-    constructor(x: number, y: number, gx: number, gy: number, z: number, anims: Array<Animation>) {
-        super(x, y, z, anims);
-        this.gPos = new Vector2(gx, gy);
-        this.pos = new Vector2(x, y);
-        this.zIndex = 5;
+    constructor(sVect: Vector2, gVect: Vector2, z: number, anims: Array<Animation>) {
+        super(sVect.x, sVect.y, anims, z);
+        this.gPos = gVect;
+        this.pos = sVect;
         this.followIndex = -5;
         this.seen = false;
 		this.turnCounter = randBetween(NPC.turnMin, NPC.turnMax, true);

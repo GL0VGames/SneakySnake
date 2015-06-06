@@ -44,7 +44,7 @@
     <Content Include="js\game.js" />
     <Content Include="js\hud.js" />
     <Content Include="js\NPC.js" />
-    <Content Include="js\player.js" />
+    <Content Include="js\Player.js" />
     <Content Include="js\Teleporter.js" />
     <Content Include="lib\jquery.js" />
     <Content Include="sounds\SneakySnake Theme.wav" />
@@ -56,7 +56,7 @@
     <TypeScriptCompile Include="js\game.ts" />
     <TypeScriptCompile Include="js\hud.ts" />
     <TypeScriptCompile Include="js\NPC.ts" />
-    <TypeScriptCompile Include="js\player.ts" />
+    <TypeScriptCompile Include="js\Player.ts" />
     <TypeScriptCompile Include="js\Teleporter.ts" />
     <TypeScriptCompile Include="lib\jquery.d.ts" />
   </ItemGroup>
@@ -66,7 +66,7 @@
     <Content Include="js\game.js.map" />
     <Content Include="js\hud.js.map" />
     <Content Include="js\NPC.js.map" />
-    <Content Include="js\player.js.map" />
+    <Content Include="js\Player.js.map" />
     <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <Content Include="js\Teleporter.js.map" />
     <None Include="web.Debug.config">
@@ -114,6 +114,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptRemoveComments>true</TypeScriptRemoveComments>

@@ -1,9 +1,9 @@
 /// <reference path="ArgyleEngine.ts"/>
-/// <reference path="player.ts"/>
+/// <reference path="Player.ts"/>
 /// <reference path="NPC.ts"/>
 /// <reference path="Teleporter.ts"/>
-var SneakySnake = (function () {
-    function SneakySnake() {
+var SneakySnakeGame = (function () {
+    function SneakySnakeGame() {
         this.interval = 15; // 15ms between frames, 66.6666666666667 frames/second
         this.fps = 0;
         this.lastFPS = 0;
@@ -16,20 +16,17 @@ var SneakySnake = (function () {
         this.viewWorld(this.world);
         this.staticObjs = [];
         this.dynamicObjs = [];
-        this.pickupObjs = [];
-        this.interactableObjs = [];
         this.collisionMap = this.world.collisionMap;
         this.numNPC = 3;
         this.NPCs = [];
         var that = this;
+        // Bind inputs
         this.input = new Input;
-        // Handle input
         $(this.renderer.canvas).click(function (e) {
             that.input.bMouseClicked = true;
             that.input.mouseClickPos.x = e.pageX;
             that.input.mouseClickPos.y = e.pageY;
         });
-        // Bind key inputs
         $(window).keyup(function (e) {
             if (e.which == 87)
                 that.input.keyPresses.push("w");
@@ -53,7 +50,7 @@ var SneakySnake = (function () {
                 that.bFPS = !that.bFPS;
         });
     }
-    SneakySnake.prototype.setupFloor = function () {
+    SneakySnakeGame.prototype.setupFloor = function () {
         this.player.pos = gridToScreen(1, 1);
         this.player.sDestination = gridToScreen(1, 1);
         this.player.gDestination = new Vector2(1, 1);
@@ -100,27 +97,21 @@ var SneakySnake = (function () {
                 tempNPC.push(this.NPCs[i]);
             }
         this.NPCs = tempNPC;
-        var tempVect = new Vector2(0, 0);
         for (var i = randBetween(this.numNPC, this.numNPC - 3, true); i > 0; i--) {
-            tempx = Math.floor(Math.random() * this.floorSize);
-            tempy = Math.floor(Math.random() * this.floorSize);
-            tempVect = new Vector2(tempx, tempy);
-            while (floor.grid[tempx][tempy].type == 1 /* WALL */ || collide(tempVect, this.NPCs) || cmpVector2(gridToScreen(tempVect), this.currTeleporter.pos) || (tempVect.x < 6 && tempVect.y == 1) || (tempVect.x == 1 && tempVect.y < 6)) {
-                tempx = Math.floor(Math.random() * this.floorSize);
-                tempy = Math.floor(Math.random() * this.floorSize);
-                tempVect = new Vector2(tempx, tempy);
+            this.tempi = randVector2(this.floorSize, this.floorSize);
+            while (floor.grid[this.tempi.x][this.tempi.y].type == 1 /* WALL */ || collide(this.tempi, this.NPCs) || cmpVector2(gridToScreen(this.tempi), this.currTeleporter.pos) || (this.tempi.x < 6 && this.tempi.y == 1) || (this.tempi.x == 1 && this.tempi.y < 6)) {
+                this.tempi = randVector2(this.floorSize, this.floorSize);
             }
-            this.tempi = gridToScreen(tempx, tempy);
-            this.NPCs.push(new NPC(this.tempi.x, this.tempi.y, tempx, tempy, 5, [this.assetmanager.anims["npcAll"], this.assetmanager.anims["npcFollowAnim"], this.assetmanager.anims["npcIdleDSeen"], this.assetmanager.anims["npcIdleLSeen"], this.assetmanager.anims["npcIdleUSeen"], this.assetmanager.anims["npcIdleRSeen"]]));
+            this.NPCs.push(new NPC(gridToScreen(this.tempi), this.tempi, 5, [this.assetmanager.anims["npcAll"], this.assetmanager.anims["npcFollowAnim"], this.assetmanager.anims["npcIdleDSeen"], this.assetmanager.anims["npcIdleLSeen"], this.assetmanager.anims["npcIdleUSeen"], this.assetmanager.anims["npcIdleRSeen"]]));
         }
     };
-    SneakySnake.prototype.toggleControls = function () {
+    SneakySnakeGame.prototype.toggleControls = function () {
         if (this.player.controls[0] == "s")
             this.player.controls = ["a", "w", "d", "s"];
         else
             this.player.controls = ["s", "a", "w", "d"];
     };
-    SneakySnake.prototype.restartGame = function () {
+    SneakySnakeGame.prototype.restartGame = function () {
         // Stop the tick function from ticking
         clearInterval(this.tickID);
         clearInterval(this.fpsID);
@@ -129,22 +120,19 @@ var SneakySnake = (function () {
         // Reset everything
         this.staticObjs = [];
         this.dynamicObjs = [];
-        this.pickupObjs = [];
-        this.interactableObjs = [];
         this.collisionMap = this.world.collisionMap;
         this.numNPC = 3;
         this.NPCs = [];
         this.currentFloor = 0;
         this.input.keyPresses = [];
-        ;
         // Run the function to start a new game
         this.startGame();
     };
-    SneakySnake.prototype.worldGen = function () {
+    SneakySnakeGame.prototype.worldGen = function () {
         // Makes a new world
         return new Building(this.floorSize, this.assetmanager);
     };
-    SneakySnake.prototype.viewWorld = function (w) {
+    SneakySnakeGame.prototype.viewWorld = function (w) {
         var wall = "id ='wall";
         var door = "id ='door";
         for (var y = 0; y <= this.floorSize; y++) {
@@ -170,18 +158,18 @@ var SneakySnake = (function () {
             color: "#CF000F"
         });
     };
-    SneakySnake.prototype.tick = function () {
+    SneakySnakeGame.prototype.tick = function () {
         //game logic loop
         this.fps++;
         // Resets world if player is on a teleporter and thus needs to go to the next level
         if (cmpVector2(this.player.pos, this.player.sDestination) && cmpVector2(this.player.pos, this.currTeleporter.pos)) {
             this.currentFloor++;
-            this.numNPC += 3;
+            this.numNPC += randBetween(1, 3, true);
             this.setupFloor();
             return;
         }
         // Draw objects
-        this.tempTick = this.staticObjs.concat(this.dynamicObjs).concat(this.pickupObjs).concat(this.NPCs).concat(this.currTeleporter);
+        this.tempTick = this.staticObjs.concat(this.dynamicObjs).concat(this.NPCs).concat(this.currTeleporter);
         this.tempTick.push(this.player);
         for (this.tempi = 0; this.tempi < this.NPCs.length; this.tempi++) {
             this.NPCs[this.tempi].tick(this.input, this.player, this.collisionMap[this.currentFloor]);
@@ -193,7 +181,7 @@ var SneakySnake = (function () {
         }
         // Tick player
         this.player.tick(this.input, this.collisionMap);
-        // Dissallows the player from moving through walls
+        // Disallows the player from moving through walls
         if (this.collisionMap[this.currentFloor][this.player.tempDestination.y][this.player.tempDestination.x].animMan.anims[0].name !== "filled")
             this.player.bCanLerp = true;
         else
@@ -235,11 +223,10 @@ var SneakySnake = (function () {
             }, 400);
         }
     };
-    SneakySnake.prototype.startGame = function () {
+    SneakySnakeGame.prototype.startGame = function () {
         // Create the player
         var playerLocation = gridToScreen(1, 1);
         this.player = new Player(playerLocation.x, playerLocation.y, [this.assetmanager.anims["playerIdleD"], this.assetmanager.anims["playerIdleL"], this.assetmanager.anims["playerIdleU"], this.assetmanager.anims["playerWalkD"], this.assetmanager.anims["playerWalkL"], this.assetmanager.anims["playerWalkU"]]);
-        // set up floor
         this.setupFloor();
         // Start tick function
         var self = this;
@@ -251,13 +238,13 @@ var SneakySnake = (function () {
             self.fps = 0;
         }, 1000);
     };
-    SneakySnake.prototype.unsubscribeClick = function () {
+    SneakySnakeGame.prototype.unsubscribeClick = function () {
         $(this.renderer.canvas).unbind("click");
     };
-    return SneakySnake;
+    return SneakySnakeGame;
 })();
 $(function game() {
-    var game = new SneakySnake();
+    var game = new SneakySnakeGame();
     $(".new").click(function () {
         // Restart the game if the button is pressed
         game.restartGame();

@@ -1,8 +1,8 @@
 /// <reference path="ArgyleEngine.ts"/>
-/// <reference path="player.ts"/>
+/// <reference path="Player.ts"/>
 /// <reference path="NPC.ts"/>
 /// <reference path="Teleporter.ts"/>
-class SneakySnake{
+class SneakySnakeGame {
     public world: Building;
     public currentFloor: number;
     public floorSize: number;
@@ -10,8 +10,6 @@ class SneakySnake{
     public assetmanager: AssetManager;
     public staticObjs: Array<Obj>; // No tick calls
     public dynamicObjs: Array<Obj>; // Tick calls
-    public pickupObjs: Array<Obj>; // No tick calls
-    public interactableObjs: Array<Obj>; // Tick calls when player is standing on it
     public interval: number = 15; // 15ms between frames, 66.6666666666667 frames/second
     public tickID: any; // ID to clear for tick function when restarting game
     public player: Player;
@@ -77,21 +75,15 @@ class SneakySnake{
             }
 
         this.NPCs = tempNPC;
-        var tempVect: Vector2 = new Vector2(0, 0);
 
         // Check if colliding with anything and if not then place
         for (var i: number = randBetween(this.numNPC, this.numNPC - 3, true); i > 0; i--) {
-            tempx = Math.floor(Math.random() * this.floorSize);
-            tempy = Math.floor(Math.random() * this.floorSize);
-            tempVect = new Vector2(tempx, tempy);
-            while (floor.grid[tempx][tempy].type == RTypes.WALL || collide(tempVect, this.NPCs) || cmpVector2(gridToScreen(tempVect), this.currTeleporter.pos) || (tempVect.x < 6 && tempVect.y == 1) || (tempVect.x == 1 && tempVect.y < 6)) {
-                tempx = Math.floor(Math.random() * this.floorSize);
-                tempy = Math.floor(Math.random() * this.floorSize);
-                tempVect = new Vector2(tempx, tempy);
+            this.tempi = randVector2(this.floorSize, this.floorSize);
+            while (floor.grid[this.tempi.x][this.tempi.y].type == RTypes.WALL || collide(this.tempi, this.NPCs) || cmpVector2(gridToScreen(this.tempi), this.currTeleporter.pos) || (this.tempi.x < 6 && this.tempi.y == 1) || (this.tempi.x == 1 && this.tempi.y < 6)) {
+                this.tempi = randVector2(this.floorSize, this.floorSize);
             }
-            
-            this.tempi = gridToScreen(tempx, tempy);
-            this.NPCs.push(new NPC(this.tempi.x, this.tempi.y, tempx, tempy, 5, [this.assetmanager.anims["npcAll"], this.assetmanager.anims["npcFollowAnim"], this.assetmanager.anims["npcIdleDSeen"], this.assetmanager.anims["npcIdleLSeen"], this.assetmanager.anims["npcIdleUSeen"], this.assetmanager.anims["npcIdleRSeen"]]));
+
+            this.NPCs.push(new NPC(gridToScreen(this.tempi), this.tempi, 5, [this.assetmanager.anims["npcAll"], this.assetmanager.anims["npcFollowAnim"], this.assetmanager.anims["npcIdleDSeen"], this.assetmanager.anims["npcIdleLSeen"], this.assetmanager.anims["npcIdleUSeen"], this.assetmanager.anims["npcIdleRSeen"]]));
         }
     }
 
@@ -113,13 +105,11 @@ class SneakySnake{
         // Reset everything
         this.staticObjs = [];
         this.dynamicObjs = [];
-        this.pickupObjs = [];
-        this.interactableObjs = [];
         this.collisionMap = this.world.collisionMap;
         this.numNPC = 3;
         this.NPCs = [];
         this.currentFloor = 0;
-        this.input.keyPresses = [];;
+        this.input.keyPresses = [];
 
         // Run the function to start a new game
         this.startGame();
@@ -129,6 +119,7 @@ class SneakySnake{
         // Makes a new world
         return new Building(this.floorSize, this.assetmanager);
     }
+
     public viewWorld(w: Building): void {
         var wall: string = "id ='wall";
         var door: string = "id ='door"
@@ -164,13 +155,13 @@ class SneakySnake{
         // Resets world if player is on a teleporter and thus needs to go to the next level
         if (cmpVector2(this.player.pos, this.player.sDestination) && cmpVector2(this.player.pos, this.currTeleporter.pos)) {
             this.currentFloor++;
-            this.numNPC += 3;
+            this.numNPC += randBetween(1, 3, true);
             this.setupFloor();
             return;
         }
 
         // Draw objects
-        this.tempTick = this.staticObjs.concat(this.dynamicObjs).concat(this.pickupObjs).concat(this.NPCs).concat(this.currTeleporter);
+        this.tempTick = this.staticObjs.concat(this.dynamicObjs).concat(this.NPCs).concat(this.currTeleporter);
         this.tempTick.push(this.player);
 
         // show collision map
@@ -185,9 +176,8 @@ class SneakySnake{
         for (this.tempi = 0; this.tempi < this.NPCs.length; this.tempi++) {
             this.NPCs[this.tempi].tick(this.input, this.player, this.collisionMap[this.currentFloor]);            
             if (this.NPCs[this.tempi].seen) {
-				
-					if (cmpVector2(this.player.sDestination, this.player.pos))
-						this.player.health -= 1;
+				if (cmpVector2(this.player.sDestination, this.player.pos))
+					this.player.health -= 1;
                 break;
             }
         }
@@ -195,7 +185,7 @@ class SneakySnake{
         // Tick player
         this.player.tick(this.input, this.collisionMap);
 
-        // Dissallows the player from moving through walls
+        // Disallows the player from moving through walls
         if (this.collisionMap[this.currentFloor][this.player.tempDestination.y][this.player.tempDestination.x].animMan.anims[0].name !== "filled")
             this.player.bCanLerp = true;
         else
@@ -239,12 +229,12 @@ class SneakySnake{
             }, 400);
 		}
     }
+
     public startGame(): void {
         // Create the player
         var playerLocation: Vector2 = gridToScreen(1, 1);
         this.player = new Player(playerLocation.x, playerLocation.y, [this.assetmanager.anims["playerIdleD"], this.assetmanager.anims["playerIdleL"], this.assetmanager.anims["playerIdleU"], this.assetmanager.anims["playerWalkD"], this.assetmanager.anims["playerWalkL"], this.assetmanager.anims["playerWalkU"]]);
-
-        // set up floor
+        
         this.setupFloor();
 
         // Start tick function
@@ -255,9 +245,11 @@ class SneakySnake{
 			self.fps = 0;
 		}, 1000);
     }
+
     public unsubscribeClick() {
         $(this.renderer.canvas).unbind("click");
     }
+
     constructor() {
         this.renderer = new Renderer();
         this.assetmanager = new AssetManager(this.renderer.ctx, this.renderer.canvas);
@@ -267,22 +259,19 @@ class SneakySnake{
         this.viewWorld(this.world);
         this.staticObjs = [];
         this.dynamicObjs = [];
-        this.pickupObjs = [];
-        this.interactableObjs = [];
         this.collisionMap = this.world.collisionMap;
         this.numNPC = 3;
         this.NPCs = [];
 
         var that = this;
+        
+        // Bind inputs
         this.input = new Input;
-        // Handle input
         $(this.renderer.canvas).click(function (e) {
             that.input.bMouseClicked = true;
             that.input.mouseClickPos.x = e.pageX;
             that.input.mouseClickPos.y = e.pageY;
         });
-
-        // Bind key inputs
         $(window).keyup(function (e) {
             if (e.which == 87)
                 that.input.keyPresses.push("w");
@@ -297,9 +286,9 @@ class SneakySnake{
                     that.assetmanager.audio.main.play();
                 else that.assetmanager.audio.main.pause();
             }
-            else if (e.which == 82) //r
+            else if (e.which == 82) // R //
                 that.restartGame();
-            else if (e.which == 84) //t
+            else if (e.which == 84) // T //
                 that.toggleControls();
 			else if (e.which == 70) //f
 				that.bFPS = !that.bFPS;
@@ -308,7 +297,7 @@ class SneakySnake{
 }
 $(function game(): void {
 
-    var game = new SneakySnake();
+    var game = new SneakySnakeGame();
     $(".new").click(function () {
         // Restart the game if the button is pressed
         game.restartGame();

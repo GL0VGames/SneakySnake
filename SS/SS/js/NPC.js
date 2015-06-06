@@ -5,18 +5,17 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 /// <reference path="ArgyleEngine.ts"/>
-/// <reference path="player.ts"/>
+/// <reference path="Player.ts"/>
 var NPC = (function (_super) {
     __extends(NPC, _super);
-    function NPC(x, y, gx, gy, z, anims) {
-        _super.call(this, x, y, z, anims);
+    function NPC(sVect, gVect, z, anims) {
+        _super.call(this, sVect.x, sVect.y, anims, z);
         this.bStatic = false;
         this.bStartFollowing = false;
         this.bFollowing = false;
         this.superTemp = 0;
-        this.gPos = new Vector2(gx, gy);
-        this.pos = new Vector2(x, y);
-        this.zIndex = 5;
+        this.gPos = gVect;
+        this.pos = sVect;
         this.followIndex = -5;
         this.seen = false;
         this.turnCounter = randBetween(NPC.turnMin, NPC.turnMax, true);
@@ -145,5 +144,5 @@ var NPC = (function (_super) {
     NPC.turnMax = 200;
     NPC.visionMax = 4;
     return NPC;
-})(Interactable);
+})(Obj);
 //# sourceMappingURL=NPC.js.map
