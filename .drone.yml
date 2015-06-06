@@ -1,4 +1,4 @@
-image: node
+image: bradrydzewski/node
 script:
 	-	npm install
 	-	gulp
