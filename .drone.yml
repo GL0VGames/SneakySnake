@@ -1,4 +1,5 @@
-script
+image: node
+script:
 	-	npm install
 	-	gulp
 	-	rsync -avhr dist/ /var/web/ss/
