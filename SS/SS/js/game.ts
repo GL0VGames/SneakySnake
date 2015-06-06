@@ -77,21 +77,15 @@ class SneakySnake{
             }
 
         this.NPCs = tempNPC;
-        var tempVect: Vector2 = new Vector2(0, 0);
 
         // Check if colliding with anything and if not then place
         for (var i: number = randBetween(this.numNPC, this.numNPC - 3, true); i > 0; i--) {
-            tempx = Math.floor(Math.random() * this.floorSize);
-            tempy = Math.floor(Math.random() * this.floorSize);
-            tempVect = new Vector2(tempx, tempy);
-            while (floor.grid[tempx][tempy].type == RTypes.WALL || collide(tempVect, this.NPCs) || cmpVector2(gridToScreen(tempVect), this.currTeleporter.pos) || (tempVect.x < 6 && tempVect.y == 1) || (tempVect.x == 1 && tempVect.y < 6)) {
-                tempx = Math.floor(Math.random() * this.floorSize);
-                tempy = Math.floor(Math.random() * this.floorSize);
-                tempVect = new Vector2(tempx, tempy);
+            this.tempi = randVector2(this.floorSize, this.floorSize);
+            while (floor.grid[this.tempi.x][this.tempi.y].type == RTypes.WALL || collide(this.tempi, this.NPCs) || cmpVector2(gridToScreen(this.tempi), this.currTeleporter.pos) || (this.tempi.x < 6 && this.tempi.y == 1) || (this.tempi.x == 1 && this.tempi.y < 6)) {
+                this.tempi = randVector2(this.floorSize, this.floorSize);
             }
-            
-            this.tempi = gridToScreen(tempx, tempy);
-            this.NPCs.push(new NPC(this.tempi.x, this.tempi.y, tempx, tempy, 5, [this.assetmanager.anims["npcAll"], this.assetmanager.anims["npcFollowAnim"], this.assetmanager.anims["npcIdleDSeen"], this.assetmanager.anims["npcIdleLSeen"], this.assetmanager.anims["npcIdleUSeen"], this.assetmanager.anims["npcIdleRSeen"]]));
+
+            this.NPCs.push(new NPC(gridToScreen(this.tempi), this.tempi, 5, [this.assetmanager.anims["npcAll"], this.assetmanager.anims["npcFollowAnim"], this.assetmanager.anims["npcIdleDSeen"], this.assetmanager.anims["npcIdleLSeen"], this.assetmanager.anims["npcIdleUSeen"], this.assetmanager.anims["npcIdleRSeen"]]));
         }
     }
 
@@ -164,7 +158,7 @@ class SneakySnake{
         // Resets world if player is on a teleporter and thus needs to go to the next level
         if (cmpVector2(this.player.pos, this.player.sDestination) && cmpVector2(this.player.pos, this.currTeleporter.pos)) {
             this.currentFloor++;
-            this.numNPC += 3;
+            this.numNPC += randBetween(1, 3, true);
             this.setupFloor();
             return;
         }

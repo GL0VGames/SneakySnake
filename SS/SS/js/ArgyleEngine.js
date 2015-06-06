@@ -13,6 +13,9 @@ function randBetween(low, high, int) {
         return Math.floor(Math.random() * (high - low + 1) + low);
     }
 }
+function randVector2(xMax, yMax) {
+    return new Vector2(randBetween(0, xMax, true), randBetween(0, yMax, true));
+}
 function cmpVector2(a, b) {
     if (a.x == b.x && a.y == b.y)
         return true;
@@ -22,12 +25,12 @@ function cmpVector2(a, b) {
 function difVector2(a, b) {
     return new Vector2(a.x - b.x, a.y - b.y);
 }
-function collide(temp, NPCs) {
+function collide(obj, NPCs) {
     for (var ind = 0; ind < NPCs.length; ind++) {
-        if (cmpVector2(temp, NPCs[ind].gPos))
+        if (cmpVector2(obj, NPCs[ind].gPos))
             return true;
-        return false;
     }
+    return false;
 }
 var Vector2 = (function () {
     function Vector2(x, y) {

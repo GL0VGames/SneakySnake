@@ -67,15 +67,15 @@ var SneakySnake = (function () {
         for (var y = 0; y < floor.grid.length; y++) {
             for (var x = 0; x < floor.grid[y].length; x++) {
                 var screen_coords = gridToScreen(x, y);
-                if (floor.grid[x][y].type == 0 /* FLOOR */) {
+                if (floor.grid[x][y].type == RTypes.FLOOR) {
                     var tile = new FloorTile(screen_coords.x, screen_coords.y, [this.assetmanager.anims["floor"]]);
                     tile.setZ(-1);
                     this.staticObjs.push(tile);
                 }
-                else if (floor.grid[x][y].type == 1 /* WALL */) {
+                else if (floor.grid[x][y].type == RTypes.WALL) {
                     this.staticObjs.push(new WallTile(screen_coords.x, screen_coords.y, [this.assetmanager.anims["wall"]]));
                 }
-                else if (floor.grid[x][y].type == 2 /* DOOR */) {
+                else if (floor.grid[x][y].type == RTypes.DOOR) {
                     this.staticObjs.push(new FloorTile(screen_coords.x, screen_coords.y, [this.assetmanager.anims["floor"]]));
                 }
             }
@@ -83,7 +83,7 @@ var SneakySnake = (function () {
         // Spawn teleporter to next level
         tempx = Math.floor(Math.random() * this.floorSize);
         tempy = Math.floor(Math.random() * this.floorSize);
-        while (floor.grid[tempx][tempy].type == 1 /* WALL */) {
+        while (floor.grid[tempx][tempy].type == RTypes.WALL) {
             tempx = Math.floor(Math.random() * this.floorSize);
             tempy = Math.floor(Math.random() * this.floorSize);
         }
@@ -100,18 +100,12 @@ var SneakySnake = (function () {
                 tempNPC.push(this.NPCs[i]);
             }
         this.NPCs = tempNPC;
-        var tempVect = new Vector2(0, 0);
         for (var i = randBetween(this.numNPC, this.numNPC - 3, true); i > 0; i--) {
-            tempx = Math.floor(Math.random() * this.floorSize);
-            tempy = Math.floor(Math.random() * this.floorSize);
-            tempVect = new Vector2(tempx, tempy);
-            while (floor.grid[tempx][tempy].type == 1 /* WALL */ || collide(tempVect, this.NPCs) || cmpVector2(gridToScreen(tempVect), this.currTeleporter.pos) || (tempVect.x < 6 && tempVect.y == 1) || (tempVect.x == 1 && tempVect.y < 6)) {
-                tempx = Math.floor(Math.random() * this.floorSize);
-                tempy = Math.floor(Math.random() * this.floorSize);
-                tempVect = new Vector2(tempx, tempy);
+            this.tempi = randVector2(this.floorSize, this.floorSize);
+            while (floor.grid[this.tempi.x][this.tempi.y].type == RTypes.WALL || collide(this.tempi, this.NPCs) || cmpVector2(gridToScreen(this.tempi), this.currTeleporter.pos) || (this.tempi.x < 6 && this.tempi.y == 1) || (this.tempi.x == 1 && this.tempi.y < 6)) {
+                this.tempi = randVector2(this.floorSize, this.floorSize);
             }
-            this.tempi = gridToScreen(tempx, tempy);
-            this.NPCs.push(new NPC(this.tempi.x, this.tempi.y, tempx, tempy, 5, [this.assetmanager.anims["npcAll"], this.assetmanager.anims["npcFollowAnim"], this.assetmanager.anims["npcIdleDSeen"], this.assetmanager.anims["npcIdleLSeen"], this.assetmanager.anims["npcIdleUSeen"], this.assetmanager.anims["npcIdleRSeen"]]));
+            this.NPCs.push(new NPC(gridToScreen(this.tempi), this.tempi, 5, [this.assetmanager.anims["npcAll"], this.assetmanager.anims["npcFollowAnim"], this.assetmanager.anims["npcIdleDSeen"], this.assetmanager.anims["npcIdleLSeen"], this.assetmanager.anims["npcIdleUSeen"], this.assetmanager.anims["npcIdleRSeen"]]));
         }
     };
     SneakySnake.prototype.toggleControls = function () {
@@ -176,7 +170,7 @@ var SneakySnake = (function () {
         // Resets world if player is on a teleporter and thus needs to go to the next level
         if (cmpVector2(this.player.pos, this.player.sDestination) && cmpVector2(this.player.pos, this.currTeleporter.pos)) {
             this.currentFloor++;
-            this.numNPC += 3;
+            this.numNPC += randBetween(1, 3, true);
             this.setupFloor();
             return;
         }

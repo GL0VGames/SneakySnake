@@ -8,14 +8,14 @@ var __extends = this.__extends || function (d, b) {
 /// <reference path="player.ts"/>
 var NPC = (function (_super) {
     __extends(NPC, _super);
-    function NPC(x, y, gx, gy, z, anims) {
-        _super.call(this, x, y, z, anims);
+    function NPC(sVect, gVect, z, anims) {
+        _super.call(this, sVect.x, sVect.y, z, anims);
         this.bStatic = false;
         this.bStartFollowing = false;
         this.bFollowing = false;
         this.superTemp = 0;
-        this.gPos = new Vector2(gx, gy);
-        this.pos = new Vector2(x, y);
+        this.gPos = gVect;
+        this.pos = sVect;
         this.zIndex = 5;
         this.followIndex = -5;
         this.seen = false;

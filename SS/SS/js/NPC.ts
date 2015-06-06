@@ -139,10 +139,10 @@ class NPC extends Interactable {
         }
     }
 
-    constructor(x: number, y: number, gx: number, gy: number, z: number, anims: Array<Animation>) {
-        super(x, y, z, anims);
-        this.gPos = new Vector2(gx, gy);
-        this.pos = new Vector2(x, y);
+    constructor(sVect: Vector2, gVect: Vector2, z: number, anims: Array<Animation>) {
+        super(sVect.x, sVect.y, z, anims);
+        this.gPos = gVect;
+        this.pos = sVect;
         this.zIndex = 5;
         this.followIndex = -5;
         this.seen = false;

@@ -6,6 +6,10 @@
     }
 }
 
+function randVector2(xMax: number, yMax: number): Vector2 {
+	return new Vector2(randBetween(0, xMax, true), randBetween(0, yMax, true));
+}
+
 function cmpVector2(a: Vector2, b: Vector2): boolean {
     if (a.x == b.x && a.y == b.y)
         return true;
@@ -17,12 +21,12 @@ function difVector2(a: Vector2, b: Vector2): Vector2 {
 	return new Vector2(a.x - b.x, a.y - b.y);
 }
 
-function collide(temp: Vector2, NPCs: Array<Obj>): boolean {
+function collide(obj: Vector2, NPCs: Array<Obj>): boolean {
     for (var ind: number = 0; ind < NPCs.length; ind++) {
-        if (cmpVector2(temp, NPCs[ind].gPos))
+        if (cmpVector2(obj, NPCs[ind].gPos))
             return true;
-        return false;
     }
+    return false;
 }
 
 class Vector2 {
@@ -177,8 +181,6 @@ function lerp(start: Vector2, end: Vector2, speed: number) {
         return new Vector2(start.x + dx, start.y + dy);
     }
 }
-
-
 
 enum RTypes { FLOOR, WALL, DOOR };
 
