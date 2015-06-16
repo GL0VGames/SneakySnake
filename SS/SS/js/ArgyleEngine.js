@@ -36,10 +36,34 @@ var Vector2 = (function () {
 })();
 var Input = (function () {
     function Input() {
-        this.bMouseClicked = false;
-        this.mouseClickPos = new Vector2(-1, -1);
+        this.mouseDown = false;
+        this.mouseClicked = false;
+        this.mouseDownPos = new Vector2(-1, -1);
+        this.mouseUpPos = new Vector2(-1, -1);
         this.keyPresses = new Array("");
     }
+    Input.prototype.mousedown = function (e) {
+        this.mouseDownPos.x = e.pageX;
+        this.mouseDownPos.y = e.pageY;
+        this.mouseDown = true;
+        alert("DOWN");
+    };
+    Input.prototype.mouseup = function (e) {
+        this.mouseUpPos.x = e.pageX;
+        this.mouseUpPos.y = e.pageY;
+        this.mouseDown = false;
+        alert("UP");
+    };
+    Input.prototype.click = function (e) {
+        // these next four lines shouldn't be needed once mousedown and mouseup are working
+        // but they're not for some reason
+        this.mouseDownPos.x = e.pageX;
+        this.mouseDownPos.y = e.pageY;
+        this.mouseUpPos.x = e.pageX;
+        this.mouseUpPos.y = e.pageY;
+        this.mouseClicked = true;
+        alert("CLICK");
+    };
     return Input;
 })();
 var Animation = (function () {
@@ -47,7 +71,7 @@ var Animation = (function () {
     function Animation(st, width, height, off_x, off_y, frames, name) {
         // For automatic anims
         this.frameCount = 0;
-        this.bStatic = st;
+        this.static = st;
         this.frameSize = new Vector2(width, height);
         this.offset = new Vector2(off_x, off_y);
         this.frameCounterMax = frames;
@@ -321,7 +345,7 @@ var Renderer = (function () {
             var obj = objs[i];
             var anim = obj.animMan.anims[obj.animMan.currentAnim];
             // For automatic anims only (so not npc's or the player or anything like that atm)
-            if (!anim.bStatic && anim.frameCounterMax > 0 && anim.frameCount == (anim.frameCounterMax - 1)) {
+            if (!anim.static && anim.frameCounterMax > 0 && anim.frameCount == (anim.frameCounterMax - 1)) {
                 obj.animMan.rightFrame();
             }
             anim.frameCount = (anim.frameCount + 1) % anim.frameCounterMax;
@@ -359,21 +383,21 @@ var AnimationManager = (function () {
         }
     };
     AnimationManager.prototype.rightFrame = function () {
-        if (!this.anims[this.currentAnim].bStatic) {
+        if (!this.anims[this.currentAnim].static) {
             this.frame = (this.frame + 1) % this.anims[this.currentAnim].sheetWidth;
             this.framePosition.x = this.frame * this.anims[this.currentAnim].frameSize.x;
             this.framePosition.y = Math.floor(this.frame / this.anims[this.currentAnim].sheetWidth);
         }
     };
     AnimationManager.prototype.leftFrame = function () {
-        if (!this.anims[this.currentAnim].bStatic) {
+        if (!this.anims[this.currentAnim].static) {
             this.frame = (this.frame + 3) % this.anims[this.currentAnim].sheetWidth;
             this.framePosition.x = this.frame * this.anims[this.currentAnim].frameSize.x;
             this.framePosition.y = Math.floor(this.frame / this.anims[this.currentAnim].sheetWidth);
         }
     };
     AnimationManager.prototype.gotoFrame = function (frame) {
-        if (frame > 0 && frame < this.anims[this.currentAnim].sheetWidth && !this.anims[this.currentAnim].bStatic) {
+        if (frame > 0 && frame < this.anims[this.currentAnim].sheetWidth && !this.anims[this.currentAnim].static) {
             this.frame = frame;
             this.framePosition.x = this.frame * this.anims[this.currentAnim].frameSize.x;
             this.framePosition.y = Math.floor(this.frame / this.anims[this.currentAnim].sheetWidth);
