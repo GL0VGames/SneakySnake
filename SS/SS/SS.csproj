@@ -49,7 +49,6 @@
     <Content Include="lib\jquery.js" />
     <Content Include="sounds\SneakySnake Theme.wav" />
     <Content Include="sounds\walking-1.mp3" />
-    <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="js\ArgyleEngine.ts" />
@@ -69,6 +68,7 @@
     <Content Include="js\Player.js.map" />
     <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <Content Include="js\Teleporter.js.map" />
+    <Content Include="web.config" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
