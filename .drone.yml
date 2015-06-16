@@ -1,0 +1,11 @@
+image: bradrydzewski/node:0.10
+
+script:
+  - npm install
+  - gulp
+  - rsync -avhr dist/ /var/web/ss/
+  
+notify:
+  email:
+    recipients:
+	  - grahammbarber@gmail.com

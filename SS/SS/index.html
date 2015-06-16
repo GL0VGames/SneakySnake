@@ -6,12 +6,18 @@
 
         <!-- snakey references -->
         <link href="css/index.css" rel="stylesheet" />
-        <script src="lib/jquery.js"></script>
+		
+        <!-- build:jquery -->
+		<script src="lib/jquery.js"></script>
+		<!-- endbuild -->
+		
+		<!-- build:js -->
         <script src="js/ArgyleEngine.js"></script>
         <script src="js/NPC.js"></script>
         <script src="js/player.js"></script>
         <script src="js/Teleporter.js"></script>
         <script src="js/game.js"></script>
+		<!-- endbuild -->
     </head>
     <body>
         <canvas id="canvas"></canvas>
@@ -24,9 +30,9 @@
         <div id="text-wrapper">
             <div class="text" id="one">
                 <br /><strong>Sneaky Snake:</strong><br />
-                A procedurally generated game first written for the CodeDay:Portland in February of 2015 at Prolifiq using the custom-made Argyle Engine.  The game is by no means dead and I still work on it in my spare time!
+                A procedurally generated game first written for the CodeDay:Portland event in February of 2015, using a custom-built JavaScript game engine: Argyle. We, GL0V Games, are prepping this game for mobile release, so stay tuned! If you have any feedback, let us know at <em>gl0vgames {dot} studio {at} gmail {dot} com</em>!
                 <br /><br /><strong>Objective:</strong><br />
-                Sneak around the little guys to make your way to the teleporter to bring you to the next level.  If you don't see a teleporter make sure to check all the corners!  Walking over the little ones increases your score and speed but also makes you longer.  Plan carefully!
+                Sneak around the enemies to make your way to the teleporter, without being seen, to get to the next level. If you don't see a teleporter, make sure to check all the corners! Walking over the enemies increases your score and moving speed, but also makes you longer. The resulting tail can be seen by enemies, so plan carefully, and see how long your tail can get!
             </div>
             <div class="text" id="two">
                 <br /><strong>Controls:</strong><br />
@@ -35,8 +41,11 @@
                 <br />r to restart
                 <br />t to toggle controls
                 <br /><br /><strong>Team:</strong><br />
-                Graham Barber: Assets, Everything else not Programming <br />
-                Damian Kulp: Programmer
+                Graham Barber: Design, Production Workflow, Project Management <br />
+				Ben Arvey: Programmer <br />
+                Damian Kulp: Programmer <br />
+				Michelle Moreland: Art <br />
+				Dylan Shumway: Design, Sound/Music, Legal Things
             </div>
         </div>
     
