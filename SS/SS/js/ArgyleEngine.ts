@@ -1,13 +1,10 @@
-﻿function randBetween(low: number, high: number, int: boolean = false): number {
-    if (int == false) {
-        return Math.random() * (high - low) + low;
-    } else if (int == true) {
-        return Math.floor(Math.random() * (high - low + 1) + low);
-    }
+﻿/* Given integers low and high, returns a random integer in the interval [low, high] */
+function randIntBetween(low: number, high: number): number {
+    return Math.floor(Math.random() * (high - low + 1) + low);
 }
 
 function randVector2(xMax: number, yMax: number): Vector2 {
-	return new Vector2(randBetween(0, xMax, true), randBetween(0, yMax, true));
+    return new Vector2(randIntBetween(0, xMax), randIntBetween(0, yMax));
 }
 
 function cmpVector2(a: Vector2, b: Vector2): boolean {

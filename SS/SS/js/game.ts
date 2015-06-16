@@ -77,7 +77,7 @@ class SneakySnakeGame {
         this.NPCs = tempNPC;
 
         // Check if colliding with anything and if not then place
-        for (var i: number = randBetween(this.numNPC, this.numNPC - 3, true); i > 0; i--) {
+        for (var i: number = randIntBetween(this.numNPC, this.numNPC - 3); i > 0; i--) {
             this.tempi = randVector2(this.floorSize, this.floorSize);
             while (floor.grid[this.tempi.x][this.tempi.y].type == RTypes.WALL || collide(this.tempi, this.NPCs) || cmpVector2(gridToScreen(this.tempi), this.currTeleporter.pos) || (this.tempi.x < 6 && this.tempi.y == 1) || (this.tempi.x == 1 && this.tempi.y < 6)) {
                 this.tempi = randVector2(this.floorSize, this.floorSize);
@@ -155,7 +155,7 @@ class SneakySnakeGame {
         // Resets world if player is on a teleporter and thus needs to go to the next level
         if (cmpVector2(this.player.pos, this.player.sDestination) && cmpVector2(this.player.pos, this.currTeleporter.pos)) {
             this.currentFloor++;
-            this.numNPC += randBetween(1, 3, true);
+            this.numNPC += randIntBetween(1, 3);
             this.setupFloor();
             return;
         }

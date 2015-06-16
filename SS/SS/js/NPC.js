@@ -18,11 +18,11 @@ var NPC = (function (_super) {
         this.pos = sVect;
         this.followIndex = -5;
         this.seen = false;
-        this.turnCounter = randBetween(NPC.turnMin, NPC.turnMax, true);
+        this.turnCounter = randIntBetween(NPC.turnMin, NPC.turnMax);
         this.animMan = new AnimationManager(anims);
-        this.animMan.frame = randBetween(0, 3, true);
+        this.animMan.frame = randIntBetween(0, 3);
         // Pick a random turn type
-        this.sightType = randBetween(0, 2, true); // 0 = cw, 1 = ccw, 2 = rand
+        this.sightType = randIntBetween(0, 2); // 0 = cw, 1 = ccw, 2 = rand
     }
     // Function to see if the player has crossed the npc's vision and to change the anim
     NPC.prototype.look = function (target, collision) {
@@ -111,7 +111,7 @@ var NPC = (function (_super) {
             }
             else if (this.animMan.frame > 3)
                 this.animMan.gotoFrame(0);
-            this.turnCounter = randBetween(NPC.turnMin, NPC.turnMax, true);
+            this.turnCounter = randIntBetween(NPC.turnMin, NPC.turnMax);
         }
         else
             this.turnCounter--;

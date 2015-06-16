@@ -4,17 +4,12 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-function randBetween(low, high, int) {
-    if (int === void 0) { int = false; }
-    if (int == false) {
-        return Math.random() * (high - low) + low;
-    }
-    else if (int == true) {
-        return Math.floor(Math.random() * (high - low + 1) + low);
-    }
+/* Given integers low and high, returns a random integer in the interval [low, high] */
+function randIntBetween(low, high) {
+    return Math.floor(Math.random() * (high - low + 1) + low);
 }
 function randVector2(xMax, yMax) {
-    return new Vector2(randBetween(0, xMax, true), randBetween(0, yMax, true));
+    return new Vector2(randIntBetween(0, xMax), randIntBetween(0, yMax));
 }
 function cmpVector2(a, b) {
     if (a.x == b.x && a.y == b.y)
