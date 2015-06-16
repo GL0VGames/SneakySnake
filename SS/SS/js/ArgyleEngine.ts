@@ -1,29 +1,14 @@
-﻿/* Given integers low and high, returns a random integer in the interval [low, high] */
+﻿// Given integers low and high, returns a random integer in the interval [low, high]
 function randIntBetween(low: number, high: number): number {
     return Math.floor(Math.random() * (high - low + 1) + low);
 }
 
-function randVector2(xMax: number, yMax: number): Vector2 {
-    return new Vector2(randIntBetween(0, xMax), randIntBetween(0, yMax));
-}
-
-function cmpVector2(a: Vector2, b: Vector2): boolean {
-    if (a.x == b.x && a.y == b.y)
-        return true;
-    return false;
-}
-
-// Finds difference between a and b (a-b) and returns vector2
-function difVector2(a: Vector2, b: Vector2): Vector2 {
-	return new Vector2(a.x - b.x, a.y - b.y);
-}
-
 function collide(obj: Vector2, NPCs: Array<Obj>): boolean {
     for (var ind: number = 0; ind < NPCs.length; ind++) {
-        if (cmpVector2(obj, NPCs[ind].gPos))
+        if (obj.equals(NPCs[ind].gPos))
             return true;
     }
-        return false;
+    return false;
 }
 
 class Vector2 {
@@ -32,6 +17,18 @@ class Vector2 {
     constructor(x: number, y: number) {
         this.x = x;
         this.y = y;
+    }
+    static randVector2(xMax: number, yMax: number) {
+        return new Vector2(randIntBetween(0, xMax), randIntBetween(0, yMax));
+    }
+    plus(rhs: Vector2): Vector2 {
+        return new Vector2(this.x + rhs.x, this.y + rhs.y);
+    }
+    minus(rhs: Vector2): Vector2 {
+        return new Vector2(this.x - rhs.x, this.y - rhs.y);
+    }
+    equals(rhs: Vector2): boolean {
+        return (this.x == rhs.x) && (this.y == rhs.y);
     }
 }
 
@@ -446,7 +443,7 @@ class Floor {
 
     private partition(x: number, y: number, dir: number, floorSize: number): void {
         var length: number = 0;
-        var start: Vector2 = { x: x, y: y };
+        var start: Vector2 = new Vector2(x, y);
 
         // Return if coords are bad
         if (x < 0 || x > floorSize || y < 0 || y > floorSize) {

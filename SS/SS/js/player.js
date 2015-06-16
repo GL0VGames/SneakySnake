@@ -25,12 +25,12 @@ var Player = (function (_super) {
         if (this.bCanLerp == true) {
             this.gDestination.x = this.tempDestination.x;
             this.gDestination.y = this.tempDestination.y;
-            if (!cmpVector2(this.gDestination, this.previousLoc[0]))
+            if (!this.gDestination.equals(this.previousLoc[0]))
                 this.previousLoc = new Array(new Vector2(this.gDestination.x, this.gDestination.y)).concat(this.previousLoc.slice()); //.push(new Vector2(this.gDestination.x, this.gDestination.y));
             if (this.previousLoc.length > 500)
                 this.previousLoc.splice(0, 1); // FIFO, remove the first if the array is too long to prevent memory leaks
             this.sDestination = gridToScreen(this.gDestination.x, this.gDestination.y);
-            if (!cmpVector2(this.pos, this.sDestination)) {
+            if (!this.pos.equals(this.sDestination)) {
                 // Change the animation depending on which way the character is moving
                 if (this.lastKey === this.controls[0])
                     this.animMan.gotoNamedAnim("playerWalkL");
@@ -73,7 +73,7 @@ var Player = (function (_super) {
                     this.animMan.gotoNamedAnim("playerIdleD");
             }
         }
-        if (input.keyPresses.length > 0 && cmpVector2(this.pos, this.sDestination)) {
+        if (input.keyPresses.length > 0 && this.pos.equals(this.sDestination)) {
             // If there is somewhere to go and you're not supposed to be moving at the moment then set the grid destination to wherever it needs to be
             if (input.keyPresses[0] === this.controls[0]) {
                 this.tempDestination.y = this.gDestination.y + 1;
@@ -96,4 +96,4 @@ var Player = (function (_super) {
     };
     return Player;
 })(Obj);
-//# sourceMappingURL=Player.js.map
+//# sourceMappingURL=player.js.map

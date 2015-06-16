@@ -27,7 +27,7 @@ var NPC = (function (_super) {
     // Function to see if the player has crossed the npc's vision and to change the anim
     NPC.prototype.look = function (target, collision) {
         this.temp = this.gPos; // Because you can't decrease this.gPos
-        this.tempVec = difVector2(target, this.gPos);
+        this.tempVec = target.minus(this.gPos);
         this.tempVec.x = Math.abs(this.tempVec.x);
         this.tempVec.y = Math.abs(this.tempVec.y);
         if (this.tempVec.x > 4 && this.tempVec.y > 4)
@@ -118,7 +118,7 @@ var NPC = (function (_super) {
     };
     NPC.prototype.tick = function (inp, p, collision) {
         // If the player walks over the npc, add the npc to the player and increase the players speed
-        if (cmpVector2(p.pos, this.pos) && !this.bFollowing) {
+        if (p.pos.equals(this.pos) && !this.bFollowing) {
             this.setfollowIndex(p.following.length + 1);
             p.following.push(this);
             this.bFollowing = true;

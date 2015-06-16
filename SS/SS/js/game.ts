@@ -78,12 +78,22 @@ class SneakySnakeGame {
 
         // Check if colliding with anything and if not then place
         for (var i: number = randIntBetween(this.numNPC, this.numNPC - 3); i > 0; i--) {
-            this.tempi = randVector2(this.floorSize, this.floorSize);
-            while (floor.grid[this.tempi.x][this.tempi.y].type == RTypes.WALL || collide(this.tempi, this.NPCs) || cmpVector2(gridToScreen(this.tempi), this.currTeleporter.pos) || (this.tempi.x < 6 && this.tempi.y == 1) || (this.tempi.x == 1 && this.tempi.y < 6)) {
-                this.tempi = randVector2(this.floorSize, this.floorSize);
+            this.tempi = Vector2.randVector2(this.floorSize, this.floorSize);
+            while (floor.grid[this.tempi.x][this.tempi.y].type == RTypes.WALL
+                || collide(this.tempi, this.NPCs)
+                || gridToScreen(this.tempi).equals(this.currTeleporter.pos)
+                || (this.tempi.x < 6 && this.tempi.y == 1)
+                || (this.tempi.x == 1 && this.tempi.y < 6)) {
+                this.tempi = Vector2.randVector2(this.floorSize, this.floorSize);
             }
 
-            this.NPCs.push(new NPC(gridToScreen(this.tempi), this.tempi, 5, [this.assetmanager.anims["npcAll"], this.assetmanager.anims["npcFollowAnim"], this.assetmanager.anims["npcIdleDSeen"], this.assetmanager.anims["npcIdleLSeen"], this.assetmanager.anims["npcIdleUSeen"], this.assetmanager.anims["npcIdleRSeen"]]));
+            this.NPCs.push(new NPC(gridToScreen(this.tempi), this.tempi, 5,
+                [this.assetmanager.anims["npcAll"],
+                    this.assetmanager.anims["npcFollowAnim"],
+                    this.assetmanager.anims["npcIdleDSeen"],
+                    this.assetmanager.anims["npcIdleLSeen"],
+                    this.assetmanager.anims["npcIdleUSeen"],
+                    this.assetmanager.anims["npcIdleRSeen"]]));
         }
     }
 
@@ -153,7 +163,7 @@ class SneakySnakeGame {
 		this.fps++;
 
         // Resets world if player is on a teleporter and thus needs to go to the next level
-        if (cmpVector2(this.player.pos, this.player.sDestination) && cmpVector2(this.player.pos, this.currTeleporter.pos)) {
+        if (this.player.pos.equals(this.player.sDestination) && this.player.pos.equals(this.currTeleporter.pos)) {
             this.currentFloor++;
             this.numNPC += randIntBetween(1, 3);
             this.setupFloor();
@@ -176,7 +186,7 @@ class SneakySnakeGame {
         for (this.tempi = 0; this.tempi < this.NPCs.length; this.tempi++) {
             this.NPCs[this.tempi].tick(this.input, this.player, this.collisionMap[this.currentFloor]);            
             if (this.NPCs[this.tempi].seen) {
-				if (cmpVector2(this.player.sDestination, this.player.pos))
+                if (this.player.pos.equals(this.player.sDestination))
 					this.player.health -= 1;
                 break;
             }

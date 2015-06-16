@@ -4,25 +4,13 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-/* Given integers low and high, returns a random integer in the interval [low, high] */
+// Given integers low and high, returns a random integer in the interval [low, high]
 function randIntBetween(low, high) {
     return Math.floor(Math.random() * (high - low + 1) + low);
 }
-function randVector2(xMax, yMax) {
-    return new Vector2(randIntBetween(0, xMax), randIntBetween(0, yMax));
-}
-function cmpVector2(a, b) {
-    if (a.x == b.x && a.y == b.y)
-        return true;
-    return false;
-}
-// Finds difference between a and b (a-b) and returns vector2
-function difVector2(a, b) {
-    return new Vector2(a.x - b.x, a.y - b.y);
-}
 function collide(obj, NPCs) {
     for (var ind = 0; ind < NPCs.length; ind++) {
-        if (cmpVector2(obj, NPCs[ind].gPos))
+        if (obj.equals(NPCs[ind].gPos))
             return true;
     }
     return false;
@@ -32,6 +20,18 @@ var Vector2 = (function () {
         this.x = x;
         this.y = y;
     }
+    Vector2.randVector2 = function (xMax, yMax) {
+        return new Vector2(randIntBetween(0, xMax), randIntBetween(0, yMax));
+    };
+    Vector2.prototype.plus = function (rhs) {
+        return new Vector2(this.x + rhs.x, this.y + rhs.y);
+    };
+    Vector2.prototype.minus = function (rhs) {
+        return new Vector2(this.x - rhs.x, this.y - rhs.y);
+    };
+    Vector2.prototype.equals = function (rhs) {
+        return (this.x == rhs.x) && (this.y == rhs.y);
+    };
     return Vector2;
 })();
 var Input = (function () {
@@ -409,7 +409,7 @@ var Floor = (function () {
     }
     Floor.prototype.partition = function (x, y, dir, floorSize) {
         var length = 0;
-        var start = { x: x, y: y };
+        var start = new Vector2(x, y);
         // Return if coords are bad
         if (x < 0 || x > floorSize || y < 0 || y > floorSize) {
             console.warn("coords out of bounds");
