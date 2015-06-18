@@ -10,7 +10,7 @@ class NPC extends Obj {
     public gPos: Vector2;
     public seen: boolean;
 	public framePosition: Vector2;
-	private static turnMin: number = 20;
+	private static turnMin: number = 30;
 	private static turnMax: number = 200;
 	private static visionMax: number = 4;
 
@@ -101,11 +101,11 @@ class NPC extends Obj {
             } else if (this.sightType == 1) {
                 this.animMan.leftFrame();
             } else if (this.sightType == 2) {
-                this.animMan.frame += (Math.round(Math.random())) ? 1 : -1;
-                this.animMan.frame %= 4;
-				this.animMan.gotoFrame(this.animMan.frame);
+                if (Math.round(Math.random()))
+					this.animMan.rightFrame();
+				else this.animMan.leftFrame();
 			}
-            else if (this.animMan.frame > 3)
+            else if (this.animMan.frame > this.animMan.anims.length)
                 this.animMan.gotoFrame(0);
             this.turnCounter = randIntBetween(NPC.turnMin, NPC.turnMax);
         } else

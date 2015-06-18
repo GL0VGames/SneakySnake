@@ -48,6 +48,8 @@
     <Content Include="js\Teleporter.js" />
     <Content Include="lib\jquery.js" />
     <Content Include="sounds\SneakySnake Theme.wav" />
+    <Content Include="sounds\spotted.wav" />
+    <Content Include="sounds\theme2.wav" />
     <Content Include="sounds\walking-1.mp3" />
   </ItemGroup>
   <ItemGroup>

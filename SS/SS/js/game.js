@@ -168,7 +168,7 @@ var SneakySnakeGame = (function () {
             this.setupFloor();
             return;
         }
-        // Draw objects
+        // Create array to put all objects in
         this.tempTick = this.staticObjs.concat(this.dynamicObjs).concat(this.NPCs).concat(this.currTeleporter);
         this.tempTick.push(this.player);
         for (this.tempi = 0; this.tempi < this.NPCs.length; this.tempi++) {

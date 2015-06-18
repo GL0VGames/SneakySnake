@@ -46,7 +46,7 @@ var Animation = (function () {
     // Frames must be greater than 0 for animations
     function Animation(st, width, height, off_x, off_y, frames, name) {
         // For automatic anims
-        this.frameCount = 0;
+        this.frameCounter = 0;
         this.bStatic = st;
         this.frameSize = new Vector2(width, height);
         this.offset = new Vector2(off_x, off_y);
@@ -321,10 +321,9 @@ var Renderer = (function () {
             var obj = objs[i];
             var anim = obj.animMan.anims[obj.animMan.currentAnim];
             // For automatic anims only (so not npc's or the player or anything like that atm)
-            if (!anim.bStatic && anim.frameCounterMax > 0 && anim.frameCount == (anim.frameCounterMax - 1)) {
+            if (!anim.bStatic && anim.frameCounterMax > 0 && anim.frameCounter == (anim.frameCounterMax - 1))
                 obj.animMan.rightFrame();
-            }
-            anim.frameCount = (anim.frameCount + 1) % anim.frameCounterMax;
+            anim.frameCounter = (anim.frameCounter + 1) % anim.frameCounterMax;
             this.ctx.drawImage(anim.image, obj.animMan.framePosition.x, obj.animMan.framePosition.y, anim.frameSize.x, anim.frameSize.y, obj.pos.x - anim.offset.x, obj.pos.y - anim.offset.y, anim.frameSize.x, anim.frameSize.y);
         }
         // FPS Counter

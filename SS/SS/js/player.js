@@ -96,4 +96,4 @@ var Player = (function (_super) {
     };
     return Player;
 })(Obj);
-//# sourceMappingURL=player.js.map
+//# sourceMappingURL=Player.js.map

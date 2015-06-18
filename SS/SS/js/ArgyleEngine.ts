@@ -51,7 +51,7 @@ class Animation {
     public sheetWidth: number;
 	public name: string;
 	// For automatic anims
-	public frameCount: number = 0;
+	public frameCounter: number = 0;
 	public frameCounterMax: number;
 
     public translate(ofst: Vector2) {
@@ -336,16 +336,16 @@ class Renderer {
                 return zDiff;
             }
         });
+
         for (var i: number = 0; i < objs.length; i++) {
             var obj: Obj = objs[i];
             var anim: Animation = obj.animMan.anims[obj.animMan.currentAnim];
 
 			// For automatic anims only (so not npc's or the player or anything like that atm)
-            if (!anim.bStatic && anim.frameCounterMax > 0 && anim.frameCount == (anim.frameCounterMax - 1)) {
+            if (!anim.bStatic && anim.frameCounterMax > 0 && anim.frameCounter == (anim.frameCounterMax - 1)) 
 				obj.animMan.rightFrame();
-            }
 
-			anim.frameCount = (anim.frameCount + 1) % anim.frameCounterMax;
+			anim.frameCounter = (anim.frameCounter + 1) % anim.frameCounterMax;
 
 			this.ctx.drawImage(anim.image,
                 obj.animMan.framePosition.x, obj.animMan.framePosition.y,
@@ -356,8 +356,8 @@ class Renderer {
 
 		// FPS Counter
 		if (typeof (fps) !== undefined && fps != -1) {
-		this.ctx.fillStyle = "#DD1321";
-		this.ctx.font = "2em Inconsolata";
+			this.ctx.fillStyle = "#DD1321";
+			this.ctx.font = "2em Inconsolata";
 			this.ctx.fillText("fps: " + JSON.stringify(fps), this.canvas.width / 11, this.canvas.height / 11);
 		}
 

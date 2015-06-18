@@ -105,11 +105,12 @@ var NPC = (function (_super) {
                 this.animMan.leftFrame();
             }
             else if (this.sightType == 2) {
-                this.animMan.frame += (Math.round(Math.random())) ? 1 : -1;
-                this.animMan.frame %= 4;
-                this.animMan.gotoFrame(this.animMan.frame);
+                if (Math.round(Math.random()))
+                    this.animMan.rightFrame();
+                else
+                    this.animMan.leftFrame();
             }
-            else if (this.animMan.frame > 3)
+            else if (this.animMan.frame > this.animMan.anims.length)
                 this.animMan.gotoFrame(0);
             this.turnCounter = randIntBetween(NPC.turnMin, NPC.turnMax);
         }
@@ -140,7 +141,7 @@ var NPC = (function (_super) {
                 this.look(p.following[this.temp].gPos, collision);
         }
     };
-    NPC.turnMin = 20;
+    NPC.turnMin = 30;
     NPC.turnMax = 200;
     NPC.visionMax = 4;
     return NPC;
