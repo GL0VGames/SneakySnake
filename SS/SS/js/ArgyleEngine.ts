@@ -50,13 +50,11 @@ class Input {
         this.mouseDownPos.x = e.pageX;
         this.mouseDownPos.y = e.pageY;
         this.mouseDown = true;
-        alert("DOWN");
     }
     public mouseup(e: JQueryMouseEventObject) {
         this.mouseUpPos.x = e.pageX;
         this.mouseUpPos.y = e.pageY;
         this.mouseDown = false;
-        alert("UP");
     }
     public click(e: JQueryMouseEventObject) {
         // these next four lines shouldn't be needed once mousedown and mouseup are working
@@ -66,7 +64,6 @@ class Input {
         this.mouseUpPos.x = e.pageX;
         this.mouseUpPos.y = e.pageY;
         this.mouseClicked = true;
-        alert("CLICK");
 }
 }
 
