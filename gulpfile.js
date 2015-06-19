@@ -6,8 +6,10 @@ var minHTML = require("gulp-minify-html");
 var minCSS = require("gulp-minify-css")
 var concat = require("gulp-concat");
 var imageMin = require("gulp-imagemin");
+var rsync = require("gulp-rsync");
+//var obfuscate = require("gulp-obfuscate");
 
-gulp.task("default", function () {
+gulp.task("build", function () {
 //	Select the HTML index, replace the script sources, minify, and move to dist	
 	gulp.src("SS/SS/index.html")
 		.pipe(replace({
@@ -25,6 +27,7 @@ gulp.task("default", function () {
 	gulp.src(["SS/SS/js/ArgyleEngine.ts", "SS/SS/js/game.ts", "SS/SS/js/NPC.js", "SS/SS/js/player.ts", "SS/SS/js/Teleporter.ts"])
 		.pipe(concat("index.ts"))
 		.pipe(ts())
+//		.pipe(obfuscate())
 		.pipe(uglify())
 		.pipe(gulp.dest("dist/js/"));
 		
@@ -35,4 +38,17 @@ gulp.task("default", function () {
 	gulp.src("SS/SS/sounds/*")
 		.pipe(gulp.dest("dist/sounds/"));
 	
+});
+
+gulp.task("deploy", function () {
+	gulp.src("dist/")
+		.pipe(rsync({
+			root: "dist",
+			hostname: "gl0vgames.com",
+			destination: "/var/web/ss/",
+			username: "root",
+			incremental: true,
+			progress: true,
+			recursive: true
+	}));
 });

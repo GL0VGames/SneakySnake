@@ -1,4 +1,5 @@
-﻿// Given integers low and high, returns a random integer in the interval [low, high]
+﻿/// <reference path="../lib/jquery.d.ts" />
+// Given integers low and high, returns a random integer in the interval [low, high]
 function randIntBetween(low: number, high: number): number {
     return Math.floor(Math.random() * (high - low + 1) + low);
 }
