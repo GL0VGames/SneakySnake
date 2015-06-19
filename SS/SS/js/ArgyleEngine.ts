@@ -33,18 +33,45 @@ class Vector2 {
 }
 
 class Input {
-    bMouseClicked: boolean;
-    mouseClickPos: Vector2;
-    keyPresses: Array<string>;
+    private mouseDown: boolean;
+    public mouseClicked: boolean;
+    public mouseDownPos: Vector2;
+    public mouseUpPos: Vector2;
+    public keyPresses: Array<string>;
+
     constructor() {
-        this.bMouseClicked = false;
-        this.mouseClickPos = new Vector2(-1, -1);
+        this.mouseDown = false;
+        this.mouseClicked = false;
+        this.mouseDownPos = new Vector2(-1, -1);
+        this.mouseUpPos = new Vector2(-1, -1);
         this.keyPresses = new Array("");
     }
+    public mousedown(e: JQueryMouseEventObject) {
+        this.mouseDownPos.x = e.pageX;
+        this.mouseDownPos.y = e.pageY;
+        this.mouseDown = true;
+        alert("DOWN");
+    }
+    public mouseup(e: JQueryMouseEventObject) {
+        this.mouseUpPos.x = e.pageX;
+        this.mouseUpPos.y = e.pageY;
+        this.mouseDown = false;
+        alert("UP");
+    }
+    public click(e: JQueryMouseEventObject) {
+        // these next four lines shouldn't be needed once mousedown and mouseup are working
+        // but they're not for some reason
+        this.mouseDownPos.x = e.pageX;
+        this.mouseDownPos.y = e.pageY;
+        this.mouseUpPos.x = e.pageX;
+        this.mouseUpPos.y = e.pageY;
+        this.mouseClicked = true;
+        alert("CLICK");
+}
 }
 
 class Animation {
-    public bStatic: boolean;
+    public static: boolean;
     public frameSize: Vector2;
     public offset: Vector2;
     public image: HTMLImageElement;
@@ -60,7 +87,7 @@ class Animation {
 
 	// Frames must be greater than 0 for animations
     constructor(st: boolean, width: number, height: number, off_x: number, off_y: number, frames: number, name: string) {
-        this.bStatic = st;
+        this.static = st;
         this.frameSize = new Vector2(width, height);
         this.offset = new Vector2(off_x, off_y);
 		this.frameCounterMax = frames;
@@ -342,26 +369,24 @@ class Renderer {
             var anim: Animation = obj.animMan.anims[obj.animMan.currentAnim];
 
 			// For automatic anims only (so not npc's or the player or anything like that atm)
-            if (!anim.bStatic && anim.frameCounterMax > 0 && anim.frameCounter == (anim.frameCounterMax - 1)) 
+            if (!anim.static && anim.frameCounterMax > 0 && anim.frameCounter == (anim.frameCounterMax - 1))
 				obj.animMan.rightFrame();
 
 			anim.frameCounter = (anim.frameCounter + 1) % anim.frameCounterMax;
-
 			this.ctx.drawImage(anim.image,
-                obj.animMan.framePosition.x, obj.animMan.framePosition.y,
-                anim.frameSize.x, anim.frameSize.y,
-                obj.pos.x - anim.offset.x, obj.pos.y - anim.offset.y,
-                anim.frameSize.x, anim.frameSize.y);
-        }
+				obj.animMan.framePosition.x, obj.animMan.framePosition.y,
+				anim.frameSize.x, anim.frameSize.y,
+				obj.pos.x - anim.offset.x, obj.pos.y - anim.offset.y,
+				anim.frameSize.x, anim.frameSize.y);
 
-		// FPS Counter
-		if (typeof (fps) !== undefined && fps != -1) {
-			this.ctx.fillStyle = "#DD1321";
-			this.ctx.font = "2em Inconsolata";
-			this.ctx.fillText("fps: " + JSON.stringify(fps), this.canvas.width / 11, this.canvas.height / 11);
+			// FPS Counter
+			if (typeof (fps) !== undefined && fps != -1) {
+				this.ctx.fillStyle = "#DD1321";
+				this.ctx.font = "2em Inconsolata";
+				this.ctx.fillText("fps: " + JSON.stringify(fps), this.canvas.width / 11, this.canvas.height / 11);
+			}
 		}
-
-    }
+	}
     constructor() {
         this.canvas = <HTMLCanvasElement> document.getElementById("canvas");
         this.canvas.width = 1024;
@@ -395,7 +420,7 @@ class AnimationManager {
 	}
 
 	public rightFrame() {
-		if (!this.anims[this.currentAnim].bStatic) {
+		if (!this.anims[this.currentAnim].static) {
 			this.frame = (this.frame + 1) % this.anims[this.currentAnim].sheetWidth;
 			this.framePosition.x = this.frame * this.anims[this.currentAnim].frameSize.x;
 			this.framePosition.y = Math.floor(this.frame / this.anims[this.currentAnim].sheetWidth);
@@ -403,7 +428,7 @@ class AnimationManager {
 	}
 
 	public leftFrame() {
-		if (!this.anims[this.currentAnim].bStatic) {
+		if (!this.anims[this.currentAnim].static) {
 			this.frame = (this.frame + 3) % this.anims[this.currentAnim].sheetWidth;
 			this.framePosition.x = this.frame * this.anims[this.currentAnim].frameSize.x;
 			this.framePosition.y = Math.floor(this.frame / this.anims[this.currentAnim].sheetWidth);
@@ -411,7 +436,7 @@ class AnimationManager {
 	}
 
 	public gotoFrame(frame: number) {
-		if (frame > 0 && frame < this.anims[this.currentAnim].sheetWidth && !this.anims[this.currentAnim].bStatic) {
+		if (frame > 0 && frame < this.anims[this.currentAnim].sheetWidth && !this.anims[this.currentAnim].static) {
 			this.frame = frame;
 			this.framePosition.x = this.frame * this.anims[this.currentAnim].frameSize.x;
 			this.framePosition.y = Math.floor(this.frame / this.anims[this.currentAnim].sheetWidth);

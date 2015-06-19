@@ -22,10 +22,14 @@ var SneakySnakeGame = (function () {
         var that = this;
         // Bind inputs
         this.input = new Input;
+        $(this.renderer.canvas).mousedown(function (e) {
+            that.input.mousedown(e);
+        });
+        $(this.renderer.canvas).mouseup(function (e) {
+            that.input.mouseup(e);
+        });
         $(this.renderer.canvas).click(function (e) {
-            that.input.bMouseClicked = true;
-            that.input.mouseClickPos.x = e.pageX;
-            that.input.mouseClickPos.y = e.pageY;
+            that.input.click(e);
         });
         $(window).keyup(function (e) {
             if (e.which == 87)
@@ -189,7 +193,7 @@ var SneakySnakeGame = (function () {
         // Render everything
         this.renderer.draw(this.tempTick, this.assetmanager.anims, (this.bFPS) ? this.lastFPS : -1);
         // Clear inputs
-        this.input.bMouseClicked = false;
+        this.input.mouseClicked = false;
         // Check end game (player has no health)
         if (this.player.health <= 0) {
             clearInterval(this.tickID);
