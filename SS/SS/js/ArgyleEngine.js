@@ -46,13 +46,11 @@ var Input = (function () {
         this.mouseDownPos.x = e.pageX;
         this.mouseDownPos.y = e.pageY;
         this.mouseDown = true;
-        alert("DOWN");
     };
     Input.prototype.mouseup = function (e) {
         this.mouseUpPos.x = e.pageX;
         this.mouseUpPos.y = e.pageY;
         this.mouseDown = false;
-        alert("UP");
     };
     Input.prototype.click = function (e) {
         // these next four lines shouldn't be needed once mousedown and mouseup are working
@@ -62,7 +60,6 @@ var Input = (function () {
         this.mouseUpPos.x = e.pageX;
         this.mouseUpPos.y = e.pageY;
         this.mouseClicked = true;
-        alert("CLICK");
     };
     return Input;
 })();
