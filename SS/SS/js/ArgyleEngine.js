@@ -4,6 +4,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+/// <reference path="../lib/jquery.d.ts" />
 // Given integers low and high, returns a random integer in the interval [low, high]
 function randIntBetween(low, high) {
     return Math.floor(Math.random() * (high - low + 1) + low);

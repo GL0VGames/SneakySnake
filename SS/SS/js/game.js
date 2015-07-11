@@ -22,15 +22,23 @@ var SneakySnakeGame = (function () {
         var that = this;
         // Bind inputs
         this.input = new Input;
+        //$(this.renderer.canvas).mousedown(function (e) { that.input.mousedown(e); });
         $(this.renderer.canvas).mousedown(function (e) {
             that.input.mousedown(e);
+            if (that.input.mouseDownPos.x < that.renderer.canvas.clientWidth / 2) {
+                if (that.input.mouseDownPos.y < that.renderer.canvas.clientHeight / 2)
+                    that.input.keyPresses.push("a");
+                else
+                    that.input.keyPresses.push("s");
+            }
+            else {
+                if (that.input.mouseDownPos.y < that.renderer.canvas.clientHeight / 2)
+                    that.input.keyPresses.push("w");
+                else
+                    that.input.keyPresses.push("d");
+            }
         });
-        $(this.renderer.canvas).mouseup(function (e) {
-            that.input.mouseup(e);
-        });
-        $(this.renderer.canvas).click(function (e) {
-            that.input.click(e);
-        });
+        //$(this.renderer.canvas).click(function (e) { that.input.click(e); });
         $(window).keyup(function (e) {
             if (e.which == 87)
                 that.input.keyPresses.push("w");

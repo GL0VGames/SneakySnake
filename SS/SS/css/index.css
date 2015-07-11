@@ -7,6 +7,12 @@ body {
     margin: 0;
 }
 
+canvas {
+	/* Get rid of 300ms delay in IE */
+	-ms-touch-action: manipulation; /* IE10  */
+	touch-action: manipulation; /* IE11+ */
+}
+
 #buttons {
     width: 230px;
     margin-left: auto;
