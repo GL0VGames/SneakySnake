@@ -241,7 +241,7 @@ var AssetManager = (function () {
         };
         this.audio = {}; // Can't do : Array<HTMLAudioElement> because that doesn't support .addEventListenerxr some odd reason
         this.audioURLs = {
-            "main": "sounds/SneakySnake Theme.wav",
+            "main": "sounds/theme2.wav",
         };
         // Loading bar canvas vars;
         this.x = 0;

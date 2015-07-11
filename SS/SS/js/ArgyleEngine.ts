@@ -249,7 +249,7 @@ class AssetManager {
     };
     public audio: any = {}; // Can't do : Array<HTMLAudioElement> because that doesn't support .addEventListenerxr some odd reason
     private audioURLs: any = {
-        "main": "sounds/SneakySnake Theme.wav",
+        "main": "sounds/theme2.wav",
     };
 
     // Loading bar canvas vars;
