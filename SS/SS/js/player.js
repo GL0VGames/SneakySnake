@@ -12,6 +12,7 @@ var Player = (function (_super) {
         this.speed = 2.5;
         this.health = 1;
         this.controls = ["s", "a", "w", "d"]; // Indexed by enum Direction
+        this.speedBoost = .1; // Added to player speed whenever they pick up an NPC
         this.bStatic = false;
         this.gDestination = new Vector2(1, 1);
         this.sDestination = new Vector2(x, y);
@@ -28,7 +29,7 @@ var Player = (function (_super) {
             if (!this.gDestination.equals(this.previousLoc[0]))
                 this.previousLoc = new Array(new Vector2(this.gDestination.x, this.gDestination.y)).concat(this.previousLoc.slice()); //.push(new Vector2(this.gDestination.x, this.gDestination.y));
             if (this.previousLoc.length > 500)
-                this.previousLoc.splice(0, 1); // FIFO, remove the first if the array is too long to prevent memory leaks
+                this.previousLoc = this.previousLoc.splice(1, this.previousLoc.length - 1); // FIFO, remove the first if the array is too long to prevent memory leaks
             this.sDestination = gridToScreen(this.gDestination.x, this.gDestination.y);
             if (!this.pos.equals(this.sDestination)) {
                 // Change the animation depending on which way the character is moving

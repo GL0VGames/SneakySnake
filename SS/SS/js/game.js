@@ -10,6 +10,7 @@ var SneakySnakeGame = (function () {
         this.bFPS = false;
         this.muted = false;
         this.paused = true;
+        this.cheated = false;
         this.renderer = new Renderer();
         this.assetmanager = new AssetManager(this.renderer.ctx, this.renderer.canvas);
         this.currentFloor = 0;
@@ -19,7 +20,7 @@ var SneakySnakeGame = (function () {
         this.staticObjs = [];
         this.dynamicObjs = [];
         this.collisionMap = this.world.collisionMap;
-        this.numNPC = 3;
+        this.numNPCNextFloor = 3;
         this.NPCs = [];
         var that = this;
         // Bind inputs
@@ -91,6 +92,17 @@ var SneakySnakeGame = (function () {
                     that.toggleControls();
                 else if (e.which == 70)
                     that.bFPS = !that.bFPS;
+                else if (e.which == 76) {
+                    var hi = new NPC(gridToScreen(1, 1), new Vector2(1, 1), 5, [that.assetmanager.anims["npcFollowAnim"]]);
+                    if (that.player.following.length >= that.player.previousLoc.length - 1)
+                        that.player.previousLoc = that.player.previousLoc.concat(new Vector2(1, 1));
+                    hi.setfollowIndex(that.player.following.length + 1);
+                    hi.bFollowing = true;
+                    that.NPCs = that.NPCs.concat(hi);
+                    that.player.following = that.player.following.concat(that.NPCs[that.NPCs.length - 1]);
+                    that.player.speed += that.player.speedBoost;
+                    that.cheated = true;
+                }
             }
         });
     }
@@ -141,7 +153,7 @@ var SneakySnakeGame = (function () {
                 tempNPC.push(this.NPCs[i]);
             }
         this.NPCs = tempNPC;
-        for (var i = randIntBetween(this.numNPC, this.numNPC - 3); i > 0; i--) {
+        for (var i = randIntBetween(this.numNPCNextFloor, this.numNPCNextFloor - 3); i > 0; i--) {
             this.tempi = Vector2.randVector2(this.floorSize, this.floorSize);
             while (floor.grid[this.tempi.x][this.tempi.y].type == 1 /* WALL */ || collide(this.tempi, this.NPCs) || gridToScreen(this.tempi).equals(this.currTeleporter.pos) || (this.tempi.x < 6 && this.tempi.y == 1) || (this.tempi.x == 1 && this.tempi.y < 6)) {
                 this.tempi = Vector2.randVector2(this.floorSize, this.floorSize);
@@ -165,7 +177,7 @@ var SneakySnakeGame = (function () {
         this.staticObjs = [];
         this.dynamicObjs = [];
         this.collisionMap = this.world.collisionMap;
-        this.numNPC = 3;
+        this.numNPCNextFloor = 3;
         this.NPCs = [];
         this.currentFloor = 0;
         this.input.keyPresses = [];
@@ -208,7 +220,7 @@ var SneakySnakeGame = (function () {
         // Resets world if player is on a teleporter and thus needs to go to the next level
         if (this.player.pos.equals(this.player.sDestination) && this.player.pos.equals(this.currTeleporter.pos)) {
             this.currentFloor++;
-            this.numNPC += randIntBetween(1, 3);
+            this.numNPCNextFloor += randIntBetween(1, 3);
             this.setupFloor();
             return;
         }
@@ -245,28 +257,37 @@ var SneakySnakeGame = (function () {
             var that = this;
             var highscore;
             var sHighscore;
-            // Save highscore
-            if (typeof (localStorage["highscore"]) == "undefined") {
-                highscore = [that.player.following.length];
-                sHighscore = JSON.stringify(highscore);
-                localStorage.setItem("highscore", sHighscore);
-            }
+            // Sort highscore, check if you cheated, save highscore
+            if (!this.cheated)
+                if (typeof (localStorage["highscore"]) == "undefined") {
+                    highscore = [that.player.following.length];
+                }
+                else {
+                    highscore = JSON.parse(localStorage.getItem("highscore"));
+                    highscore.push(that.player.following.length);
+                    highscore = highscore.sort(function (a, b) {
+                        return a - b;
+                    }); // The function allows the sort to be on numbers instead of strings... I know it's dumb but that's how it works
+                }
             else {
                 highscore = JSON.parse(localStorage.getItem("highscore"));
-                highscore.push(that.player.following.length);
-                highscore = highscore.sort(function (a, b) {
-                    return a - b;
-                }); // The function allows the sort to be on numbers instead of strings... I know it's dumb but that's how it works
-                sHighscore = JSON.stringify(highscore);
-                localStorage.setItem("highscore", sHighscore);
             }
+            // Don't let it get too long, there's only so much space in localstorage
+            if (highscore.length > 5)
+                highscore = highscore.splice(1, highscore.length - 1);
+            // Convert to string and save
+            sHighscore = JSON.stringify(highscore);
+            localStorage.setItem("highscore", sHighscore);
             // Show stuff on screen
             setTimeout(function () {
                 that.renderer.ctx.fillStyle = "#DD1321";
                 that.renderer.ctx.font = "6.5em Inconsolata";
                 that.renderer.ctx.fillText("You've been seen!", that.renderer.canvas.width / 8, that.renderer.canvas.height / 2);
                 that.renderer.ctx.font = "3em Incosolata";
-                that.renderer.ctx.fillText("Score: " + that.player.following.length, that.renderer.canvas.width / 2.4, that.renderer.canvas.height / 1.5);
+                if (!that.cheated)
+                    that.renderer.ctx.fillText("Score: " + that.player.following.length, that.renderer.canvas.width / 2.4, that.renderer.canvas.height / 1.5);
+                else
+                    that.renderer.ctx.fillText("Cheater: " + that.player.following.length, that.renderer.canvas.width / 2.4, that.renderer.canvas.height / 1.5);
                 that.renderer.ctx.fillText("Highscore: " + highscore[highscore.length - 1], that.renderer.canvas.width / 2.8, that.renderer.canvas.height / 1.25);
             }, 400);
         }

@@ -10,7 +10,7 @@ class NPC extends Obj {
     public gPos: Vector2;
     public seen: boolean;
 	public framePosition: Vector2;
-	private static turnMin: number = 30;
+	private static turnMin: number = 40;
 	private static turnMax: number = 200;
 	private static visionMax: number = 4;
 
@@ -94,7 +94,7 @@ class NPC extends Obj {
     }
 
     // Pseudo-randomly rotate the npc's in either a clockwise, anti-clockwise, or random direction
-    private rotate() {
+    private rotate(score: number) {
         if (this.turnCounter == 0) {
             if (this.sightType == 0) {
                 this.animMan.rightFrame();
@@ -107,7 +107,7 @@ class NPC extends Obj {
 			}
             else if (this.animMan.frame > this.animMan.anims.length)
                 this.animMan.gotoFrame(0);
-            this.turnCounter = randIntBetween(NPC.turnMin, NPC.turnMax);
+            this.turnCounter = randIntBetween(NPC.turnMin, clamp(NPC.turnMin, NPC.turnMax, NPC.turnMax - score));
         } else
 			this.turnCounter--;
     }
@@ -118,7 +118,7 @@ class NPC extends Obj {
             this.setfollowIndex(p.following.length + 1);
             p.following.push(this);
             this.bFollowing = true;
-            p.speed += .1;
+            p.speed += p.speedBoost;
         }
         // If the npc is supposed to be following the player, change the anim to the following anim
         else if (this.bFollowing) {
@@ -130,7 +130,7 @@ class NPC extends Obj {
         }
         else if (!this.seen) {
             // rand decide turn
-            this.rotate();
+            this.rotate(p.following.length);
 
             // check if can see player or any part of tail
             this.look(p.gDestination, collision);

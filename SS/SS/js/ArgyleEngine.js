@@ -9,6 +9,13 @@ var __extends = this.__extends || function (d, b) {
 function randIntBetween(low, high) {
     return Math.floor(Math.random() * (high - low + 1) + low);
 }
+function clamp(low, high, num) {
+    if (num < low)
+        return low;
+    if (num > high)
+        return high;
+    return num;
+}
 function collide(obj, NPCs) {
     for (var ind = 0; ind < NPCs.length; ind++) {
         if (obj.equals(NPCs[ind].gPos))

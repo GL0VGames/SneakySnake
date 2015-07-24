@@ -4,6 +4,14 @@ function randIntBetween(low: number, high: number): number {
     return Math.floor(Math.random() * (high - low + 1) + low);
 }
 
+function clamp(low: number, high: number, num: number) {
+	if (num < low)
+		return low;
+	if (num > high)
+		return high;
+	return num;
+}
+
 function collide(obj: Vector2, NPCs: Array<Obj>): boolean {
     for (var ind: number = 0; ind < NPCs.length; ind++) {
         if (obj.equals(NPCs[ind].gPos))

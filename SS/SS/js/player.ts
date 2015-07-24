@@ -10,6 +10,7 @@ class Player extends Obj {
     private lastKey: string;
     public health: number = 1;
     public controls: Array<string> = ["s", "a", "w", "d"]; // Indexed by enum Direction
+	public speedBoost: number = .1; // Added to player speed whenever they pick up an NPC
 
     constructor(x: number, y: number, anims: Array<Animation>) {
         super(x, y, anims, 5);
@@ -30,7 +31,7 @@ class Player extends Obj {
             if (!this.gDestination.equals(this.previousLoc[0]))
                 this.previousLoc = new Array(new Vector2(this.gDestination.x, this.gDestination.y)).concat(this.previousLoc.slice());//.push(new Vector2(this.gDestination.x, this.gDestination.y));
             if (this.previousLoc.length > 500) // This means you can only have 500 little guys following you, :( oh darn
-                this.previousLoc.splice(0, 1); // FIFO, remove the first if the array is too long to prevent memory leaks
+                this.previousLoc = this.previousLoc.splice(1, this.previousLoc.length - 1); // FIFO, remove the first if the array is too long to prevent memory leaks
             this.sDestination = gridToScreen(this.gDestination.x, this.gDestination.y);
             if (!this.pos.equals(this.sDestination)) {
                 // Change the animation depending on which way the character is moving

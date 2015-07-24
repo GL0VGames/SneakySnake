@@ -96,7 +96,7 @@ var NPC = (function (_super) {
         this.gPos = new Vector2(p.previousLoc[this.followIndex].x, p.previousLoc[this.followIndex].y);
     };
     // Pseudo-randomly rotate the npc's in either a clockwise, anti-clockwise, or random direction
-    NPC.prototype.rotate = function () {
+    NPC.prototype.rotate = function (score) {
         if (this.turnCounter == 0) {
             if (this.sightType == 0) {
                 this.animMan.rightFrame();
@@ -112,7 +112,7 @@ var NPC = (function (_super) {
             }
             else if (this.animMan.frame > this.animMan.anims.length)
                 this.animMan.gotoFrame(0);
-            this.turnCounter = randIntBetween(NPC.turnMin, NPC.turnMax);
+            this.turnCounter = randIntBetween(NPC.turnMin, clamp(NPC.turnMin, NPC.turnMax, NPC.turnMax - score));
         }
         else
             this.turnCounter--;
@@ -123,7 +123,7 @@ var NPC = (function (_super) {
             this.setfollowIndex(p.following.length + 1);
             p.following.push(this);
             this.bFollowing = true;
-            p.speed += .1;
+            p.speed += p.speedBoost;
         }
         else if (this.bFollowing) {
             this.followPlayer(p);
@@ -134,14 +134,14 @@ var NPC = (function (_super) {
         }
         else if (!this.seen) {
             // rand decide turn
-            this.rotate();
+            this.rotate(p.following.length);
             // check if can see player or any part of tail
             this.look(p.gDestination, collision);
             for (this.temp = 0; this.temp < p.following.length; this.temp++)
                 this.look(p.following[this.temp].gPos, collision);
         }
     };
-    NPC.turnMin = 30;
+    NPC.turnMin = 40;
     NPC.turnMax = 200;
     NPC.visionMax = 4;
     return NPC;
