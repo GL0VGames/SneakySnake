@@ -13,6 +13,23 @@ canvas {
 	touch-action: manipulation; /* IE11+ */
 }
 
+#menu {
+	display: none;
+}
+
+#pause {
+	display: none;
+	width: 32px;
+}
+
+#back {
+	display: none;
+}
+
+#text-wrapper {
+	display: none;
+}
+
 #buttons {
     width: 230px;
     margin-left: auto;

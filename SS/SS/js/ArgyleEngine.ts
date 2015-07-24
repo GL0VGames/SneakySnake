@@ -94,7 +94,6 @@ class Animation {
     public setImage(img) {
         this.image = img;
         this.sheetWidth = Math.floor(img.width / this.frameSize.x);
-		console.log(this.name + "= width: " + img.width + " framesize: " + this.frameSize.x + " divide: " + img.width / this.frameSize.x + " floor: " + Math.floor(img.width / this.frameSize.x) + " sheetWidth: " + this.sheetWidth);
     }
 }
 

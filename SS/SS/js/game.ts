@@ -24,6 +24,8 @@ class SneakySnakeGame {
 	public lastFPS: number = 0;
 	public fpsID: number;
 	private bFPS: boolean = false;
+	public muted: boolean = false;
+	public paused: boolean = true;
 
     private setupFloor() {
         this.player.pos = gridToScreen(1, 1);
@@ -204,6 +206,11 @@ class SneakySnakeGame {
         // Render everything
         this.renderer.draw(this.tempTick, this.assetmanager.anims, (this.bFPS) ? this.lastFPS : -1);
 
+		// Draw the "press p to pause"
+		this.renderer.ctx.fillStyle = "#FFFFFF";
+		this.renderer.ctx.font = "1em Inconsolata";
+		this.renderer.ctx.fillText("Press p to pause", 10, 20);
+
         // Clear inputs
         this.input.mouseClicked = false;
 
@@ -241,6 +248,7 @@ class SneakySnakeGame {
     }
 
     public startGame(): void {
+		console.log("startGame");
         // Create the player
         var playerLocation: Vector2 = gridToScreen(1, 1);
         this.player = new Player(playerLocation.x, playerLocation.y, [this.assetmanager.anims["playerIdleD"], this.assetmanager.anims["playerIdleL"], this.assetmanager.anims["playerIdleU"], this.assetmanager.anims["playerWalkD"], this.assetmanager.anims["playerWalkL"], this.assetmanager.anims["playerWalkU"]]);
@@ -266,7 +274,7 @@ class SneakySnakeGame {
         this.currentFloor = 0;
         this.floorSize = 15;
         this.world = this.worldGen();
-        this.viewWorld(this.world);
+        //this.viewWorld(this.world);
         this.staticObjs = [];
         this.dynamicObjs = [];
         this.collisionMap = this.world.collisionMap;
@@ -295,25 +303,54 @@ class SneakySnakeGame {
 		});
         //$(this.renderer.canvas).click(function (e) { that.input.click(e); });
         $(window).keyup(function (e) {
-            if (e.which == 87)
-                that.input.keyPresses.push("w");
-            else if (e.which == 65)
-                that.input.keyPresses.push("a");
-            else if (e.which == 83)
-                that.input.keyPresses.push("s");
-            else if (e.which == 68)
-                that.input.keyPresses.push("d");
-            else if (e.which == 77) {
-                if (that.assetmanager.audio.main.paused)
-                    that.assetmanager.audio.main.play();
-                else that.assetmanager.audio.main.pause();
-            }
-            else if (e.which == 82) // R //
-                that.restartGame();
-            else if (e.which == 84) // T //
-                that.toggleControls();
-			else if (e.which == 70) //f
-				that.bFPS = !that.bFPS;
+			// Allowed to happen when paused
+			if (e.which == 80) {// P
+				$("#back").hide();
+				$("#text-wrapper").hide();
+				that.paused = !that.paused;
+				if (that.paused) {
+					$("#game").hide();
+					$("#menu").show();
+					that.assetmanager.audio.main.pause();
+				} else if (!that.paused && !that.muted) {
+					$("#game").show();
+					$("#menu").hide();
+					that.assetmanager.audio.main.play();
+				}
+			} else if (e.which == 77) { // M
+				if (that.assetmanager.audio.main.paused) {
+					that.assetmanager.audio.main.play();
+					that.muted = false;
+				}
+				else {
+					that.assetmanager.audio.main.pause();
+					that.muted = true;
+				}
+			} else if (e.which == 73) { // I
+				$("#menu").hide();
+				$("#game").hide();
+				$("#back").show();
+				$("#text-wrapper").show();
+				that.paused = true;
+			}
+
+			// Not allowed to happen when paused
+			if (!that.paused) {
+				if (e.which == 87)
+					that.input.keyPresses.push("w");
+				else if (e.which == 65)
+					that.input.keyPresses.push("a");
+				else if (e.which == 83)
+					that.input.keyPresses.push("s");
+				else if (e.which == 68)
+					that.input.keyPresses.push("d");
+				else if (e.which == 82) // R //
+					that.restartGame();
+				else if (e.which == 84) // T //
+					that.toggleControls();
+				else if (e.which == 70) // F
+					that.bFPS = !that.bFPS;
+			}
         });
     }
 }
@@ -331,13 +368,42 @@ $(function game(): void {
 	    
     // Start game when all assets are loaded
     $("body").on("assetsFinished", function () {
-        game.assetmanager.audio.main.addEventListener('ended', function () {
-            this.currentTime = 0;
-            this.play();
-        }, false);
-        game.assetmanager.audio.main.play();
+        $("#game").hide();
+		$("#menu").show();
         game.startGame();
     });
+
+	function PLAYGAME(): void {
+		$("#menu").hide();
+		$("#game").show();
+		$("#back").hide();
+		$("#text-wrapper").hide();
+		if (!game.muted)
+			game.assetmanager.audio.main.play();
+		game.paused = false;
+	}
+
+	$("#play").click(function () {
+		PLAYGAME();
+	});
+
+	$("#restart").click(function () {
+		game.restartGame();
+		PLAYGAME();
+	});
+
+	$("#info").click(function () {
+		$("#menu").hide();
+		$("#game").hide();
+		$("#back").show();
+		$("#text-wrapper").show();
+	});
+
+	$("#back").click(function () {
+		$("#menu").show();
+		$("#back").hide();
+		$("#text-wrapper").hide();
+	});
 
     
 });

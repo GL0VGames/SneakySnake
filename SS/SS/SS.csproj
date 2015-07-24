@@ -37,11 +37,10 @@
     <Content Include="images\npcStatLeft.png" />
     <Content Include="images\npcStatRight.png" />
     <Content Include="images\npcStatUp.png" />
+    <Content Include="images\pause.png" />
     <Content Include="images\teleporter.png" />
     <Content Include="images\walls.png" />
     <Content Include="index.html" />
-    <Content Include="js\ArgyleEngine.js" />
-    <Content Include="js\game.js" />
     <Content Include="js\hud.js" />
     <Content Include="js\NPC.js" />
     <Content Include="js\Player.js" />
@@ -63,8 +62,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="images\Thumbs.db" />
-    <Content Include="js\ArgyleEngine.js.map" />
-    <Content Include="js\game.js.map" />
     <Content Include="js\hud.js.map" />
     <Content Include="js\NPC.js.map" />
     <Content Include="js\Player.js.map" />
@@ -117,6 +114,7 @@
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
