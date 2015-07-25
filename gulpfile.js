@@ -40,7 +40,7 @@ gulp.task("build", function () {
 
 });
 
-gulp.task("deploy", ["build"], function () {
+gulp.task("deploy", function () {
 	gulp.src("dist/")
 		.pipe(rsync({
 			root: "dist",
