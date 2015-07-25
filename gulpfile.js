@@ -34,6 +34,10 @@ gulp.task("build", function () {
 	gulp.src("SS/SS/images/*")
 		.pipe(imageMin())
 		.pipe(gulp.dest("dist/images/"));
+		
+	gulp.src("SS/SS/images/arrows/*")
+		.pipe(imageMin())
+		.pipe(gulp.dest("dist/images/arrows/"));
 
 	gulp.src("SS/SS/sounds/*")
 		.pipe(gulp.dest("dist/sounds/"));
