@@ -146,8 +146,8 @@ class NPC extends Obj {
         this.followIndex = -5;
         this.seen = false;
         this.turnCounter = randIntBetween(NPC.turnMin, NPC.turnMax);
-		this.animMan = new AnimationManager(anims);
-        this.animMan.frame = randIntBetween(0, 3);
+        this.animMan = new AnimationManager(anims);
+        this.animMan.gotoFrame(randIntBetween(0, 3));
 
         // Pick a random turn type
         this.sightType = randIntBetween(0, 2); // 0 = cw, 1 = ccw, 2 = rand
