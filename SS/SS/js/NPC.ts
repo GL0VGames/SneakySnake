@@ -18,6 +18,7 @@ class NPC extends Obj {
 	private temp: any;
 	private tempVec: Vector2;
     private superTemp: number = 0;
+    private tempCount: number = 0;
 
     // Function to see if the player has crossed the npc's vision and to change the anim
     private look(target: Vector2, collision: any) {
@@ -131,11 +132,11 @@ class NPC extends Obj {
         else if (!this.seen) {
             // rand decide turn
             this.rotate(p.following.length);
-
+            
             // check if can see player or any part of tail
             this.look(p.gDestination, collision);
-            for (this.temp = 0; this.temp < p.following.length; this.temp++)
-                this.look(p.following[this.temp].gPos, collision);
+            for (this.tempCount = 0; this.tempCount < p.following.length; this.tempCount++)
+                this.look(p.following[this.tempCount].gPos, collision);
         }
     }
 

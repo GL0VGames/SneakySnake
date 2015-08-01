@@ -187,6 +187,9 @@ class SneakySnakeGame {
         //    this.tempTick = this.tempTick.concat(moreTemp.slice());
         //}
         // end show collision map
+        
+        // Tick player
+        this.player.tick(this.input, this.collisionMap);
 
         // Tick NPC's, if any can see the player, kill the player
         for (this.tempi = 0; this.tempi < this.NPCs.length; this.tempi++) {
@@ -197,9 +200,6 @@ class SneakySnakeGame {
                 break;
             }
         }
-
-        // Tick player
-        this.player.tick(this.input, this.collisionMap);
 
         // Disallows the player from moving through walls
         if (this.collisionMap[this.currentFloor][this.player.tempDestination.y][this.player.tempDestination.x].animMan.anims[0].name !== "filled") {
