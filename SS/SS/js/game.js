@@ -33,25 +33,41 @@ var SneakySnakeGame = (function () {
         this.arrows[Direction.UR] = new Arrow(gridToScreen(6, -3), [this.assetmanager.anims["arrowUpRight"], this.assetmanager.anims["arrowUpRightPress"], this.assetmanager.anims["arrowUpRightNo"]]);
         //$(this.renderer.canvas).mousedown(function (e) { that.input.mousedown(e); });
         $(this.renderer.canvas).mousedown(function (e) {
-            that.input.mouseup(e);
+            that.input.mousedown(e);
             if (that.input.mouseDownPos.x < that.renderer.canvas.clientWidth / 2) {
                 if (that.input.mouseDownPos.y < that.renderer.canvas.clientHeight / 2) {
                     that.input.keyPresses.push("a");
-                    that.arrows[Direction.UR].press();
+                    that.arrows[Direction.UL].press();
                 }
                 else {
                     that.input.keyPresses.push("s");
-                    that.arrows[Direction.UL].press();
+                    that.arrows[Direction.DL].press();
                 }
             }
             else {
                 if (that.input.mouseDownPos.y < that.renderer.canvas.clientHeight / 2) {
                     that.input.keyPresses.push("w");
-                    that.arrows[Direction.DL].press();
+                    that.arrows[Direction.UR].press();
                 }
                 else {
                     that.input.keyPresses.push("d");
                     that.arrows[Direction.DR].press();
+                }
+            }
+        });
+        $(this.renderer.canvas).mouseup(function (e) {
+            that.input.mouseup(e);
+            if (that.input.mouseUpPos.x < that.renderer.canvas.clientWidth / 2) {
+                if (that.input.mouseUpPos.y < that.renderer.canvas.clientHeight / 2)
+                    that.arrows[Direction.UL].norm();
+                else
+                    that.arrows[Direction.DL].norm();
+            }
+            else {
+                if (that.input.mouseUpPos.y < that.renderer.canvas.clientHeight / 2)
+                    that.arrows[Direction.UR].norm();
+                else {
+                    that.arrows[Direction.DR].norm();
                 }
             }
         });
