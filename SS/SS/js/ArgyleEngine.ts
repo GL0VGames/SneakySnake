@@ -239,10 +239,6 @@ class AssetManager {
 		arrowUpRight: "images/arrows/arrow-upright.png",
 		arrowUpRightPress: "images/arrows/arrow-upright-press.png",
         arrowUpRightNo: "images/arrows/arrow-upright-press1.png",
-        play: "images/play.png",
-        info: "images/info.png",
-        gameOver: "images/gameover.png",
-        logo: "images/logo.png",
     };
     public anims: { [index: string]: Animation; } = { //index matches imageURL index
         none: new Animation(true, 64, 32, 32, 16, 0, "none"),
