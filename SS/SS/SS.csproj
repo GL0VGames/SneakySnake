@@ -40,26 +40,40 @@
     <Content Include="images\teleporter.png" />
     <Content Include="images\walls.png" />
     <Content Include="index.html" />
+    <Content Include="js\app.js" />
     <Content Include="js\ArgyleEngine.js" />
+    <Content Include="js\Boot.js" />
+    <Content Include="js\Cooking.js" />
     <Content Include="js\game.js" />
     <Content Include="js\hud.js" />
+    <Content Include="js\MainMenu.js" />
     <Content Include="js\NPC.js" />
     <Content Include="js\Player.js" />
+    <Content Include="js\Preloader.js" />
     <Content Include="js\Teleporter.js" />
     <Content Include="lib\jquery.js" />
+    <Content Include="lib\phaser.min.js" />
     <Content Include="sounds\SneakySnake Theme.wav" />
     <Content Include="sounds\spotted.wav" />
     <Content Include="sounds\theme2.wav" />
     <Content Include="sounds\walking-1.mp3" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="js\app.ts" />
     <TypeScriptCompile Include="js\ArgyleEngine.ts" />
+    <TypeScriptCompile Include="js\Boot.ts" />
+    <TypeScriptCompile Include="js\Level.ts" />
     <TypeScriptCompile Include="js\game.ts" />
     <TypeScriptCompile Include="js\hud.ts" />
+    <TypeScriptCompile Include="js\MainMenu.ts" />
     <TypeScriptCompile Include="js\NPC.ts" />
     <TypeScriptCompile Include="js\Player.ts" />
+    <TypeScriptCompile Include="js\Preloader.ts" />
     <TypeScriptCompile Include="js\Teleporter.ts" />
     <TypeScriptCompile Include="lib\jquery.d.ts" />
+    <TypeScriptCompile Include="lib\p2.d.ts" />
+    <TypeScriptCompile Include="lib\phaser.d.ts" />
+    <TypeScriptCompile Include="lib\pixi.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="images\Thumbs.db" />
@@ -71,6 +85,11 @@
     <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <Content Include="js\Teleporter.js.map" />
     <Content Include="web.config" />
+    <Content Include="js\Preloader.js.map" />
+    <Content Include="js\MainMenu.js.map" />
+    <Content Include="js\Cooking.js.map" />
+    <Content Include="js\Boot.js.map" />
+    <Content Include="js\app.js.map" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

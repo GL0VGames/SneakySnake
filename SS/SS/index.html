@@ -10,18 +10,26 @@
         <!-- build:jquery -->
 		<script src="lib/jquery.js"></script>
 		<!-- endbuild -->
+
+        <script src="lib/phaser.min.js"></script>
 		
 		<!-- build:js -->
         <script src="js/ArgyleEngine.js"></script>
         <script src="js/NPC.js"></script>
         <script src="js/player.js"></script>
         <script src="js/Teleporter.js"></script>
+        <script src="js/Boot.js"></script>
+        <script src="js/Preloader.js"></script>
+        <script src="js/MainMenu.js"></script>
+        <script src="js/Level.js"></script>
         <script src="js/game.js"></script>
+        <script src="js/app.js"></script>
 		<!-- endbuild -->
     </head>
     <body>
-        <canvas id="canvas"></canvas>
+        <div id="content"></div>
 
+        <canvas id="canvas"></canvas>
         <!-- Buttons for starting a new game and changing controls -->
         <div  id="buttons">
             <button class="new">New Game</button>
