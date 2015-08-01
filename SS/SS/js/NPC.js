@@ -14,6 +14,7 @@ var NPC = (function (_super) {
         this.bStartFollowing = false;
         this.bFollowing = false;
         this.superTemp = 0;
+        this.tempCount = 0;
         this.gPos = gVect;
         this.pos = sVect;
         this.followIndex = -5;
@@ -137,8 +138,8 @@ var NPC = (function (_super) {
             this.rotate(p.following.length);
             // check if can see player or any part of tail
             this.look(p.gDestination, collision);
-            for (this.temp = 0; this.temp < p.following.length; this.temp++)
-                this.look(p.following[this.temp].gPos, collision);
+            for (this.tempCount = 0; this.tempCount < p.following.length; this.tempCount++)
+                this.look(p.following[this.tempCount].gPos, collision);
         }
     };
     NPC.turnMin = 40;

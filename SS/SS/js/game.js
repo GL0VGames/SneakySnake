@@ -298,6 +298,8 @@ var SneakySnakeGame = (function () {
         //    this.tempTick = this.tempTick.concat(moreTemp.slice());
         //}
         // end show collision map
+        // Tick player
+        this.player.tick(this.input, this.collisionMap);
         // Tick NPC's, if any can see the player, kill the player
         for (this.tempi = 0; this.tempi < this.NPCs.length; this.tempi++) {
             this.NPCs[this.tempi].tick(this.input, this.player, this.collisionMap[this.currentFloor]);
@@ -307,8 +309,6 @@ var SneakySnakeGame = (function () {
                 break;
             }
         }
-        // Tick player
-        this.player.tick(this.input, this.collisionMap);
         // Disallows the player from moving through walls
         if (this.collisionMap[this.currentFloor][this.player.tempDestination.y][this.player.tempDestination.x].animMan.anims[0].name !== "filled") {
             this.player.bCanLerp = true;
