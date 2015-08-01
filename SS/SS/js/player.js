@@ -1,4 +1,4 @@
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -9,7 +9,7 @@ var Player = (function (_super) {
     __extends(Player, _super);
     function Player(x, y, anims) {
         _super.call(this, x, y, anims, 5);
-        this.speed = 2.5;
+        this.speed = 2.3;
         this.health = 1;
         this.controls = ["s", "a", "w", "d"]; // Indexed by enum Direction
         this.speedBoost = .1; // Added to player speed whenever they pick up an NPC

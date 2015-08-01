@@ -3,7 +3,7 @@ class Player extends Obj {
     public gDestination: Vector2;
     public sDestination: Vector2;
     public tempDestination: Vector2;
-    public speed: number = 2.5;
+    public speed: number = 2.3;
     public bCanLerp: boolean;
     public previousLoc: Array<Vector2>;
     public following: Array<NPC>;
