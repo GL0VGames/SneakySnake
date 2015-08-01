@@ -24,7 +24,7 @@ gulp.task("build", function () {
 		.pipe(minCSS())
 		.pipe(gulp.dest("dist/css/"));
 
-	gulp.src(["SS/SS/js/ArgyleEngine.ts", "SS/SS/js/game.ts", "SS/SS/js/NPC.js", "SS/SS/js/player.ts", "SS/SS/js/Teleporter.ts"])
+	gulp.src("SS/SS/js/*.ts")
 		.pipe(concat("index.ts"))
 		.pipe(ts())
 //		.pipe(obfuscate())
