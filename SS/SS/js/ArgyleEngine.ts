@@ -4,12 +4,9 @@ function randIntBetween(low: number, high: number): number {
     return Math.floor(Math.random() * (high - low + 1) + low);
 }
 
+// Prevent a number from going outside specified range
 function clamp(low: number, high: number, num: number) {
-	if (num < low)
-		return low;
-	if (num > high)
-		return high;
-	return num;
+	return (num < low) ? low : (num > high) ? high : num;
 }
 
 function collide(obj: Vector2, NPCs: Array<Obj>): boolean {
@@ -73,7 +70,7 @@ class Input {
         this.mouseUpPos.x = e.pageX;
         this.mouseUpPos.y = e.pageY;
         this.mouseClicked = true;
-}
+	}
 }
 
 class Animation {
@@ -119,7 +116,7 @@ class Obj {
         this.pos = new Vector2(x, y);
         this.zIndex = 0;
 		this.animMan = new AnimationManager(anims);
-		if (typeof (z) !== undefined)
+		if (typeof (z) !== "undefined")
 			this.zIndex = z;
     }
 }
@@ -230,7 +227,18 @@ class AssetManager {
         npcIdleLSeen: "images/npcStatLeft.png",
         npcIdleUSeen: "images/npcStatUp.png",
         npcIdleRSeen: "images/npcStatRight.png",
-		testAnim: "images/testAnim.png",
+		arrowDownLeft: "images/arrows/arrow-downleft.png",
+		arrowDownLeftPress: "images/arrows/arrow-downleft-press.png",
+		arrowDownLeftNo: "images/arrows/arrow-downleft-press1.png",
+		arrowDownRight: "images/arrows/arrow-downright.png",
+		arrowDownRightPress: "images/arrows/arrow-downright-press.png",
+		arrowDownRightNo: "images/arrows/arrow-downright-press1.png",
+		arrowUpLeft: "images/arrows/arrow-upleft.png",
+		arrowUpLeftPress: "images/arrows/arrow-upleft-press.png",
+		arrowUpLeftNo: "images/arrows/arrow-upleft-press1.png",
+		arrowUpRight: "images/arrows/arrow-upright.png",
+		arrowUpRightPress: "images/arrows/arrow-upright-press.png",
+		arrowUpRightNo: "images/arrows/arrow-upright-press1.png",
     };
     public anims: { [index: string]: Animation; } = { //index matches imageURL index
         none: new Animation(true, 64, 32, 32, 16, 0, "none"),
@@ -252,7 +260,18 @@ class AssetManager {
         npcIdleLSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleLSeen"),
         npcIdleUSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleUSeen"),
         npcIdleRSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleRSeen"),
-		testAnim: new Animation(false, 13, 32, 13, 32, 60, "testAnim"),
+		arrowDownLeft: new Animation(true, 91, 77, 45, 38, 0, "arrowDownLeft"),
+        arrowDownLeftPress: new Animation(true, 91, 77, 45, 38, 0, "arrowDownLeftPress"),
+        arrowDownLeftNo: new Animation(true, 91, 77, 45, 38, 0, "arrowDownLeftNo"),
+        arrowDownRight: new Animation(true, 91, 77, 45, 38, 0, "arrowDownRight"),
+        arrowDownRightPress: new Animation(true, 91, 77, 45, 38, 0, "arrowDownRightPress"),
+        arrowDownRightNo: new Animation(true, 91, 77, 45, 38, 0, "arrowDownRightNo"),
+        arrowUpLeft: new Animation(true, 91, 76, 45, 38, 0, "arrowUpLeft"),
+        arrowUpLeftPress: new Animation(true, 91, 76, 45, 38, 0, "arrowUpLeftPress"),
+        arrowUpLeftNo: new Animation(true, 91, 76, 45, 38, 0, "arrowUpLeftNo"),
+        arrowUpRight: new Animation(true, 91, 76, 45, 38, 0, "arrowUpRight"),
+        arrowUpRightPress: new Animation(true, 91, 76, 45, 38, 0, "arrowUpRightPress"),
+        arrowUpRightNo: new Animation(true, 91, 76, 45, 38, 0, "arrowUpRightNo"),
     };
     public audio: any = {}; // Can't do : Array<HTMLAudioElement> because that doesn't support .addEventListenerxr some odd reason
     private audioURLs: any = {
@@ -276,7 +295,7 @@ class AssetManager {
         if (this.curr >= this.total) width += this.remainder;
         ctx.fillRect(this.x, this.y, width, this.height);
 
-        // Custom even handled in game.ts to start the game when all assets have loaded
+        // Custom event handled in game.ts to start the game when all assets have loaded
         $("body").trigger("assetLoaded", {
 			"num": this.curr
 		});
@@ -343,6 +362,11 @@ class AssetManager {
         this.barTickSize = Math.floor((canvas.width / 2) / this.total);
         this.remainder = Math.floor(canvas.width / 2) - (this.barTickSize * this.total);
 
+        // "Loading..."
+        ctx.fillStyle = "white";
+        ctx.font = "2em Inconsolata";
+        ctx.fillText("Loading...", canvas.width / 2 - 72, canvas.height / 2 + 32);
+
         // Actually load the images
         this.preloader(ctx, canvas);
     }
@@ -374,21 +398,27 @@ class Renderer {
             var anim: Animation = obj.animMan.anims[obj.animMan.currentAnim];
 
 			// For automatic anims only (so not npc's or the player or anything like that atm)
-            if (!anim.static && anim.frameCounterMax > 0 && anim.frameCounter == (anim.frameCounterMax - 1))
-				obj.animMan.rightFrame();
+            if (!anim.static && anim.frameCounterMax > 0 && anim.frameCounter == (anim.frameCounterMax - 1)) {
+                obj.animMan.rightFrame();
+                anim.frameCounter = (anim.frameCounter + 1) % anim.frameCounterMax;
+            }
 
-			anim.frameCounter = (anim.frameCounter + 1) % anim.frameCounterMax;
-			this.ctx.drawImage(anim.image,
-				obj.animMan.framePosition.x, obj.animMan.framePosition.y,
-				anim.frameSize.x, anim.frameSize.y,
-				obj.pos.x - anim.offset.x, obj.pos.y - anim.offset.y,
-				anim.frameSize.x, anim.frameSize.y);
+            // Draw everything on canvas
+            this.ctx.drawImage(anim.image,
+                obj.animMan.framePosition.x,
+                obj.animMan.framePosition.y,
+                anim.frameSize.x,
+                anim.frameSize.y,
+                obj.pos.x - anim.offset.x,
+                obj.pos.y - anim.offset.y, 
+                anim.frameSize.x,
+                anim.frameSize.y);
 
 			// FPS Counter
 			if (typeof (fps) !== undefined && fps != -1) {
 				this.ctx.fillStyle = "#DD1321";
 				this.ctx.font = "2em Inconsolata";
-				this.ctx.fillText("fps: " + JSON.stringify(fps), this.canvas.width / 11, this.canvas.height / 11);
+				this.ctx.fillText("fps: " + JSON.stringify(fps), this.canvas.width / 14, this.canvas.height / 11);
 			}
 		}
 	}
@@ -421,6 +451,15 @@ class AnimationManager {
 				this.framePosition.y = Math.floor(this.frame / this.anims[this.currentAnim].sheetWidth);
 				break;
 			}
+		}
+	}
+
+	public gotoAnim(num: number) {
+		if (num >= 0 && num < this.anims.length) {
+			this.frame = 0;
+			this.currentAnim = num;
+			this.framePosition.x = this.frame * this.anims[this.currentAnim].frameSize.x;
+			this.framePosition.y = Math.floor(this.frame / this.anims[this.currentAnim].sheetWidth);
 		}
 	}
 

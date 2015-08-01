@@ -1,0 +1,7 @@
+﻿{
+  "short_name": "Sneaky Snake",
+  "name": "Sneaky Snake",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "landscape"
+}

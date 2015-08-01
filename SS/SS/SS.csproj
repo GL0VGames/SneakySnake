@@ -24,6 +24,19 @@
   <ItemGroup>
     <Content Include="css\index.css" />
     <Content Include="images\arrows.png" />
+    <Content Include="images\arrows\arrow-downleft-press.png" />
+    <Content Include="images\arrows\arrow-downleft-press1.png" />
+    <Content Include="images\arrows\arrow-downleft.png" />
+    <Content Include="images\arrows\arrow-downright-press.png" />
+    <Content Include="images\arrows\arrow-downright-press1.png" />
+    <Content Include="images\arrows\arrow-downright.png" />
+    <Content Include="images\arrows\arrow-upleft-press.png" />
+    <Content Include="images\arrows\arrow-upleft-press1.png" />
+    <Content Include="images\arrows\arrow-upleft.png" />
+    <Content Include="images\arrows\arrow-upright-press.png" />
+    <Content Include="images\arrows\arrow-upright-press1.png" />
+    <Content Include="images\arrows\arrow-upright.png" />
+    <Content Include="images\arrows\arrows demo.png" />
     <Content Include="images\charStatDown.png" />
     <Content Include="images\charStatLeft.png" />
     <Content Include="images\charStatUp.png" />
@@ -41,11 +54,8 @@
     <Content Include="images\teleporter.png" />
     <Content Include="images\walls.png" />
     <Content Include="index.html" />
-    <Content Include="js\hud.js" />
-    <Content Include="js\NPC.js" />
-    <Content Include="js\Player.js" />
-    <Content Include="js\Teleporter.js" />
     <Content Include="lib\jquery.js" />
+    <Content Include="logos\gg.png" />
     <Content Include="sounds\SneakySnake Theme.wav" />
     <Content Include="sounds\spotted.wav" />
     <Content Include="sounds\theme2.wav" />
@@ -53,8 +63,8 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="js\ArgyleEngine.ts" />
+    <TypeScriptCompile Include="js\Arrow.ts" />
     <TypeScriptCompile Include="js\game.ts" />
-    <TypeScriptCompile Include="js\hud.ts" />
     <TypeScriptCompile Include="js\NPC.ts" />
     <TypeScriptCompile Include="js\Player.ts" />
     <TypeScriptCompile Include="js\Teleporter.ts" />
@@ -62,12 +72,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="images\Thumbs.db" />
-    <Content Include="js\hud.js.map" />
-    <Content Include="js\NPC.js.map" />
-    <Content Include="js\Player.js.map" />
     <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <Content Include="js\Teleporter.js.map" />
     <Content Include="web.config" />
+    <Content Include="json\manifest.json" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -90,6 +97,28 @@
   <PropertyGroup>
     <RootNamespace>SS</RootNamespace>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug Phone|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Phone|x64'">
+    <OutputPath>bin\</OutputPath>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\WebApplications\Microsoft.WebApplication.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\WebApplications\Microsoft.WebApplication.targets')" />
   <ProjectExtensions>
@@ -110,13 +139,13 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <TypeScriptTarget>ES5</TypeScriptTarget>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
     <TypeScriptSourceMap>false</TypeScriptSourceMap>
   </PropertyGroup>

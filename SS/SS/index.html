@@ -10,6 +10,9 @@
 
         <!-- snakey references -->
         <link href="css/index.css" rel="stylesheet" />
+
+        <!-- Force full screen and specify stuff for offline playing of web version -->
+        <link rel="manifest" href="/json/manifest.json">
 		
         <!-- build:jquery -->
 		<script src="lib/jquery.js"></script>
@@ -20,6 +23,8 @@
         <script src="js/NPC.js"></script>
         <script src="js/player.js"></script>
         <script src="js/Teleporter.js"></script>
+		<script src="js/Arrow.js"></script>
+		<!-- game.js must be last for dependencies to work! -->
         <script src="js/game.js"></script>
 		<!-- endbuild -->
     </head>

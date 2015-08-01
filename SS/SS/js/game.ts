@@ -2,6 +2,7 @@
 /// <reference path="Player.ts"/>
 /// <reference path="NPC.ts"/>
 /// <reference path="Teleporter.ts"/>
+/// <reference path="Arrow.ts"/>
 class SneakySnakeGame {
     public world: Building;
     public currentFloor: number;
@@ -27,6 +28,7 @@ class SneakySnakeGame {
 	public muted: boolean = false;
 	public paused: boolean = true;
 	private cheated: boolean = false;
+	public arrows: Array<Arrow>;
 
     private setupFloor() {
         this.player.pos = gridToScreen(1, 1);
@@ -123,6 +125,7 @@ class SneakySnakeGame {
         this.NPCs = [];
         this.currentFloor = 0;
         this.input.keyPresses = [];
+        this.cheated = false;
 
         // Run the function to start a new game
         this.startGame();
@@ -199,10 +202,18 @@ class SneakySnakeGame {
         this.player.tick(this.input, this.collisionMap);
 
         // Disallows the player from moving through walls
-        if (this.collisionMap[this.currentFloor][this.player.tempDestination.y][this.player.tempDestination.x].animMan.anims[0].name !== "filled")
+        if (this.collisionMap[this.currentFloor][this.player.tempDestination.y][this.player.tempDestination.x].animMan.anims[0].name !== "filled") {
             this.player.bCanLerp = true;
-        else
+		}
+        else {
             this.player.bCanLerp = false;
+			for (var x: number = 0; x < 4; x++)
+                if (this.arrows[x].animMan.currentAnim == 1)
+                    this.arrows[x].no();
+		}
+
+        // Add arrows to be rendered with the updated anim
+        this.tempTick = this.tempTick.concat(this.arrows);
 
         // Render everything
         this.renderer.draw(this.tempTick, this.assetmanager.anims, (this.bFPS) ? this.lastFPS : -1);
@@ -296,25 +307,54 @@ class SneakySnakeGame {
         
         // Bind inputs
         this.input = new Input;
+        this.arrows = [];
+        this.arrows[Direction.DL] = new Arrow(gridToScreen(8, 17), [this.assetmanager.anims["arrowDownLeft"], this.assetmanager.anims["arrowDownLeftPress"], this.assetmanager.anims["arrowDownLeftNo"]]);
+        this.arrows[Direction.DR] = new Arrow(gridToScreen(17, 8), [this.assetmanager.anims["arrowDownRight"], this.assetmanager.anims["arrowDownRightPress"], this.assetmanager.anims["arrowDownRightNo"]]);
+        this.arrows[Direction.UL] = new Arrow(gridToScreen(-3, 6), [this.assetmanager.anims["arrowUpLeft"], this.assetmanager.anims["arrowUpLeftPress"], this.assetmanager.anims["arrowUpLeftNo"]]);
+        this.arrows[Direction.UR] = new Arrow(gridToScreen(6, -3), [this.assetmanager.anims["arrowUpRight"], this.assetmanager.anims["arrowUpRightPress"], this.assetmanager.anims["arrowUpRightNo"]]);
+
         //$(this.renderer.canvas).mousedown(function (e) { that.input.mousedown(e); });
         $(this.renderer.canvas).mousedown(function (e) {
-			that.input.mousedown(e);
+			that.input.mouseup(e);
 			if (that.input.mouseDownPos.x < that.renderer.canvas.clientWidth / 2) {
-				if (that.input.mouseDownPos.y < that.renderer.canvas.clientHeight / 2)
+				if (that.input.mouseDownPos.y < that.renderer.canvas.clientHeight / 2) {
 					that.input.keyPresses.push("a");
-				else
+					that.arrows[Direction.UR].press();
+				}
+				else {
 					that.input.keyPresses.push("s");
+					that.arrows[Direction.UL].press();
+				}
 			}
 			else {
-				if (that.input.mouseDownPos.y < that.renderer.canvas.clientHeight / 2)
+				if (that.input.mouseDownPos.y < that.renderer.canvas.clientHeight / 2) {
 					that.input.keyPresses.push("w");
-				else
+					that.arrows[Direction.DL].press();
+				}
+				else {
 					that.input.keyPresses.push("d");
+					that.arrows[Direction.DR].press();
+				}
 			}
 		});
         //$(this.renderer.canvas).click(function (e) { that.input.click(e); });
         $(window).keyup(function (e) {
+            console.log("down");
+			if (!that.paused) {
+                if (e.which == 87)
+                    that.arrows[Direction.UR].norm();
+				else if (e.which == 65)
+					that.arrows[Direction.UL].norm();
+				else if (e.which == 83)
+					that.arrows[Direction.DL].norm();
+				else if (e.which == 68)
+					that.arrows[Direction.DR].norm();
+			}
+		});
+
+        $(window).keydown(function (e) {
 			// Allowed to happen when paused
+            console.log("up")
 			if (e.which == 80) {// P
 				$("#back").hide();
 				$("#text-wrapper").hide();
@@ -347,14 +387,22 @@ class SneakySnakeGame {
 
 			// Not allowed to happen when paused
 			if (!that.paused) {
-				if (e.which == 87)
-					that.input.keyPresses.push("w");
-				else if (e.which == 65)
-					that.input.keyPresses.push("a");
-				else if (e.which == 83)
-					that.input.keyPresses.push("s");
-				else if (e.which == 68)
-					that.input.keyPresses.push("d");
+				if (e.which == 87) {
+                    that.input.keyPresses.push("w");
+                    that.arrows[Direction.UR].press();
+				}
+				else if (e.which == 65) {
+                    that.input.keyPresses.push("a");
+                    that.arrows[Direction.UL].press();
+				}
+				else if (e.which == 83) {
+                    that.input.keyPresses.push("s");
+                    that.arrows[Direction.DL].press();
+				}
+				else if (e.which == 68) {
+                    that.input.keyPresses.push("d");
+                    that.arrows[Direction.DR].press();
+				}
 				else if (e.which == 82) // R //
 					that.restartGame();
 				else if (e.which == 84) // T //
