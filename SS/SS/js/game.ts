@@ -258,13 +258,14 @@ class SneakySnakeGame {
             setTimeout(function () {
                 that.renderer.ctx.fillStyle = "#DD1321";
                 that.renderer.ctx.font = "6.5em Inconsolata";
-                that.renderer.ctx.fillText("You've been seen!", that.renderer.canvas.width / 8, that.renderer.canvas.height / 2);
-                that.renderer.ctx.font = "3em Incosolata";
+                that.renderer.ctx.fillText("You've been seen!", that.renderer.canvas.width / 10, that.renderer.canvas.height / 4);
+                that.renderer.ctx.font = "3em Inconsolata";
 				if (!that.cheated)
 					that.renderer.ctx.fillText("Score: " + that.player.following.length, that.renderer.canvas.width / 2.4, that.renderer.canvas.height / 1.5);
 				else
 					that.renderer.ctx.fillText("Cheater: " + that.player.following.length, that.renderer.canvas.width / 2.4, that.renderer.canvas.height / 1.5);
-				that.renderer.ctx.fillText("Highscore: " + highscore[highscore.length - 1], that.renderer.canvas.width / 2.8, that.renderer.canvas.height / 1.25);
+                that.renderer.ctx.fillText("Highscore: " + highscore[highscore.length - 1], that.renderer.canvas.width / 2.8, that.renderer.canvas.height / 1.25);
+                that.renderer.ctx.fillText("Click to return to menu", that.renderer.canvas.width / 4, that.renderer.canvas.height / 3);
             }, 400);
 		}
     }
@@ -315,8 +316,16 @@ class SneakySnakeGame {
 
         //$(this.renderer.canvas).mousedown(function (e) { that.input.mousedown(e); });
         $(this.renderer.canvas).mousedown(function (e) {
-			that.input.mousedown(e);
-			if (that.input.mouseDownPos.x < that.renderer.canvas.clientWidth / 2) {
+            that.input.mousedown(e);
+            if (that.player.health >= 0) {
+                $("#menu").show();
+                $("#play").show();
+                $("#resume").hide();
+                $("#restart").hide();
+                $("#game").hide();
+                that.paused = true;
+                that.restartGame();
+            } else if (that.input.mouseDownPos.x < that.renderer.canvas.clientWidth / 2) {
 				if (that.input.mouseDownPos.y < that.renderer.canvas.clientHeight / 2) {
 					that.input.keyPresses.push("a");
 					that.arrows[Direction.UL].press();
@@ -325,8 +334,7 @@ class SneakySnakeGame {
 					that.input.keyPresses.push("s");
 					that.arrows[Direction.DL].press();
 				}
-			}
-			else {
+			} else {
 				if (that.input.mouseDownPos.y < that.renderer.canvas.clientHeight / 2) {
 					that.input.keyPresses.push("w");
 					that.arrows[Direction.UR].press();
@@ -375,7 +383,7 @@ class SneakySnakeGame {
             console.log("up")
 			if (e.which == 80) {// P
 				$("#back").hide();
-				$("#text-wrapper").hide();
+                $("#text-wrapper").hide();
 				that.paused = !that.paused;
 				if (that.paused) {
 					$("#game").hide();
@@ -462,18 +470,25 @@ $(function game(): void {
     });
 
 	function PLAYGAME(): void {
-		$("#menu").hide();
+        $("#menu").hide();
+        $("#play").hide();
+        $("#resume").show();
+        $("#restart").show();
 		$("#game").show();
-		$("#back").hide();
+        $("#back").hide();
 		$("#text-wrapper").hide();
 		if (!game.muted)
 			game.assetmanager.audio.main.play();
 		game.paused = false;
-	}
+    }
 
-	$("#play").click(function () {
-		PLAYGAME();
-	});
+    $("#play").click(function () {
+        PLAYGAME();
+    });
+
+    $("#resume").click(function () {
+        PLAYGAME();
+    });
 
 	$("#restart").click(function () {
 		game.restartGame();
