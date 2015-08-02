@@ -70,7 +70,7 @@ class Input {
         this.mouseUpPos.x = e.pageX;
         this.mouseUpPos.y = e.pageY;
         this.mouseClicked = true;
-	}
+    }
 }
 
 class Animation {
@@ -239,10 +239,6 @@ class AssetManager {
 		arrowUpRight: "images/arrows/arrow-upright.png",
 		arrowUpRightPress: "images/arrows/arrow-upright-press.png",
         arrowUpRightNo: "images/arrows/arrow-upright-press1.png",
-        play: "images/play.png",
-        info: "images/info.png",
-        gameOver: "images/gameover.png",
-        logo: "images/logo.png",
     };
     public anims: { [index: string]: Animation; } = { //index matches imageURL index
         none: new Animation(true, 64, 32, 32, 16, 0, "none"),
@@ -276,10 +272,6 @@ class AssetManager {
         arrowUpRight: new Animation(true, 91, 76, 45, 38, 0, "arrowUpRight"),
         arrowUpRightPress: new Animation(true, 91, 76, 45, 38, 0, "arrowUpRightPress"),
         arrowUpRightNo: new Animation(true, 91, 76, 45, 38, 0, "arrowUpRightNo"),
-        play: new Animation(true, 150, 60, 0, 0, 0, "play"),
-        info: new Animation(true, 126, 60, 0, 0, 0, "info"),
-        gameOver: new Animation(true, 420, 40, 0, 0, 0, "gameOver"),
-        logo: new Animation(true, 882, 288, 0, 0, 0, "logo"),
     };
     public audio: any = {}; // Can't do : Array<HTMLAudioElement> because that doesn't support .addEventListenerxr some odd reason
     private audioURLs: any = {
