@@ -21,6 +21,10 @@ canvas {
     cursor: pointer;
 }
 
+#menu ul {
+    list-style-type: none;
+}
+
 #resume, #restart {
     display: none;
 }
