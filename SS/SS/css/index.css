@@ -1,5 +1,11 @@
 @import url(http://fonts.googleapis.com/css?family=Inconsolata);
 
+/* Remove 300ms delay on mobile in some browsers */
+html {
+-ms-touch-action: manipulation;
+touch-action: manipulation;
+}
+
 body {
     font-family: "Inconsolata"; /* Because I'm sick of the unevenness. */
     color: white;
