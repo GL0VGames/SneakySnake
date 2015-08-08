@@ -102,6 +102,9 @@ var SneakySnakeGame = (function () {
                 if (that.paused) {
                     $("#game").hide();
                     $("#menu").show();
+                    $("#play").hide();
+                    $("#resume").show();
+                    $("#restart").show();
                     that.assetmanager.audio.main.pause();
                 }
                 else if (!that.paused && !that.muted) {

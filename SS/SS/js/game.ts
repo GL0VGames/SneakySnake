@@ -385,7 +385,10 @@ class SneakySnakeGame {
 				that.paused = !that.paused;
 				if (that.paused) {
 					$("#game").hide();
-					$("#menu").show();
+                    $("#menu").show();
+                    $("#play").hide();
+                    $("#resume").show();
+                    $("#restart").show();
 					that.assetmanager.audio.main.pause();
 				} else if (!that.paused && !that.muted) {
 					$("#game").show();
