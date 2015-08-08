@@ -1,4 +1,4 @@
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -121,7 +121,7 @@ var NPC = (function (_super) {
     NPC.prototype.tick = function (inp, p, collision) {
         // If the player walks over the npc, add the npc to the player and increase the players speed
         if (p.pos.equals(this.pos) && !this.bFollowing) {
-            this.setfollowIndex(p.following.length + 1);
+            this.setfollowIndex(p.following.length);
             p.following.push(this);
             this.bFollowing = true;
             p.speed += p.speedBoost;

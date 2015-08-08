@@ -116,7 +116,7 @@ class NPC extends Obj {
     public tick(inp: Input, p: Player, collision: any) {
         // If the player walks over the npc, add the npc to the player and increase the players speed
         if (p.pos.equals(this.pos) && !this.bFollowing) {
-            this.setfollowIndex(p.following.length + 1);
+            this.setfollowIndex(p.following.length);
             p.following.push(this);
             this.bFollowing = true;
             p.speed += p.speedBoost;

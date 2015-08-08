@@ -34,10 +34,10 @@ class SneakySnakeGame {
         this.player.pos = gridToScreen(1, 1);
         this.player.sDestination = gridToScreen(1, 1);
         this.player.gDestination = new Vector2(1, 1);
-        this.player.tempDestination = new Vector2(1, 1);
         this.player.previousLoc = [new Vector2(1, 1)];
         for (var i = 0; i < this.player.following.length + 1; i++)
             this.player.previousLoc.push(new Vector2(1, 1));
+        this.player.animMan.gotoNamedAnim("playerIdleR");
 
         // Set up floor tiles
         var floor = this.world.floors[this.currentFloor];
@@ -100,13 +100,6 @@ class SneakySnakeGame {
                     this.assetmanager.anims["npcIdleUSeen"],
                     this.assetmanager.anims["npcIdleRSeen"]]));
         }
-    }
-
-    public toggleControls() {
-        if (this.player.controls[0] == "s")
-            this.player.controls = ["a", "w", "d", "s"];
-        else
-            this.player.controls = ["s", "a", "w", "d"];
     }
 
     public restartGame() {
@@ -202,7 +195,7 @@ class SneakySnakeGame {
         }
 
         // Disallows the player from moving through walls
-        if (this.collisionMap[this.currentFloor][this.player.tempDestination.y][this.player.tempDestination.x].animMan.anims[0].name !== "filled") {
+        if (this.collisionMap[this.currentFloor][this.player.gDestination.y][this.player.gDestination.x].animMan.anims[0].name !== "filled") {
             this.player.bCanLerp = true;
 		}
         else {
@@ -273,7 +266,7 @@ class SneakySnakeGame {
     public startGame(): void {
         // Create the player
         var playerLocation: Vector2 = gridToScreen(1, 1);
-        this.player = new Player(playerLocation.x, playerLocation.y, [this.assetmanager.anims["playerIdleD"], this.assetmanager.anims["playerIdleL"], this.assetmanager.anims["playerIdleU"], this.assetmanager.anims["playerWalkD"], this.assetmanager.anims["playerWalkL"], this.assetmanager.anims["playerWalkU"]]);
+        this.player = new Player(playerLocation.x, playerLocation.y, [this.assetmanager.anims["playerIdleR"], this.assetmanager.anims["playerIdleD"], this.assetmanager.anims["playerIdleU"], this.assetmanager.anims["playerWalkR"], this.assetmanager.anims["playerWalkD"], this.assetmanager.anims["playerWalkU"]]);
         
         this.setupFloor();
 
@@ -325,9 +318,8 @@ class SneakySnakeGame {
                 $("#pause").hide();
                 that.paused = true;
                 that.restartGame();
-            } else
-                if (that.input.mouseDownPos.x < that.renderer.canvas.clientWidth / 2) {
-				if (that.input.mouseDownPos.y < that.renderer.canvas.clientHeight / 2) {
+            } else if (that.input.mouseDownPos.x < window.outerWidth / 2) {
+                if (that.input.mouseDownPos.y < that.renderer.canvas.height / 2) {
 					that.input.keyPresses.push("a");
 					that.arrows[Direction.UL].press();
 				}
@@ -335,8 +327,8 @@ class SneakySnakeGame {
 					that.input.keyPresses.push("s");
 					that.arrows[Direction.DL].press();
 				}
-			} else {
-				if (that.input.mouseDownPos.y < that.renderer.canvas.clientHeight / 2) {
+            } else {
+                if (that.input.mouseDownPos.y < that.renderer.canvas.height / 2) {
 					that.input.keyPresses.push("w");
 					that.arrows[Direction.UR].press();
 				}
@@ -349,14 +341,14 @@ class SneakySnakeGame {
 
         $(this.renderer.canvas).mouseup(function (e) {
             that.input.mouseup(e);
-            if (that.input.mouseUpPos.x < that.renderer.canvas.clientWidth / 2) {
-                if (that.input.mouseUpPos.y < that.renderer.canvas.clientHeight / 2)
+            if (that.input.mouseUpPos.x < window.outerWidth / 2) {
+                if (that.input.mouseUpPos.y < that.renderer.canvas.height / 2)
                     that.arrows[Direction.UL].norm();
                 else
                     that.arrows[Direction.DL].norm();
             }
             else {
-                if (that.input.mouseUpPos.y < that.renderer.canvas.clientHeight / 2)
+                if (that.input.mouseUpPos.y < that.renderer.canvas.height / 2)
                     that.arrows[Direction.UR].norm();
                 else {
                     that.arrows[Direction.DR].norm();
@@ -366,6 +358,7 @@ class SneakySnakeGame {
 
         //$(this.renderer.canvas).click(function (e) { that.input.click(e); });
         $(window).keyup(function (e) {
+            e.preventDefault();
 			if (!that.paused) {
                 if (e.which == 87 || e.which == 38)
                     that.arrows[Direction.UR].norm();
@@ -379,7 +372,8 @@ class SneakySnakeGame {
 		});
 
         $(window).keydown(function (e) {
-			// Allowed to happen when paused
+            // Allowed to happen when paused
+            e.preventDefault();
 			if (e.which == 80) {// P
 				$("#back").hide();
                 $("#text-wrapper").hide();
@@ -435,10 +429,8 @@ class SneakySnakeGame {
                     that.arrows[Direction.DR].press();
 				}
 				else if (e.which == 82) // R //
-					that.restartGame();
-				else if (e.which == 84) // T //
-					that.toggleControls();
-				else if (e.which == 70) // F
+                    that.restartGame();
+                else if (e.which == 70) // F
 					that.bFPS = !that.bFPS;
 				else if (e.which == 76) { // L this is for testing only! use to increase score by one, the game knows you're cheating and you don't get a high score
 					var hi = new NPC(gridToScreen(1, 1), new Vector2(1, 1), 5, [that.assetmanager.anims["npcFollowAnim"]]);

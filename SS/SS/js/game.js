@@ -27,10 +27,10 @@ var SneakySnakeGame = (function () {
         // Bind inputs
         this.input = new Input;
         this.arrows = [];
-        this.arrows[0 /* DL */] = new Arrow(gridToScreen(8, 17), [this.assetmanager.anims["arrowDownLeft"], this.assetmanager.anims["arrowDownLeftPress"], this.assetmanager.anims["arrowDownLeftNo"]]);
-        this.arrows[3 /* DR */] = new Arrow(gridToScreen(17, 8), [this.assetmanager.anims["arrowDownRight"], this.assetmanager.anims["arrowDownRightPress"], this.assetmanager.anims["arrowDownRightNo"]]);
-        this.arrows[1 /* UL */] = new Arrow(gridToScreen(-3, 6), [this.assetmanager.anims["arrowUpLeft"], this.assetmanager.anims["arrowUpLeftPress"], this.assetmanager.anims["arrowUpLeftNo"]]);
-        this.arrows[2 /* UR */] = new Arrow(gridToScreen(6, -3), [this.assetmanager.anims["arrowUpRight"], this.assetmanager.anims["arrowUpRightPress"], this.assetmanager.anims["arrowUpRightNo"]]);
+        this.arrows[Direction.DL] = new Arrow(gridToScreen(8, 17), [this.assetmanager.anims["arrowDownLeft"], this.assetmanager.anims["arrowDownLeftPress"], this.assetmanager.anims["arrowDownLeftNo"]]);
+        this.arrows[Direction.DR] = new Arrow(gridToScreen(17, 8), [this.assetmanager.anims["arrowDownRight"], this.assetmanager.anims["arrowDownRightPress"], this.assetmanager.anims["arrowDownRightNo"]]);
+        this.arrows[Direction.UL] = new Arrow(gridToScreen(-3, 6), [this.assetmanager.anims["arrowUpLeft"], this.assetmanager.anims["arrowUpLeftPress"], this.assetmanager.anims["arrowUpLeftNo"]]);
+        this.arrows[Direction.UR] = new Arrow(gridToScreen(6, -3), [this.assetmanager.anims["arrowUpRight"], this.assetmanager.anims["arrowUpRightPress"], this.assetmanager.anims["arrowUpRightNo"]]);
         //$(this.renderer.canvas).mousedown(function (e) { that.input.mousedown(e); });
         $(this.renderer.canvas).mousedown(function (e) {
             that.input.mousedown(e);
@@ -44,58 +44,60 @@ var SneakySnakeGame = (function () {
                 that.paused = true;
                 that.restartGame();
             }
-            else if (that.input.mouseDownPos.x < that.renderer.canvas.clientWidth / 2) {
-                if (that.input.mouseDownPos.y < that.renderer.canvas.clientHeight / 2) {
+            else if (that.input.mouseDownPos.x < window.outerWidth / 2) {
+                if (that.input.mouseDownPos.y < that.renderer.canvas.height / 2) {
                     that.input.keyPresses.push("a");
-                    that.arrows[1 /* UL */].press();
+                    that.arrows[Direction.UL].press();
                 }
                 else {
                     that.input.keyPresses.push("s");
-                    that.arrows[0 /* DL */].press();
+                    that.arrows[Direction.DL].press();
                 }
             }
             else {
-                if (that.input.mouseDownPos.y < that.renderer.canvas.clientHeight / 2) {
+                if (that.input.mouseDownPos.y < that.renderer.canvas.height / 2) {
                     that.input.keyPresses.push("w");
-                    that.arrows[2 /* UR */].press();
+                    that.arrows[Direction.UR].press();
                 }
                 else {
                     that.input.keyPresses.push("d");
-                    that.arrows[3 /* DR */].press();
+                    that.arrows[Direction.DR].press();
                 }
             }
         });
         $(this.renderer.canvas).mouseup(function (e) {
             that.input.mouseup(e);
-            if (that.input.mouseUpPos.x < that.renderer.canvas.clientWidth / 2) {
-                if (that.input.mouseUpPos.y < that.renderer.canvas.clientHeight / 2)
-                    that.arrows[1 /* UL */].norm();
+            if (that.input.mouseUpPos.x < window.outerWidth / 2) {
+                if (that.input.mouseUpPos.y < that.renderer.canvas.height / 2)
+                    that.arrows[Direction.UL].norm();
                 else
-                    that.arrows[0 /* DL */].norm();
+                    that.arrows[Direction.DL].norm();
             }
             else {
-                if (that.input.mouseUpPos.y < that.renderer.canvas.clientHeight / 2)
-                    that.arrows[2 /* UR */].norm();
+                if (that.input.mouseUpPos.y < that.renderer.canvas.height / 2)
+                    that.arrows[Direction.UR].norm();
                 else {
-                    that.arrows[3 /* DR */].norm();
+                    that.arrows[Direction.DR].norm();
                 }
             }
         });
         //$(this.renderer.canvas).click(function (e) { that.input.click(e); });
         $(window).keyup(function (e) {
+            e.preventDefault();
             if (!that.paused) {
                 if (e.which == 87 || e.which == 38)
-                    that.arrows[2 /* UR */].norm();
+                    that.arrows[Direction.UR].norm();
                 else if (e.which == 65 || e.which == 37)
-                    that.arrows[1 /* UL */].norm();
+                    that.arrows[Direction.UL].norm();
                 else if (e.which == 83 || e.which == 40)
-                    that.arrows[0 /* DL */].norm();
+                    that.arrows[Direction.DL].norm();
                 else if (e.which == 68 || e.which == 39)
-                    that.arrows[3 /* DR */].norm();
+                    that.arrows[Direction.DR].norm();
             }
         });
         $(window).keydown(function (e) {
             // Allowed to happen when paused
+            e.preventDefault();
             if (e.which == 80) {
                 $("#back").hide();
                 $("#text-wrapper").hide();
@@ -139,24 +141,22 @@ var SneakySnakeGame = (function () {
             if (!that.paused) {
                 if (e.which == 87 || e.which == 38) {
                     that.input.keyPresses.push("w");
-                    that.arrows[2 /* UR */].press();
+                    that.arrows[Direction.UR].press();
                 }
                 else if (e.which == 65 || e.which == 37) {
                     that.input.keyPresses.push("a");
-                    that.arrows[1 /* UL */].press();
+                    that.arrows[Direction.UL].press();
                 }
                 else if (e.which == 83 || e.which == 40) {
                     that.input.keyPresses.push("s");
-                    that.arrows[0 /* DL */].press();
+                    that.arrows[Direction.DL].press();
                 }
                 else if (e.which == 68 || e.which == 39) {
                     that.input.keyPresses.push("d");
-                    that.arrows[3 /* DR */].press();
+                    that.arrows[Direction.DR].press();
                 }
                 else if (e.which == 82)
                     that.restartGame();
-                else if (e.which == 84)
-                    that.toggleControls();
                 else if (e.which == 70)
                     that.bFPS = !that.bFPS;
                 else if (e.which == 76) {
@@ -177,25 +177,25 @@ var SneakySnakeGame = (function () {
         this.player.pos = gridToScreen(1, 1);
         this.player.sDestination = gridToScreen(1, 1);
         this.player.gDestination = new Vector2(1, 1);
-        this.player.tempDestination = new Vector2(1, 1);
         this.player.previousLoc = [new Vector2(1, 1)];
         for (var i = 0; i < this.player.following.length + 1; i++)
             this.player.previousLoc.push(new Vector2(1, 1));
+        this.player.animMan.gotoNamedAnim("playerIdleR");
         // Set up floor tiles
         var floor = this.world.floors[this.currentFloor];
         this.staticObjs = [];
         for (var y = 0; y < floor.grid.length; y++) {
             for (var x = 0; x < floor.grid[y].length; x++) {
                 var screen_coords = gridToScreen(x, y);
-                if (floor.grid[x][y].type == 0 /* FLOOR */) {
+                if (floor.grid[x][y].type == RTypes.FLOOR) {
                     var tile = new FloorTile(screen_coords.x, screen_coords.y, [this.assetmanager.anims["floor"]]);
                     tile.setZ(-1);
                     this.staticObjs.push(tile);
                 }
-                else if (floor.grid[x][y].type == 1 /* WALL */) {
+                else if (floor.grid[x][y].type == RTypes.WALL) {
                     this.staticObjs.push(new WallTile(screen_coords.x, screen_coords.y, [this.assetmanager.anims["wall"]]));
                 }
-                else if (floor.grid[x][y].type == 2 /* DOOR */) {
+                else if (floor.grid[x][y].type == RTypes.DOOR) {
                     this.staticObjs.push(new FloorTile(screen_coords.x, screen_coords.y, [this.assetmanager.anims["floor"]]));
                 }
             }
@@ -203,7 +203,7 @@ var SneakySnakeGame = (function () {
         // Spawn teleporter to next level
         tempx = Math.floor(Math.random() * this.floorSize);
         tempy = Math.floor(Math.random() * this.floorSize);
-        while (floor.grid[tempx][tempy].type == 1 /* WALL */) {
+        while (floor.grid[tempx][tempy].type == RTypes.WALL) {
             tempx = Math.floor(Math.random() * this.floorSize);
             tempy = Math.floor(Math.random() * this.floorSize);
         }
@@ -220,19 +220,23 @@ var SneakySnakeGame = (function () {
                 tempNPC.push(this.NPCs[i]);
             }
         this.NPCs = tempNPC;
+        // Check if colliding with anything and if not then place
         for (var i = randIntBetween(this.numNPCNextFloor, this.numNPCNextFloor - 3); i > 0; i--) {
             this.tempi = Vector2.randVector2(this.floorSize, this.floorSize);
-            while (floor.grid[this.tempi.x][this.tempi.y].type == 1 /* WALL */ || collide(this.tempi, this.NPCs) || gridToScreen(this.tempi).equals(this.currTeleporter.pos) || (this.tempi.x < 6 && this.tempi.y == 1) || (this.tempi.x == 1 && this.tempi.y < 6)) {
+            while (floor.grid[this.tempi.x][this.tempi.y].type == RTypes.WALL
+                || collide(this.tempi, this.NPCs)
+                || gridToScreen(this.tempi).equals(this.currTeleporter.pos)
+                || (this.tempi.x < 6 && this.tempi.y == 1)
+                || (this.tempi.x == 1 && this.tempi.y < 6)) {
                 this.tempi = Vector2.randVector2(this.floorSize, this.floorSize);
             }
-            this.NPCs.push(new NPC(gridToScreen(this.tempi), this.tempi, 5, [this.assetmanager.anims["npcAll"], this.assetmanager.anims["npcFollowAnim"], this.assetmanager.anims["npcIdleDSeen"], this.assetmanager.anims["npcIdleLSeen"], this.assetmanager.anims["npcIdleUSeen"], this.assetmanager.anims["npcIdleRSeen"]]));
+            this.NPCs.push(new NPC(gridToScreen(this.tempi), this.tempi, 5, [this.assetmanager.anims["npcAll"],
+                this.assetmanager.anims["npcFollowAnim"],
+                this.assetmanager.anims["npcIdleDSeen"],
+                this.assetmanager.anims["npcIdleLSeen"],
+                this.assetmanager.anims["npcIdleUSeen"],
+                this.assetmanager.anims["npcIdleRSeen"]]));
         }
-    };
-    SneakySnakeGame.prototype.toggleControls = function () {
-        if (this.player.controls[0] == "s")
-            this.player.controls = ["a", "w", "d", "s"];
-        else
-            this.player.controls = ["s", "a", "w", "d"];
     };
     SneakySnakeGame.prototype.restartGame = function () {
         // Stop the tick function from ticking
@@ -259,6 +263,7 @@ var SneakySnakeGame = (function () {
     SneakySnakeGame.prototype.viewWorld = function (w) {
         var wall = "id ='wall";
         var door = "id ='door";
+        //$("p").remove();
         for (var y = 0; y <= this.floorSize; y++) {
             var outP = "<p>";
             for (var x = 0; x <= this.floorSize; x++) {
@@ -304,6 +309,7 @@ var SneakySnakeGame = (function () {
         // end show collision map
         // Tick player
         this.player.tick(this.input, this.collisionMap);
+        // Tick NPC's, if any can see the player, kill the player
         for (this.tempi = 0; this.tempi < this.NPCs.length; this.tempi++) {
             this.NPCs[this.tempi].tick(this.input, this.player, this.collisionMap[this.currentFloor]);
             if (this.NPCs[this.tempi].seen) {
@@ -313,7 +319,7 @@ var SneakySnakeGame = (function () {
             }
         }
         // Disallows the player from moving through walls
-        if (this.collisionMap[this.currentFloor][this.player.tempDestination.y][this.player.tempDestination.x].animMan.anims[0].name !== "filled") {
+        if (this.collisionMap[this.currentFloor][this.player.gDestination.y][this.player.gDestination.x].animMan.anims[0].name !== "filled") {
             this.player.bCanLerp = true;
         }
         else {
@@ -347,9 +353,7 @@ var SneakySnakeGame = (function () {
                 else {
                     highscore = JSON.parse(localStorage.getItem("highscore"));
                     highscore.push(that.player.following.length);
-                    highscore = highscore.sort(function (a, b) {
-                        return a - b;
-                    }); // The function allows the sort to be on numbers instead of strings... I know it's dumb but that's how it works
+                    highscore = highscore.sort(function (a, b) { return a - b; }); // The function allows the sort to be on numbers instead of strings... I know it's dumb but that's how it works
                 }
             else {
                 highscore = JSON.parse(localStorage.getItem("highscore"));
@@ -378,13 +382,11 @@ var SneakySnakeGame = (function () {
     SneakySnakeGame.prototype.startGame = function () {
         // Create the player
         var playerLocation = gridToScreen(1, 1);
-        this.player = new Player(playerLocation.x, playerLocation.y, [this.assetmanager.anims["playerIdleD"], this.assetmanager.anims["playerIdleL"], this.assetmanager.anims["playerIdleU"], this.assetmanager.anims["playerWalkD"], this.assetmanager.anims["playerWalkL"], this.assetmanager.anims["playerWalkU"]]);
+        this.player = new Player(playerLocation.x, playerLocation.y, [this.assetmanager.anims["playerIdleR"], this.assetmanager.anims["playerIdleD"], this.assetmanager.anims["playerIdleU"], this.assetmanager.anims["playerWalkR"], this.assetmanager.anims["playerWalkD"], this.assetmanager.anims["playerWalkU"]]);
         this.setupFloor();
         // Start tick function
         var self = this;
-        this.tickID = setInterval(function () {
-            self.tick();
-        }, this.interval);
+        this.tickID = setInterval(function () { self.tick(); }, this.interval);
         this.fpsID = setInterval(function () {
             self.lastFPS = self.fps;
             self.fps = 0;
