@@ -271,7 +271,6 @@ class SneakySnakeGame {
     }
 
     public startGame(): void {
-		console.log("startGame");
         // Create the player
         var playerLocation: Vector2 = gridToScreen(1, 1);
         this.player = new Player(playerLocation.x, playerLocation.y, [this.assetmanager.anims["playerIdleD"], this.assetmanager.anims["playerIdleL"], this.assetmanager.anims["playerIdleU"], this.assetmanager.anims["playerWalkD"], this.assetmanager.anims["playerWalkL"], this.assetmanager.anims["playerWalkU"]]);
@@ -317,7 +316,7 @@ class SneakySnakeGame {
         //$(this.renderer.canvas).mousedown(function (e) { that.input.mousedown(e); });
         $(this.renderer.canvas).mousedown(function (e) {
             that.input.mousedown(e);
-            if (that.player.health >= 0) {
+            if (that.player.health <= 0) {
                 $("#menu").show();
                 $("#play").show();
                 $("#resume").hide();
@@ -325,7 +324,8 @@ class SneakySnakeGame {
                 $("#game").hide();
                 that.paused = true;
                 that.restartGame();
-            } else if (that.input.mouseDownPos.x < that.renderer.canvas.clientWidth / 2) {
+            } else
+                if (that.input.mouseDownPos.x < that.renderer.canvas.clientWidth / 2) {
 				if (that.input.mouseDownPos.y < that.renderer.canvas.clientHeight / 2) {
 					that.input.keyPresses.push("a");
 					that.arrows[Direction.UL].press();
@@ -365,7 +365,6 @@ class SneakySnakeGame {
 
         //$(this.renderer.canvas).click(function (e) { that.input.click(e); });
         $(window).keyup(function (e) {
-            console.log("down");
 			if (!that.paused) {
                 if (e.which == 87)
                     that.arrows[Direction.UR].norm();
@@ -380,7 +379,6 @@ class SneakySnakeGame {
 
         $(window).keydown(function (e) {
 			// Allowed to happen when paused
-            console.log("up")
 			if (e.which == 80) {// P
 				$("#back").hide();
                 $("#text-wrapper").hide();
@@ -453,15 +451,6 @@ class SneakySnakeGame {
 $(function game(): void {
 
     var game = new SneakySnakeGame();
-    $(".new").click(function () {
-        // Restart the game if the button is pressed
-        game.restartGame();
-    });
-    $(".control").click(function () {
-        // Change control scheme from w moving to upper right to w moving to upper left
-        game.toggleControls();
-    });
-	    
     // Start game when all assets are loaded
     $("body").on("assetsFinished", function () {
         $("#game").hide();
@@ -472,8 +461,8 @@ $(function game(): void {
 	function PLAYGAME(): void {
         $("#menu").hide();
         $("#play").hide();
-        $("#resume").show();
-        $("#restart").show();
+        $("#resume").hide();
+        $("#restart").hide();
 		$("#game").show();
         $("#back").hide();
 		$("#text-wrapper").hide();
