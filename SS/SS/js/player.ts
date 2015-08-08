@@ -94,7 +94,7 @@ class Player extends Obj {
                 this.tempDestination.x = this.gDestination.x + 1;
                 this.lastKey = this.controls[3];
             }
-            input.keyPresses.pop();  
+            input.keyPresses = input.keyPresses.splice(1, input.keyPresses.length - 1);
         }
     }
 } 
