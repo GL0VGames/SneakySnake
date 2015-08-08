@@ -83,13 +83,13 @@ var SneakySnakeGame = (function () {
         //$(this.renderer.canvas).click(function (e) { that.input.click(e); });
         $(window).keyup(function (e) {
             if (!that.paused) {
-                if (e.which == 87)
+                if (e.which == 87 || e.which == 38)
                     that.arrows[Direction.UR].norm();
-                else if (e.which == 65)
+                else if (e.which == 65 || e.which == 37)
                     that.arrows[Direction.UL].norm();
-                else if (e.which == 83)
+                else if (e.which == 83 || e.which == 40)
                     that.arrows[Direction.DL].norm();
-                else if (e.which == 68)
+                else if (e.which == 68 || e.which == 39)
                     that.arrows[Direction.DR].norm();
             }
         });
@@ -132,19 +132,19 @@ var SneakySnakeGame = (function () {
             }
             // Not allowed to happen when paused
             if (!that.paused) {
-                if (e.which == 87) {
+                if (e.which == 87 || e.which == 38) {
                     that.input.keyPresses.push("w");
                     that.arrows[Direction.UR].press();
                 }
-                else if (e.which == 65) {
+                else if (e.which == 65 || e.which == 37) {
                     that.input.keyPresses.push("a");
                     that.arrows[Direction.UL].press();
                 }
-                else if (e.which == 83) {
+                else if (e.which == 83 || e.which == 40) {
                     that.input.keyPresses.push("s");
                     that.arrows[Direction.DL].press();
                 }
-                else if (e.which == 68) {
+                else if (e.which == 68 || e.which == 39) {
                     that.input.keyPresses.push("d");
                     that.arrows[Direction.DR].press();
                 }
