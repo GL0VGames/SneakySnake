@@ -38,6 +38,7 @@ canvas {
 #pause {
 	display: none;
 	width: 32px;
+    cursor: pointer;
 }
 
 #back {

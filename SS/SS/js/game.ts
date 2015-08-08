@@ -219,9 +219,9 @@ class SneakySnakeGame {
         this.renderer.draw(this.tempTick, this.assetmanager.anims, (this.bFPS) ? this.lastFPS : -1);
 
 		// Draw the "press p to pause"
-		this.renderer.ctx.fillStyle = "#FFFFFF";
-		this.renderer.ctx.font = "1em Inconsolata";
-		this.renderer.ctx.fillText("Press p to pause", 10, 20);
+		//this.renderer.ctx.fillStyle = "#FFFFFF";
+		//this.renderer.ctx.font = "1em Inconsolata";
+		//this.renderer.ctx.fillText("Press p to pause", 10, 20);
 
         // Clear inputs
         this.input.mouseClicked = false;
@@ -322,6 +322,7 @@ class SneakySnakeGame {
                 $("#resume").hide();
                 $("#restart").hide();
                 $("#game").hide();
+                $("#pause").hide();
                 that.paused = true;
                 that.restartGame();
             } else
@@ -389,11 +390,13 @@ class SneakySnakeGame {
                     $("#play").hide();
                     $("#resume").show();
                     $("#restart").show();
+                    $("#pause").hide();
 					that.assetmanager.audio.main.pause();
-				} else if (!that.paused && !that.muted) {
+				} else {
 					$("#game").show();
-					$("#menu").hide();
-					that.assetmanager.audio.main.play();
+                    $("#menu").hide();
+                    $("#pause").show();
+                    if (!that.muted) that.assetmanager.audio.main.play();
 				}
 			} else if (e.which == 77) { // M
 				if (that.assetmanager.audio.main.paused) {
@@ -409,7 +412,8 @@ class SneakySnakeGame {
 				$("#game").hide();
 				$("#back").show();
 				$("#text-wrapper").show();
-				that.paused = true;
+                that.paused = true;
+                $("#pause").hide();
 			}
 
 			// Not allowed to happen when paused
@@ -468,6 +472,7 @@ $(function game(): void {
         $("#restart").hide();
 		$("#game").show();
         $("#back").hide();
+        $("#pause").show();
 		$("#text-wrapper").hide();
 		if (!game.muted)
 			game.assetmanager.audio.main.play();
@@ -485,8 +490,28 @@ $(function game(): void {
 	$("#restart").click(function () {
 		game.restartGame();
 		PLAYGAME();
-	});
-
+    });
+    
+    $("#pause").click(function () {
+        $("#back").hide();
+        $("#text-wrapper").hide();
+        game.paused = !game.paused;
+        if (game.paused) {
+            $("#game").hide();
+            $("#menu").show();
+            $("#play").hide();
+            $("#resume").show();
+            $("#restart").show();
+            $("#pause").hide();
+            game.assetmanager.audio.main.pause();
+        } else {
+            $("#game").show();
+            $("#menu").hide();
+            $("#pause").show();
+            if (!game.muted) game.assetmanager.audio.main.play();
+        }    
+    });
+	
 	$("#info").click(function () {
 		$("#menu").hide();
 		$("#game").hide();
