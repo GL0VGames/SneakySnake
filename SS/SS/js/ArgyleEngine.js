@@ -1,4 +1,4 @@
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -311,6 +311,7 @@ var AssetManager = (function () {
         $("body").on("assetLoaded", function (e, d) {
             if (d.num >= that.total && !that.doneLoading) {
                 that.doneLoading = true;
+                // Assign image to anim
                 for (var j in that.anims)
                     that.anims[j].setImage(that.images[j]);
                 $("body").trigger("assetsFinished");
@@ -319,6 +320,7 @@ var AssetManager = (function () {
     };
     AssetManager.prototype.preloader = function (ctx, canvas) {
         var that = this;
+        // Preload all images and put into anims
         for (var i in this.anims) {
             this.images[i] = new Image();
             this.images[i].onload = function () {
@@ -327,6 +329,7 @@ var AssetManager = (function () {
             this.images[i].src = this.imageURLs[i];
             this.imagesLength++;
         }
+        // Preload all sounds
         for (var i in this.audioURLs) {
             this.audio[i] = new Audio();
             this.audio[i].addEventListener('canplaythrough', that.updateBar(ctx, canvas), false);
@@ -446,7 +449,7 @@ var GridTile = (function () {
     function GridTile() {
         this.wall = false;
         this.door = false;
-        this.type = 0 /* FLOOR */;
+        this.type = RTypes.FLOOR;
     }
     return GridTile;
 })();
@@ -459,7 +462,7 @@ var Floor = (function () {
             for (var k = 0; k <= floorSize; k++) {
                 this.grid[j][k] = new GridTile();
                 this.grid[j][k].wall = (j == 0 || j == floorSize) ? true : (k == 0 || k == floorSize) ? true : false;
-                this.grid[j][k].type = (j == 0 || j == floorSize) ? 1 /* WALL */ : (k == 0 || k == floorSize) ? 1 /* WALL */ : 0 /* FLOOR */;
+                this.grid[j][k].type = (j == 0 || j == floorSize) ? RTypes.WALL : (k == 0 || k == floorSize) ? RTypes.WALL : RTypes.FLOOR;
             }
         }
         var dir = Math.round(Math.random());
@@ -506,9 +509,10 @@ var Floor = (function () {
             if (this.grid[x - 1][y + 1].wall || (this.grid[x - 1][y + 2].wall && (Math.random() * 10) > percent) || this.grid[x - 1][y - 1].wall || (this.grid[x - 1][y - 2].wall && (Math.random() * 10) > percent))
                 return;
         }
+        // Make a wall until you hit another wall in the specified direction 
         while (!this.grid[x][y].wall) {
             this.grid[x][y].wall = !this.grid[x][y].wall;
-            this.grid[x][y].type = 1 /* WALL */;
+            this.grid[x][y].type = RTypes.WALL;
             if (dir == 0)
                 y++;
             else if (dir == 1)
@@ -523,50 +527,50 @@ var Floor = (function () {
         // To move the door if a wall runs into a door (not for spawning from a door)
         if (dir == 0 && (y + 1 < floorSize) && this.grid[x][y].door) {
             this.grid[x][y].door = false;
-            this.grid[x][y].type = 1 /* WALL */;
+            this.grid[x][y].type = RTypes.WALL;
             if (this.grid[x + 1][y + 1].wall) {
                 this.grid[x - 1][y].door = true;
-                this.grid[x - 1][y].type = 2 /* DOOR */;
+                this.grid[x - 1][y].type = RTypes.DOOR;
             }
             else {
                 this.grid[x + 1][y].door = true;
-                this.grid[x + 1][y].type = 2 /* DOOR */;
+                this.grid[x + 1][y].type = RTypes.DOOR;
             }
         }
         else if (dir == 1 && (x + 1 < floorSize) && this.grid[x][y].door) {
             this.grid[x][y].door = false;
-            this.grid[x][y].type = 1 /* WALL */;
+            this.grid[x][y].type = RTypes.WALL;
             if (this.grid[x + 1][y + 1].wall) {
                 this.grid[x][y - 1].door = true;
-                this.grid[x][y - 1].type = 2 /* DOOR */;
+                this.grid[x][y - 1].type = RTypes.DOOR;
             }
             else {
                 this.grid[x][y + 1].door = true;
-                this.grid[x][y + 1].type = 2 /* DOOR */;
+                this.grid[x][y + 1].type = RTypes.DOOR;
             }
         }
         else if (dir == 2 && (y - 1 > 0) && this.grid[x][y].door) {
             this.grid[x][y].door = false;
-            this.grid[x][y].type = 1 /* WALL */;
+            this.grid[x][y].type = RTypes.WALL;
             if (this.grid[x + 1][y - 1].wall) {
                 this.grid[x - 1][y].door = true;
-                this.grid[x - 1][y].type = 2 /* DOOR */;
+                this.grid[x - 1][y].type = RTypes.DOOR;
             }
             else {
                 this.grid[x + 1][y].door = true;
-                this.grid[x + 1][y].type = 2 /* DOOR */;
+                this.grid[x + 1][y].type = RTypes.DOOR;
             }
         }
         else if (dir == 3 && (x - 1 > 0) && this.grid[x][y].door) {
             this.grid[x][y].door = false;
-            this.grid[x][y].type = 1 /* WALL */;
+            this.grid[x][y].type = RTypes.WALL;
             if (this.grid[x - 1][y + 1].wall) {
                 this.grid[x][y - 1].door = true;
-                this.grid[x][y - 1].type = 2 /* DOOR */;
+                this.grid[x][y - 1].type = RTypes.DOOR;
             }
             else {
                 this.grid[x][y + 1].door = true;
-                this.grid[x][y + 1].type = 2 /* DOOR */;
+                this.grid[x][y + 1].type = RTypes.DOOR;
             }
         }
         // Make a door in the middle-ish
@@ -598,26 +602,26 @@ var Floor = (function () {
         // Set door
         if (dir == 0 || dir == 2) {
             this.grid[x][start.y + door1].door = true;
-            this.grid[x][start.y + door1].type = 2 /* DOOR */;
+            this.grid[x][start.y + door1].type = RTypes.DOOR;
             if (length > (floorSize * .75)) {
                 this.grid[x][start.y + door2].door = true;
-                this.grid[x][start.y + door2].type = 2 /* DOOR */;
+                this.grid[x][start.y + door2].type = RTypes.DOOR;
             }
             else if (length > (floorSize / 2) && ((Math.random() * 10) > 2.5)) {
                 this.grid[x][start.y + door2].door = true;
-                this.grid[x][start.y + door2].type = 2 /* DOOR */;
+                this.grid[x][start.y + door2].type = RTypes.DOOR;
             }
         }
         else if (dir == 1 || dir == 3) {
             this.grid[start.x + door1][y].door = true;
-            this.grid[start.x + door1][y].type = 2 /* DOOR */;
+            this.grid[start.x + door1][y].type = RTypes.DOOR;
             if (length > (floorSize * .75)) {
                 this.grid[start.x + door2][y].door = true;
-                this.grid[start.x + door2][y].type = 2 /* DOOR */;
+                this.grid[start.x + door2][y].type = RTypes.DOOR;
             }
             else if (length > (floorSize / 2) && ((Math.random() * 10) > 2.5)) {
                 this.grid[start.x + door2][y].door = true;
-                this.grid[start.x + door2][y].type = 2 /* DOOR */;
+                this.grid[start.x + door2][y].type = RTypes.DOOR;
             }
         }
         // Do the recursion
@@ -652,7 +656,7 @@ var Building = (function () {
             this.collisionMap[i] = [];
             for (var x = 0; x < this.floors[i].grid.length; x++) {
                 for (var y = 0; y < this.floors[i].grid.length; y++) {
-                    tempCollish.push((this.floors[i].grid[y][x].type == 1 /* WALL */) ? new CollisionTile(gridToScreen(y, x).x, gridToScreen(y, x).y, [assets.anims["filled"]]) : new CollisionTile(gridToScreen(y, x).x, gridToScreen(y, x).y, [assets.anims["empty"]]));
+                    tempCollish.push((this.floors[i].grid[y][x].type == RTypes.WALL) ? new CollisionTile(gridToScreen(y, x).x, gridToScreen(y, x).y, [assets.anims["filled"]]) : new CollisionTile(gridToScreen(y, x).x, gridToScreen(y, x).y, [assets.anims["empty"]]));
                 }
                 this.collisionMap[i].push(tempCollish);
                 tempCollish = [];
