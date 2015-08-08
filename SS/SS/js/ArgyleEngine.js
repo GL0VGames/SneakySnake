@@ -362,7 +362,21 @@ var Renderer = (function () {
         objs.sort(function (a, b) {
             var zDiff = a.zIndex - b.zIndex;
             if (zDiff == 0) {
-                return a.pos.y - b.pos.y;
+                var yDiff = a.pos.y - b.pos.y;
+                if (yDiff == 0) {
+                    if (a instanceof Player) {
+                        return 1;
+                    }
+                    else if (b instanceof Player) {
+                        return -1;
+                    }
+                    else {
+                        return 0;
+                    }
+                }
+                else {
+                    return yDiff;
+                }
             }
             else {
                 return zDiff;
