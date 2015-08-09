@@ -343,27 +343,29 @@ var SneakySnakeGame = (function () {
             clearInterval(this.tickID);
             clearInterval(this.fpsID);
             var that = this;
-            var highscore;
-            var sHighscore;
-            // Sort highscore, check if you cheated, save highscore
-            if (!this.cheated)
-                if (typeof (localStorage["highscore"]) == "undefined") {
-                    highscore = [that.player.following.length];
-                }
+            var highscore = [];
+            var sHighscore = "[]";
+            if (typeof (localStorage) !== "undefined") {
+                // Sort highscore, check if you cheated, save highscore
+                if (!this.cheated)
+                    if (typeof (localStorage["highscore"]) == "undefined") {
+                        highscore = [that.player.following.length];
+                    }
+                    else {
+                        highscore = JSON.parse(localStorage.getItem("highscore"));
+                        highscore.push(that.player.following.length);
+                        highscore = highscore.sort(function (a, b) { return a - b; }); // The function allows the sort to be on numbers instead of strings... I know it's dumb but that's how it works
+                    }
                 else {
                     highscore = JSON.parse(localStorage.getItem("highscore"));
-                    highscore.push(that.player.following.length);
-                    highscore = highscore.sort(function (a, b) { return a - b; }); // The function allows the sort to be on numbers instead of strings... I know it's dumb but that's how it works
                 }
-            else {
-                highscore = JSON.parse(localStorage.getItem("highscore"));
+                // Don't let it get too long, there's only so much space in localstorage
+                if (highscore.length > 5)
+                    highscore = highscore.splice(1, highscore.length - 1);
+                // Convert to string and save
+                sHighscore = JSON.stringify(highscore);
+                localStorage.setItem("highscore", sHighscore);
             }
-            // Don't let it get too long, there's only so much space in localstorage
-            if (highscore.length > 5)
-                highscore = highscore.splice(1, highscore.length - 1);
-            // Convert to string and save
-            sHighscore = JSON.stringify(highscore);
-            localStorage.setItem("highscore", sHighscore);
             // Show stuff on screen
             setTimeout(function () {
                 that.renderer.ctx.fillStyle = "#DD1321";
@@ -374,7 +376,8 @@ var SneakySnakeGame = (function () {
                     that.renderer.ctx.fillText("Score: " + that.player.following.length, that.renderer.canvas.width / 2.4, that.renderer.canvas.height / 1.5);
                 else
                     that.renderer.ctx.fillText("Cheater: " + that.player.following.length, that.renderer.canvas.width / 2.4, that.renderer.canvas.height / 1.5);
-                that.renderer.ctx.fillText("Highscore: " + highscore[highscore.length - 1], that.renderer.canvas.width / 2.8, that.renderer.canvas.height / 1.25);
+                sHighscore = (typeof (localStorage) !== "undefined") ? highscore[highscore.length - 1] : that.player.following.length;
+                that.renderer.ctx.fillText("Highscore: " + sHighscore, that.renderer.canvas.width / 2.8, that.renderer.canvas.height / 1.25);
                 that.renderer.ctx.fillText("Click to return to menu", that.renderer.canvas.width / 4, that.renderer.canvas.height / 3);
             }, 400);
         }
