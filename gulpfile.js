@@ -7,7 +7,6 @@ var minCSS = require("gulp-minify-css");
 var concat = require("gulp-concat");
 var imageMin = require("gulp-imagemin");
 var rsync = require("gulp-rsync");
-//var obfuscate = require("gulp-obfuscate");
 
 gulp.task("build", function () {
 //	Select the HTML index, replace the script sources, minify, and move to dist

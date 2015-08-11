@@ -28,7 +28,6 @@
     "gulp-imagemin": "*",
     "gulp-minify-css": "*",
     "gulp-minify-html": "*",
-    "gulp-obfuscate": "^0.2.9",
     "gulp-rsync": "0.0.5",
     "gulp-typescript": "*",
     "gulp-uglify": "*"
