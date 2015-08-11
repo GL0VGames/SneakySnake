@@ -102,12 +102,14 @@ var SneakySnakeGame = (function () {
                     $("#resume").show();
                     $("#restart").show();
                     $("#pause").hide();
+                    $("#menu").zoomTo({ "scalemode": "both" });
                     that.assetmanager.audio.main.pause();
                 }
                 else {
                     $("#game").show();
                     $("#menu").hide();
                     $("#pause").show();
+                    $("#game").zoomTo({ "scalemode": "both" });
                     if (!that.muted)
                         that.assetmanager.audio.main.play();
                 }
@@ -156,7 +158,7 @@ var SneakySnakeGame = (function () {
                     var hi = new NPC(gridToScreen(1, 1), new Vector2(1, 1), 5, [that.assetmanager.anims["npcFollowAnim"]]);
                     if (that.player.following.length >= that.player.previousLoc.length - 1)
                         that.player.previousLoc = that.player.previousLoc.concat(new Vector2(1, 1));
-                    hi.setfollowIndex(that.player.following.length + 1);
+                    hi.setfollowIndex(that.player.following.length);
                     hi.bFollowing = true;
                     that.NPCs = that.NPCs.concat(hi);
                     that.player.following = that.player.following.concat(that.NPCs[that.NPCs.length - 1]);
@@ -361,17 +363,16 @@ var SneakySnakeGame = (function () {
             }
             // Show stuff on screen
             setTimeout(function () {
+                that.renderer.ctx.drawImage(that.assetmanager.anims["gameOver"].image, (gridToScreen(-1, 5).x - 18), gridToScreen(-1, 5).y);
                 that.renderer.ctx.fillStyle = "#DD1321";
-                that.renderer.ctx.font = "6.5em Inconsolata";
-                that.renderer.ctx.fillText("You've been seen!", that.renderer.canvas.width / 10, that.renderer.canvas.height / 4);
-                that.renderer.ctx.font = "3em Inconsolata";
+                that.renderer.ctx.font = "2.5em Inconsolata";
                 if (!that.cheated)
-                    that.renderer.ctx.fillText("Score: " + that.player.following.length, that.renderer.canvas.width / 2.4, that.renderer.canvas.height / 1.5);
+                    that.renderer.ctx.fillText("Score: " + that.player.following.length, that.renderer.canvas.width / 2.4, that.renderer.canvas.height / 2 + 30);
                 else
-                    that.renderer.ctx.fillText("Cheater: " + that.player.following.length, that.renderer.canvas.width / 2.4, that.renderer.canvas.height / 1.5);
+                    that.renderer.ctx.fillText("Cheater: " + that.player.following.length, that.renderer.canvas.width / 2.4, that.renderer.canvas.height / 2 + 30);
                 sHighscore = (typeof (localStorage) !== "undefined") ? highscore[highscore.length - 1] : that.player.following.length;
-                that.renderer.ctx.fillText("Highscore: " + sHighscore, that.renderer.canvas.width / 2.8, that.renderer.canvas.height / 1.25);
-                that.renderer.ctx.fillText("Tap to restart", that.renderer.canvas.width / 3, that.renderer.canvas.height / 3);
+                that.renderer.ctx.fillText("Highscore: " + sHighscore, that.renderer.canvas.width / 2.8, that.renderer.canvas.height / 2 + 100);
+                that.renderer.ctx.fillText("Tap to restart!", that.renderer.canvas.width / 3 + 20, that.renderer.canvas.height / 2 - 80);
             }, 400);
         }
     };

@@ -233,6 +233,7 @@ var AssetManager = (function () {
             arrowUpRight: "images/arrows/arrow-upright.png",
             arrowUpRightPress: "images/arrows/arrow-upright-press.png",
             arrowUpRightNo: "images/arrows/arrow-upright-press1.png",
+            gameOver: "images/gameover.png",
         };
         this.anims = {
             none: new Animation(true, 64, 32, 32, 16, 0, "none"),
@@ -266,6 +267,7 @@ var AssetManager = (function () {
             arrowUpRight: new Animation(true, 91, 76, 45, 38, 0, "arrowUpRight"),
             arrowUpRightPress: new Animation(true, 91, 76, 45, 38, 0, "arrowUpRightPress"),
             arrowUpRightNo: new Animation(true, 91, 76, 45, 38, 0, "arrowUpRightNo"),
+            gameOver: new Animation(true, 420, 40, 0, 0, 0, "gameOver"),
         };
         this.audio = {}; // Can't do : Array<HTMLAudioElement> because that doesn't support .addEventListenerxr some odd reason
         this.audioURLs = {

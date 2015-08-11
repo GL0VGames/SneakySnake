@@ -43,7 +43,10 @@
     <Content Include="images\empty.png" />
     <Content Include="images\filled.png" />
     <Content Include="images\floors.png" />
+    <Content Include="images\gameover.png" />
+    <Content Include="images\info.png" />
     <Content Include="images\logo.png" />
+    <Content Include="images\newgame.png" />
     <Content Include="images\none.png" />
     <Content Include="images\npcAll.png" />
     <Content Include="images\npcFollower.png" />
@@ -52,6 +55,8 @@
     <Content Include="images\npcStatRight.png" />
     <Content Include="images\npcStatUp.png" />
     <Content Include="images\pause.png" />
+    <Content Include="images\play.png" />
+    <Content Include="images\resume.png" />
     <Content Include="images\teleporter.png" />
     <Content Include="images\walls.png" />
     <Content Include="index.html" />
