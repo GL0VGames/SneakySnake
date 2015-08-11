@@ -35,13 +35,6 @@ var SneakySnakeGame = (function () {
         $(this.renderer.canvas).mousedown(function (e) {
             that.input.mousedown(e);
             if (that.player.health <= 0) {
-                $("#menu").show();
-                $("#play").show();
-                $("#resume").hide();
-                $("#restart").hide();
-                $("#game").hide();
-                $("#pause").hide();
-                that.paused = true;
                 that.restartGame();
             }
             else if (that.input.mouseDownPos.x < window.outerWidth / 2) {
@@ -223,7 +216,7 @@ var SneakySnakeGame = (function () {
         // Check if colliding with anything and if not then place
         for (var i = randIntBetween(this.numNPCNextFloor, this.numNPCNextFloor - 3); i > 0; i--) {
             this.tempi = Vector2.randVector2(this.floorSize, this.floorSize);
-            while (floor.grid[this.tempi.x][this.tempi.y].type == RTypes.WALL
+            while (this.collisionMap[this.currentFloor][this.tempi.y][this.tempi.x].animMan.anims[this.collisionMap[this.currentFloor][this.tempi.y][this.tempi.x].animMan.currentAnim].name === "filled"
                 || collide(this.tempi, this.NPCs)
                 || gridToScreen(this.tempi).equals(this.currTeleporter.pos)
                 || (this.tempi.x < 6 && this.tempi.y == 1)
@@ -378,7 +371,7 @@ var SneakySnakeGame = (function () {
                     that.renderer.ctx.fillText("Cheater: " + that.player.following.length, that.renderer.canvas.width / 2.4, that.renderer.canvas.height / 1.5);
                 sHighscore = (typeof (localStorage) !== "undefined") ? highscore[highscore.length - 1] : that.player.following.length;
                 that.renderer.ctx.fillText("Highscore: " + sHighscore, that.renderer.canvas.width / 2.8, that.renderer.canvas.height / 1.25);
-                that.renderer.ctx.fillText("Click to return to menu", that.renderer.canvas.width / 4, that.renderer.canvas.height / 3);
+                that.renderer.ctx.fillText("Tap to restart", that.renderer.canvas.width / 3, that.renderer.canvas.height / 3);
             }, 400);
         }
     };
@@ -387,6 +380,8 @@ var SneakySnakeGame = (function () {
         var playerLocation = gridToScreen(1, 1);
         this.player = new Player(playerLocation.x, playerLocation.y, [this.assetmanager.anims["playerIdleR"], this.assetmanager.anims["playerIdleD"], this.assetmanager.anims["playerIdleU"], this.assetmanager.anims["playerWalkR"], this.assetmanager.anims["playerWalkD"], this.assetmanager.anims["playerWalkU"]]);
         this.setupFloor();
+        // Now you see the game
+        $("#game").zoomTo({ "scalemode": "both" });
         // Start tick function
         var self = this;
         this.tickID = setInterval(function () { self.tick(); }, this.interval);
@@ -466,4 +461,3 @@ $(function game() {
         $("#text-wrapper").hide();
     });
 });
-//# sourceMappingURL=game.js.map

@@ -145,4 +145,3 @@ var NPC = (function (_super) {
     NPC.visionMax = 4;
     return NPC;
 })(Obj);
-//# sourceMappingURL=NPC.js.map

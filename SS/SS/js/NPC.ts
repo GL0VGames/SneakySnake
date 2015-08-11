@@ -22,7 +22,7 @@ class NPC extends Obj {
 
     // Function to see if the player has crossed the npc's vision and to change the anim
     private look(target: Vector2, collision: any) {
-		this.temp = this.gPos; // Because you can't decrease this.gPos
+        this.temp = this.gPos; // Because you can't decrease this.gPos
         this.tempVec = target.minus(this.gPos);
 		if (this.tempVec.abs().x > 4 && this.tempVec.abs().y > 4)
             return;

@@ -14,4 +14,3 @@ var Teleporter = (function (_super) {
     }
     return Teleporter;
 })(Obj);
-//# sourceMappingURL=Teleporter.js.map
