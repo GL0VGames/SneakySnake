@@ -38,6 +38,7 @@
 		
         <!-- build:libs -->
 		<script src="lib/jquery.js"></script>
+        <script src="lib/jquery.zoomooz.min.js"></script>
 		<!-- endbuild -->
 		
 		<!-- build:js -->
@@ -52,6 +53,7 @@
     </head>
     <body>
 		<nav id="menu">
+            <img id="title" src="images/logo.png" alt="Stealthy Snake" />
 			<ul>
                 <li id="play">
                     <img src="images/play.png" alt="Play" />
@@ -65,15 +67,11 @@
 				<li id="info">
                     <img src="images/info.png" alt="Info" />
 				</li>
-				<!--<li id="settings">
-					Settings
-				</li>-->
 			</ul>
 		</nav>
 
-		<!-- uncomment for visual pause button, needs click handler and css and stuff -->
 		<div id="game">
-			<img src="images/pause.png" alt="Pause" id="pause" />
+			<span id="pause" ><img src="images/pause.png" alt="Pause" /></span>
 			<canvas id="canvas"></canvas>
 		</div>
 

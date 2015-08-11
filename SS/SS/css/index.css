@@ -19,16 +19,33 @@ canvas {
 	touch-action: manipulation; /* IE11+ */
 }
 
-#menu {
-    width: 294px;
+#game {
+    width: 1024px;
+    height: 600px;
     margin-left: auto;
     margin-right: auto;
+    position: relative;
+}
+
+#menu {
+    width: 1024px;
+    height: 600px;
 	display: none;
     cursor: pointer;
 }
 
+#menu #title {
+    width: 1023px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 #menu ul {
+    width: 294px;
+    margin-left: auto;
+    margin-right: auto;
     list-style-type: none;
+    padding: 0px;
 }
 
 #resume, #restart {
@@ -37,8 +54,12 @@ canvas {
 
 #pause {
 	display: none;
-	width: 32px;
+	width: 16px;
     cursor: pointer;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 10;
 }
 
 #back {

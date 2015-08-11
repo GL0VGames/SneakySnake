@@ -29,13 +29,11 @@ var NPC = (function (_super) {
     NPC.prototype.look = function (target, collision) {
         this.temp = this.gPos; // Because you can't decrease this.gPos
         this.tempVec = target.minus(this.gPos);
-        this.tempVec.x = Math.abs(this.tempVec.x);
-        this.tempVec.y = Math.abs(this.tempVec.y);
-        if (this.tempVec.x > 4 && this.tempVec.y > 4)
+        if (this.tempVec.abs().x > 4 && this.tempVec.abs().y > 4)
             return;
-        else if (this.tempVec.x < 4 && (this.animMan.frame == 0 || this.animMan.frame == 2))
+        else if (this.tempVec.abs().x < 4 && (this.animMan.frame == Direction.DL || this.animMan.frame == Direction.UR))
             switch (this.animMan.frame) {
-                case 0:
+                case Direction.DL:
                     // Make sure the npc can actually see the player, no walls in the way and not out of range ( 4 )
                     if (target.x > this.temp.x && target.y == this.temp.y) {
                         this.superTemp = 0;
@@ -48,7 +46,7 @@ var NPC = (function (_super) {
                         this.animMan.gotoNamedAnim("npcIdleDSeen");
                     }
                     break;
-                case 2:
+                case Direction.UR:
                     if (target.x < this.temp.x && target.y == this.temp.y) {
                         this.superTemp = 0;
                         for (this.temp.x; target.x < this.temp.x; this.temp.x--, this.superTemp++) {
@@ -60,9 +58,9 @@ var NPC = (function (_super) {
                     }
                     break;
             }
-        else if (this.tempVec.y < 4 && (this.animMan.frame == 1 || this.animMan.frame == 3))
+        else if (this.tempVec.abs().y < 4 && (this.animMan.frame == Direction.UL || this.animMan.frame == Direction.DR))
             switch (this.animMan.frame) {
-                case 1:
+                case Direction.UL:
                     if (target.x == this.temp.x && target.y > this.temp.y) {
                         for (this.temp.y; target.y > this.temp.y; this.temp.y++, this.superTemp++) {
                             if (collision[this.temp.y][this.temp.x].animMan.anims[collision[this.temp.y][this.temp.x].animMan.currentAnim].name === "filled")
@@ -72,7 +70,7 @@ var NPC = (function (_super) {
                         this.animMan.gotoNamedAnim("npcIdleLSeen");
                     }
                     break;
-                case 3:
+                case Direction.DR:
                     if (target.x == this.temp.x && target.y < this.temp.y) {
                         this.superTemp = 0;
                         for (this.temp.y; target.y < this.temp.y; this.temp.y--, this.superTemp++) {

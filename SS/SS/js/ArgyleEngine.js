@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-/// <reference path="../lib/jquery.d.ts" />
+var $;
 // Given integers low and high, returns a random integer in the interval [low, high]
 function randIntBetween(low, high) {
     return Math.floor(Math.random() * (high - low + 1) + low);
@@ -27,6 +27,9 @@ var Vector2 = (function () {
     }
     Vector2.randVector2 = function (xMax, yMax) {
         return new Vector2(randIntBetween(0, xMax), randIntBetween(0, yMax));
+    };
+    Vector2.prototype.abs = function () {
+        return new Vector2(Math.abs(this.x), Math.abs(this.y));
     };
     Vector2.prototype.plus = function (rhs) {
         return new Vector2(this.x + rhs.x, this.y + rhs.y);

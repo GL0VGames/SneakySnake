@@ -43,6 +43,7 @@
     <Content Include="images\empty.png" />
     <Content Include="images\filled.png" />
     <Content Include="images\floors.png" />
+    <Content Include="images\logo.png" />
     <Content Include="images\none.png" />
     <Content Include="images\npcAll.png" />
     <Content Include="images\npcFollower.png" />
@@ -55,6 +56,7 @@
     <Content Include="images\walls.png" />
     <Content Include="index.html" />
     <Content Include="lib\jquery.js" />
+    <Content Include="lib\jquery.zoomooz.min.js" />
     <Content Include="logos\gg.png" />
     <Content Include="sounds\SneakySnake Theme.wav" />
     <Content Include="sounds\spotted.wav" />
@@ -68,10 +70,8 @@
     <TypeScriptCompile Include="js\NPC.ts" />
     <TypeScriptCompile Include="js\Player.ts" />
     <TypeScriptCompile Include="js\Teleporter.ts" />
-    <TypeScriptCompile Include="lib\jquery.d.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="images\Thumbs.db" />
     <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <Content Include="web.config" />
     <Content Include="json\manifest.json" />

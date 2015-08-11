@@ -1,4 +1,6 @@
-﻿/// <reference path="../lib/jquery.d.ts" />
+﻿
+
+var $: any;
 // Given integers low and high, returns a random integer in the interval [low, high]
 function randIntBetween(low: number, high: number): number {
     return Math.floor(Math.random() * (high - low + 1) + low);
@@ -27,6 +29,9 @@ class Vector2 {
     static randVector2(xMax: number, yMax: number) {
         return new Vector2(randIntBetween(0, xMax), randIntBetween(0, yMax));
     }
+    public abs(): Vector2 {
+        return new Vector2(Math.abs(this.x), Math.abs(this.y));
+    }
     plus(rhs: Vector2): Vector2 {
         return new Vector2(this.x + rhs.x, this.y + rhs.y);
     }
@@ -52,17 +57,17 @@ class Input {
         this.mouseUpPos = new Vector2(-1, -1);
         this.keyPresses = new Array("");
     }
-    public mousedown(e: JQueryMouseEventObject) {
+    public mousedown(e: any) {
         this.mouseDownPos.x = e.pageX;
         this.mouseDownPos.y = e.pageY;
         this.mouseDown = true;
     }
-    public mouseup(e: JQueryMouseEventObject) {
+    public mouseup(e: any) {
         this.mouseUpPos.x = e.pageX;
         this.mouseUpPos.y = e.pageY;
         this.mouseDown = false;
     }
-    public click(e: JQueryMouseEventObject) {
+    public click(e: any) {
         // these next four lines shouldn't be needed once mousedown and mouseup are working
         // but they're not for some reason
         this.mouseDownPos.x = e.pageX;

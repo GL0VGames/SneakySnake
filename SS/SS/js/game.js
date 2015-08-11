@@ -45,7 +45,7 @@ var SneakySnakeGame = (function () {
                 that.restartGame();
             }
             else if (that.input.mouseDownPos.x < window.outerWidth / 2) {
-                if (that.input.mouseDownPos.y < that.renderer.canvas.height / 2) {
+                if (that.input.mouseDownPos.y < window.outerHeight / 2) {
                     that.input.keyPresses.push("a");
                     that.arrows[Direction.UL].press();
                 }
@@ -55,7 +55,7 @@ var SneakySnakeGame = (function () {
                 }
             }
             else {
-                if (that.input.mouseDownPos.y < that.renderer.canvas.height / 2) {
+                if (that.input.mouseDownPos.y < window.outerHeight / 2) {
                     that.input.keyPresses.push("w");
                     that.arrows[Direction.UR].press();
                 }
@@ -68,13 +68,13 @@ var SneakySnakeGame = (function () {
         $(this.renderer.canvas).mouseup(function (e) {
             that.input.mouseup(e);
             if (that.input.mouseUpPos.x < window.outerWidth / 2) {
-                if (that.input.mouseUpPos.y < that.renderer.canvas.height / 2)
+                if (that.input.mouseUpPos.y < window.outerHeight / 2)
                     that.arrows[Direction.UL].norm();
                 else
                     that.arrows[Direction.DL].norm();
             }
             else {
-                if (that.input.mouseUpPos.y < that.renderer.canvas.height / 2)
+                if (that.input.mouseUpPos.y < window.outerHeight / 2)
                     that.arrows[Direction.UR].norm();
                 else {
                     that.arrows[Direction.DR].norm();
@@ -406,6 +406,7 @@ $(function game() {
     $("body").on("assetsFinished", function () {
         $("#game").hide();
         $("#menu").show();
+        $("#menu").zoomTo({ "scalemode": "both" });
         game.startGame();
     });
     function PLAYGAME() {
@@ -417,6 +418,7 @@ $(function game() {
         $("#back").hide();
         $("#pause").show();
         $("#text-wrapper").hide();
+        $("#game").zoomTo({ "scalemode": "both" });
         if (!game.muted)
             game.assetmanager.audio.main.play();
         game.paused = false;
@@ -436,18 +438,18 @@ $(function game() {
         $("#text-wrapper").hide();
         game.paused = !game.paused;
         if (game.paused) {
-            $("#game").hide();
+            $("#game").css({ "display": "none" });
             $("#menu").show();
             $("#play").hide();
             $("#resume").show();
             $("#restart").show();
-            $("#pause").hide();
+            $("#menu").zoomTo({ "scalemode": "both" });
             game.assetmanager.audio.main.pause();
         }
         else {
             $("#game").show();
             $("#menu").hide();
-            $("#pause").show();
+            $("#game").zoomTo({ "scalemode": "both" });
             if (!game.muted)
                 game.assetmanager.audio.main.play();
         }
