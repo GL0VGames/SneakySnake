@@ -12,7 +12,7 @@ gulp.task("build", function () {
 //	Select the HTML index, replace the script sources, minify, and move to dist
 	gulp.src("SS/SS/index.html")
 		.pipe(replace({
-			jquery: "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js \"></script>",
+			libs: "<script src=\"js/libs.js \"></script>",
 			js: "<script src=\"js/index.js\"></script>"
 		}))
 		.pipe(minHTML())
@@ -26,8 +26,12 @@ gulp.task("build", function () {
 	gulp.src("SS/SS/js/*.ts")
 		.pipe(concat("index.ts"))
 		.pipe(ts())
-//		.pipe(obfuscate())
 		.pipe(uglify())
+		.pipe(gulp.dest("dist/js/"));
+		
+	gulp.src("SS/SS/lib/*.js")
+		.pipe(concat("libs.js"))
+		.pipe(uglify({ mangle: false }))
 		.pipe(gulp.dest("dist/js/"));
 
 	gulp.src("SS/SS/images/*")
