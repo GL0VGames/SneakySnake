@@ -506,13 +506,15 @@ $(function game(): void {
 		$("#menu").hide();
 		$("#game").hide();
 		$("#back").show();
-		$("#text-wrapper").show();
+        $("#text-wrapper").show();
+        $("#text-wrapper").zoomTo({ "scalemode": "both" });
 	});
 
 	$("#back").click(function () {
 		$("#menu").show();
 		$("#back").hide();
-		$("#text-wrapper").hide();
+        $("#text-wrapper").hide();
+        $("#menu").zoomTo({ "scalemode": "both" });
 	});
 
     

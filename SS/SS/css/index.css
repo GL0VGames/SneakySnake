@@ -35,7 +35,7 @@ canvas {
 }
 
 #menu #title {
-    width: 1023px;
+    width: 1024px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -67,10 +67,6 @@ canvas {
     cursor: pointer;
 }
 
-#text-wrapper {
-	display: none;
-}
-
 #buttons {
     width: 230px;
     margin-left: auto;
@@ -78,7 +74,9 @@ canvas {
 }
 
 #text-wrapper {
+    display: none;
     width: 830px;
+    height: 300px;
     margin-left: auto;
     margin-right: auto;
 }
