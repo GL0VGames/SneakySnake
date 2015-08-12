@@ -272,6 +272,7 @@ var AssetManager = (function () {
         this.audio = {}; // Can't do : Array<HTMLAudioElement> because that doesn't support .addEventListenerxr some odd reason
         this.audioURLs = {
             "main": "sounds/theme2.wav",
+            "seen": "sounds/spotted.wav",
         };
         // Loading bar canvas vars;
         this.x = 0;
@@ -340,10 +341,11 @@ var AssetManager = (function () {
             this.audio[i].addEventListener('canplaythrough', that.updateBar(ctx, canvas), false);
             this.audio[i].src = this.audioURLs[i];
             this.audio[i].load();
-            this.audio[i].addEventListener('ended', function () {
-                this.currentTime = 0;
-                this.play();
-            }, false);
+            if (this.audioURLs[i] !== "sounds/spotted.wav")
+                this.audio[i].addEventListener('ended', function () {
+                    this.currentTime = 0;
+                    this.play();
+                }, false);
         }
     };
     AssetManager.prototype.removeAssets = function () {

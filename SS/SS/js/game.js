@@ -337,6 +337,7 @@ var SneakySnakeGame = (function () {
         if (this.player.health <= 0) {
             clearInterval(this.tickID);
             clearInterval(this.fpsID);
+            this.assetmanager.audio.seen.play();
             var that = this;
             var highscore = [];
             var sHighscore = "[]";
