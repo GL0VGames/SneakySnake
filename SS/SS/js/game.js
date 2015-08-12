@@ -250,6 +250,8 @@ var SneakySnakeGame = (function () {
         this.cheated = false;
         // Run the function to start a new game
         this.startGame();
+        if (!this.paused)
+            this.assetmanager.audio.main.play();
     };
     SneakySnakeGame.prototype.worldGen = function () {
         // Makes a new world
@@ -337,6 +339,7 @@ var SneakySnakeGame = (function () {
         if (this.player.health <= 0) {
             clearInterval(this.tickID);
             clearInterval(this.fpsID);
+            this.assetmanager.audio.main.pause();
             this.assetmanager.audio.seen.play();
             var that = this;
             var highscore = [];

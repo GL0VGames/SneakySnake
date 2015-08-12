@@ -122,6 +122,8 @@ class SneakySnakeGame {
 
         // Run the function to start a new game
         this.startGame();
+        if (!this.paused)
+            this.assetmanager.audio.main.play();
     }
 
     public worldGen(): Building {
@@ -224,6 +226,7 @@ class SneakySnakeGame {
             clearInterval(this.tickID);
             clearInterval(this.fpsID);
 
+            this.assetmanager.audio.main.pause();
             this.assetmanager.audio.seen.play();
 
             var that = this;
