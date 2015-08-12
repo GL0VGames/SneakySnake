@@ -23,7 +23,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\index.css" />
-    <Content Include="images\arrows.png" />
     <Content Include="images\arrows\arrow-downleft-press.png" />
     <Content Include="images\arrows\arrow-downleft-press1.png" />
     <Content Include="images\arrows\arrow-downleft.png" />

@@ -50,6 +50,17 @@
 		<!-- game.js must be last for dependencies to work! -->
         <script src="js/game.js"></script>
 		<!-- endbuild -->
+
+        <script>
+            window.onload = function () {
+                var ctx = document.getElementById("canvas").getContext("2d");
+                ctx.imageSmoothingEnabled = false;
+                ctx.webkitImageSmoothingEnabled = false;
+                ctx.mozImageSmoothingEnabled = false;
+                ctx.msImageSmoothingEnabled = false;
+                ctx.oImageSmoothingEnabled = false;
+            }
+        </script>
     </head>
     <body>
 		<nav id="menu">

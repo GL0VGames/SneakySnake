@@ -385,7 +385,6 @@ class Renderer {
 	private assets: AssetManager;
 
     public draw(objs: Array<Obj>, anims: { [index: string]: Animation; }, fps?: number) {
-
         // draw background
         this.ctx.fillStyle = "black";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
