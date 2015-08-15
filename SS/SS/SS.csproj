@@ -36,6 +36,9 @@
     <Content Include="images\arrows\arrow-upright-press1.png" />
     <Content Include="images\arrows\arrow-upright.png" />
     <Content Include="images\arrows\arrows demo.png" />
+    <Content Include="images\back.png" />
+    <Content Include="images\backhover.png" />
+    <Content Include="images\charStat.png" />
     <Content Include="images\charStatDown.png" />
     <Content Include="images\charStatLeft.png" />
     <Content Include="images\charStatUp.png" />
@@ -43,9 +46,13 @@
     <Content Include="images\filled.png" />
     <Content Include="images\floors.png" />
     <Content Include="images\gameover.png" />
+    <Content Include="images\icon.png" />
     <Content Include="images\info.png" />
     <Content Include="images\logo.png" />
     <Content Include="images\newgame.png" />
+    <Content Include="images\newgamebutton.png" />
+    <Content Include="images\newgamebuttonpress.png" />
+    <Content Include="images\newgamehover.png" />
     <Content Include="images\none.png" />
     <Content Include="images\npcAll.png" />
     <Content Include="images\npcFollower.png" />
@@ -56,6 +63,9 @@
     <Content Include="images\pause.png" />
     <Content Include="images\play.png" />
     <Content Include="images\resume.png" />
+    <Content Include="images\resumehover.png" />
+    <Content Include="images\stealthysnake.png" />
+    <Content Include="images\taptoresume.png" />
     <Content Include="images\teleporter.png" />
     <Content Include="images\walls.png" />
     <Content Include="index.html" />
