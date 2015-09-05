@@ -245,6 +245,7 @@ class AssetManager {
 		arrowUpRightPress: "images/arrows/arrow-upright-press.png",
         arrowUpRightNo: "images/arrows/arrow-upright-press1.png",
         gameOver: "images/gameover.png",
+        tapToRestart: "images/taptorestart.png",
     };
     public anims: { [index: string]: Animation; } = { //index matches imageURL index
         none: new Animation(true, 64, 32, 32, 16, 0, "none"),
@@ -279,6 +280,7 @@ class AssetManager {
         arrowUpRightPress: new Animation(true, 91, 76, 45, 38, 0, "arrowUpRightPress"),
         arrowUpRightNo: new Animation(true, 91, 76, 45, 38, 0, "arrowUpRightNo"),
         gameOver: new Animation(true, 420, 40, 0, 0, 0, "gameOver"),
+        tapToRestart: new Animation(true, 486, 60, 0, 0, 0, "tapToRestart"),
     };
     public audio: any = {}; // Can't do : Array<HTMLAudioElement> because that doesn't support .addEventListenerxr some odd reason
     private audioURLs: any = {

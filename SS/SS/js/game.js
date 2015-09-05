@@ -366,7 +366,7 @@ var SneakySnakeGame = (function () {
                     that.renderer.ctx.fillText("Cheater: " + that.player.following.length, that.renderer.canvas.width / 2.4, that.renderer.canvas.height / 2 + 30);
                 sHighscore = (typeof (localStorage) !== "undefined") ? highscore[highscore.length - 1] : that.player.following.length;
                 that.renderer.ctx.fillText("Highscore: " + sHighscore, that.renderer.canvas.width / 2.8, that.renderer.canvas.height / 2 + 100);
-                that.renderer.ctx.fillText("Tap to restart!", that.renderer.canvas.width / 3 + 20, that.renderer.canvas.height / 2 - 80);
+                that.renderer.ctx.drawImage(that.assetmanager.anims["tapToRestart"].image, 386, 220, that.assetmanager.anims["tapToRestart"].frameSize.x / 2, that.assetmanager.anims["tapToRestart"].frameSize.y / 2);
             }, 400);
         }
     };
