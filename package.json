@@ -22,7 +22,9 @@
     }
   ],
   "scripts": {
-	"start": "rimraf dist && gulp build:dev"
+	"start": "gulp build:dev",
+	"build:prod": "rimraf dist && gulp build:prod",
+	"prod": "npm run build:prod && node dist/server.js"
   },
   "dependencies": {
     "gulp": "4.0.2",
@@ -33,7 +35,10 @@
     "gulp-minify-html": "1.0.6",
     "gulp-rsync": "0.0.5",
     "gulp-typescript": "6.0.0-alpha.1",
+	"gulp-sourcemaps": "3.0.0",
     "gulp-uglify": "3.0.2",
-	"browser-sync": "2.27.11"
+	"browser-sync": "2.27.11",
+	"express": "4.18.2",
+	"path": "0.12.7"
   }
 }
