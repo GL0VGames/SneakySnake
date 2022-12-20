@@ -1,24 +1,34 @@
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 /// <reference path="ArgyleEngine.ts"/>
-var Player = (function (_super) {
+var Player = /** @class */ (function (_super) {
     __extends(Player, _super);
     function Player(x, y, anims) {
-        _super.call(this, x, y, anims, 5);
-        this.speed = 2.3;
-        this.health = 1;
-        this.speedBoost = .1; // Added to player speed whenever they pick up an NPC
-        this.bStatic = false;
-        this.gDestination = new Vector2(1, 1);
-        this.sDestination = new Vector2(x, y);
-        this.previousLoc = [new Vector2(1, 1)];
-        this.bCanLerp = true;
-        this.following = [];
-        this.animMan.gotoNamedAnim("playerIdleR");
+        var _this = _super.call(this, x, y, anims, 5) || this;
+        _this.speed = 2.3;
+        _this.health = 1;
+        _this.speedBoost = .1; // Added to player speed whenever they pick up an NPC
+        _this.bStatic = false;
+        _this.gDestination = new Vector2(1, 1);
+        _this.sDestination = new Vector2(x, y);
+        _this.previousLoc = [new Vector2(1, 1)];
+        _this.bCanLerp = true;
+        _this.following = [];
+        _this.animMan.gotoNamedAnim("playerIdleR");
+        return _this;
     }
     Player.prototype.IDLE = function () {
         if (this.animMan.anims[this.animMan.currentAnim].name == "playerWalkD")
@@ -81,5 +91,6 @@ var Player = (function (_super) {
             this.IDLE();
     };
     return Player;
-})(Obj);
+}(Obj));
+
 //# sourceMappingURL=Player.js.map

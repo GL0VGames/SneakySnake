@@ -21,15 +21,19 @@
       "name": "AkimboScreens"
     }
   ],
+  "scripts": {
+	"start": "rimraf dist && gulp build:dev"
+  },
   "dependencies": {
-    "gulp": "*",
-    "gulp-concat": "*",
-    "gulp-html-replace": "*",
-    "gulp-imagemin": "*",
-    "gulp-minify-css": "*",
-    "gulp-minify-html": "*",
+    "gulp": "4.0.2",
+    "gulp-concat": "2.6.1",
+    "gulp-html-replace": "1.6.2",
+    "gulp-imagemin": "7.1.0",
+    "gulp-minify-css": "1.2.4",
+    "gulp-minify-html": "1.0.6",
     "gulp-rsync": "0.0.5",
-    "gulp-typescript": "*",
-    "gulp-uglify": "*"
+    "gulp-typescript": "6.0.0-alpha.1",
+    "gulp-uglify": "3.0.2",
+	"browser-sync": "2.27.11"
   }
 }

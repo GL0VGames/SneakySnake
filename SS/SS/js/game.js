@@ -3,7 +3,7 @@
 /// <reference path="NPC.ts"/>
 /// <reference path="Teleporter.ts"/>
 /// <reference path="Arrow.ts"/>
-var SneakySnakeGame = (function () {
+var SneakySnakeGame = /** @class */ (function () {
     function SneakySnakeGame() {
         this.interval = 15; // 15ms between frames, 66.6666666666667 frames/second
         this.fps = 0;
@@ -27,10 +27,10 @@ var SneakySnakeGame = (function () {
         // Bind inputs
         this.input = new Input;
         this.arrows = [];
-        this.arrows[0 /* DL */] = new Arrow(gridToScreen(8, 17), [this.assetmanager.anims["arrowDownLeft"], this.assetmanager.anims["arrowDownLeftPress"], this.assetmanager.anims["arrowDownLeftNo"]]);
-        this.arrows[3 /* DR */] = new Arrow(gridToScreen(17, 8), [this.assetmanager.anims["arrowDownRight"], this.assetmanager.anims["arrowDownRightPress"], this.assetmanager.anims["arrowDownRightNo"]]);
-        this.arrows[1 /* UL */] = new Arrow(gridToScreen(-3, 6), [this.assetmanager.anims["arrowUpLeft"], this.assetmanager.anims["arrowUpLeftPress"], this.assetmanager.anims["arrowUpLeftNo"]]);
-        this.arrows[2 /* UR */] = new Arrow(gridToScreen(6, -3), [this.assetmanager.anims["arrowUpRight"], this.assetmanager.anims["arrowUpRightPress"], this.assetmanager.anims["arrowUpRightNo"]]);
+        this.arrows[Direction.DL] = new Arrow(gridToScreen(8, 17), [this.assetmanager.anims["arrowDownLeft"], this.assetmanager.anims["arrowDownLeftPress"], this.assetmanager.anims["arrowDownLeftNo"]]);
+        this.arrows[Direction.DR] = new Arrow(gridToScreen(17, 8), [this.assetmanager.anims["arrowDownRight"], this.assetmanager.anims["arrowDownRightPress"], this.assetmanager.anims["arrowDownRightNo"]]);
+        this.arrows[Direction.UL] = new Arrow(gridToScreen(-3, 6), [this.assetmanager.anims["arrowUpLeft"], this.assetmanager.anims["arrowUpLeftPress"], this.assetmanager.anims["arrowUpLeftNo"]]);
+        this.arrows[Direction.UR] = new Arrow(gridToScreen(6, -3), [this.assetmanager.anims["arrowUpRight"], this.assetmanager.anims["arrowUpRightPress"], this.assetmanager.anims["arrowUpRightNo"]]);
         //$(this.renderer.canvas).mousedown(function (e) { that.input.mousedown(e); });
         $(this.renderer.canvas).mousedown(function (e) {
             that.input.mousedown(e);
@@ -40,21 +40,21 @@ var SneakySnakeGame = (function () {
             else if (that.input.mouseDownPos.x < window.outerWidth / 2) {
                 if (that.input.mouseDownPos.y < window.outerHeight / 2) {
                     that.input.keyPresses.push("a");
-                    that.arrows[1 /* UL */].press();
+                    that.arrows[Direction.UL].press();
                 }
                 else {
                     that.input.keyPresses.push("s");
-                    that.arrows[0 /* DL */].press();
+                    that.arrows[Direction.DL].press();
                 }
             }
             else {
                 if (that.input.mouseDownPos.y < window.outerHeight / 2) {
                     that.input.keyPresses.push("w");
-                    that.arrows[2 /* UR */].press();
+                    that.arrows[Direction.UR].press();
                 }
                 else {
                     that.input.keyPresses.push("d");
-                    that.arrows[3 /* DR */].press();
+                    that.arrows[Direction.DR].press();
                 }
             }
         });
@@ -62,15 +62,15 @@ var SneakySnakeGame = (function () {
             that.input.mouseup(e);
             if (that.input.mouseUpPos.x < window.outerWidth / 2) {
                 if (that.input.mouseUpPos.y < window.outerHeight / 2)
-                    that.arrows[1 /* UL */].norm();
+                    that.arrows[Direction.UL].norm();
                 else
-                    that.arrows[0 /* DL */].norm();
+                    that.arrows[Direction.DL].norm();
             }
             else {
                 if (that.input.mouseUpPos.y < window.outerHeight / 2)
-                    that.arrows[2 /* UR */].norm();
+                    that.arrows[Direction.UR].norm();
                 else {
-                    that.arrows[3 /* DR */].norm();
+                    that.arrows[Direction.DR].norm();
                 }
             }
         });
@@ -79,19 +79,19 @@ var SneakySnakeGame = (function () {
             e.preventDefault();
             if (!that.paused) {
                 if (e.which == 87 || e.which == 38)
-                    that.arrows[2 /* UR */].norm();
+                    that.arrows[Direction.UR].norm();
                 else if (e.which == 65 || e.which == 37)
-                    that.arrows[1 /* UL */].norm();
+                    that.arrows[Direction.UL].norm();
                 else if (e.which == 83 || e.which == 40)
-                    that.arrows[0 /* DL */].norm();
+                    that.arrows[Direction.DL].norm();
                 else if (e.which == 68 || e.which == 39)
-                    that.arrows[3 /* DR */].norm();
+                    that.arrows[Direction.DR].norm();
             }
         });
         $(window).keydown(function (e) {
             // Allowed to happen when paused
             e.preventDefault();
-            if (e.which == 80) {
+            if (e.which == 80) { // P
                 $("#back").hide();
                 $("#text-wrapper").hide();
                 that.paused = !that.paused;
@@ -114,7 +114,7 @@ var SneakySnakeGame = (function () {
                         that.assetmanager.audio.main.play();
                 }
             }
-            else if (e.which == 77) {
+            else if (e.which == 77) { // M
                 if (that.assetmanager.audio.main.paused) {
                     that.assetmanager.audio.main.play();
                     that.muted = false;
@@ -124,7 +124,7 @@ var SneakySnakeGame = (function () {
                     that.muted = true;
                 }
             }
-            else if (e.which == 73) {
+            else if (e.which == 73) { // I
                 $("#menu").hide();
                 $("#game").hide();
                 $("#back").show();
@@ -136,25 +136,25 @@ var SneakySnakeGame = (function () {
             if (!that.paused) {
                 if (e.which == 87 || e.which == 38) {
                     that.input.keyPresses.push("w");
-                    that.arrows[2 /* UR */].press();
+                    that.arrows[Direction.UR].press();
                 }
                 else if (e.which == 65 || e.which == 37) {
                     that.input.keyPresses.push("a");
-                    that.arrows[1 /* UL */].press();
+                    that.arrows[Direction.UL].press();
                 }
                 else if (e.which == 83 || e.which == 40) {
                     that.input.keyPresses.push("s");
-                    that.arrows[0 /* DL */].press();
+                    that.arrows[Direction.DL].press();
                 }
                 else if (e.which == 68 || e.which == 39) {
                     that.input.keyPresses.push("d");
-                    that.arrows[3 /* DR */].press();
+                    that.arrows[Direction.DR].press();
                 }
-                else if (e.which == 82)
+                else if (e.which == 82) // R //
                     that.restartGame();
-                else if (e.which == 70)
+                else if (e.which == 70) // F
                     that.bFPS = !that.bFPS;
-                else if (e.which == 76) {
+                else if (e.which == 76) { // L this is for testing only! use to increase score by one, the game knows you're cheating and you don't get a high score
                     var hi = new NPC(gridToScreen(1, 1), new Vector2(1, 1), 5, [that.assetmanager.anims["npcFollowAnim"]]);
                     if (that.player.following.length >= that.player.previousLoc.length - 1)
                         that.player.previousLoc = that.player.previousLoc.concat(new Vector2(1, 1));
@@ -182,15 +182,15 @@ var SneakySnakeGame = (function () {
         for (var y = 0; y < floor.grid.length; y++) {
             for (var x = 0; x < floor.grid[y].length; x++) {
                 var screen_coords = gridToScreen(x, y);
-                if (floor.grid[x][y].type == 0 /* FLOOR */) {
+                if (floor.grid[x][y].type == RTypes.FLOOR) {
                     var tile = new FloorTile(screen_coords.x, screen_coords.y, [this.assetmanager.anims["floor"]]);
                     tile.setZ(-1);
                     this.staticObjs.push(tile);
                 }
-                else if (floor.grid[x][y].type == 1 /* WALL */) {
+                else if (floor.grid[x][y].type == RTypes.WALL) {
                     this.staticObjs.push(new WallTile(screen_coords.x, screen_coords.y, [this.assetmanager.anims["wall"]]));
                 }
-                else if (floor.grid[x][y].type == 2 /* DOOR */) {
+                else if (floor.grid[x][y].type == RTypes.DOOR) {
                     this.staticObjs.push(new FloorTile(screen_coords.x, screen_coords.y, [this.assetmanager.anims["floor"]]));
                 }
             }
@@ -198,7 +198,7 @@ var SneakySnakeGame = (function () {
         // Spawn teleporter to next level
         tempx = Math.floor(Math.random() * this.floorSize);
         tempy = Math.floor(Math.random() * this.floorSize);
-        while (floor.grid[tempx][tempy].type == 1 /* WALL */) {
+        while (floor.grid[tempx][tempy].type == RTypes.WALL) {
             tempx = Math.floor(Math.random() * this.floorSize);
             tempy = Math.floor(Math.random() * this.floorSize);
         }
@@ -215,12 +215,22 @@ var SneakySnakeGame = (function () {
                 tempNPC.push(this.NPCs[i]);
             }
         this.NPCs = tempNPC;
+        // Check if colliding with anything and if not then place
         for (var i = randIntBetween(this.numNPCNextFloor, this.numNPCNextFloor - 3); i > 0; i--) {
             this.tempi = Vector2.randVector2(this.floorSize, this.floorSize);
-            while (this.collisionMap[this.currentFloor][this.tempi.y][this.tempi.x].animMan.anims[this.collisionMap[this.currentFloor][this.tempi.y][this.tempi.x].animMan.currentAnim].name === "filled" || collide(this.tempi, this.NPCs) || gridToScreen(this.tempi).equals(this.currTeleporter.pos) || (this.tempi.x < 6 && this.tempi.y == 1) || (this.tempi.x == 1 && this.tempi.y < 6)) {
+            while (this.collisionMap[this.currentFloor][this.tempi.y][this.tempi.x].animMan.anims[this.collisionMap[this.currentFloor][this.tempi.y][this.tempi.x].animMan.currentAnim].name === "filled"
+                || collide(this.tempi, this.NPCs)
+                || gridToScreen(this.tempi).equals(this.currTeleporter.pos)
+                || (this.tempi.x < 6 && this.tempi.y == 1)
+                || (this.tempi.x == 1 && this.tempi.y < 6)) {
                 this.tempi = Vector2.randVector2(this.floorSize, this.floorSize);
             }
-            this.NPCs.push(new NPC(gridToScreen(this.tempi), this.tempi, 5, [this.assetmanager.anims["npcAll"], this.assetmanager.anims["npcFollowAnim"], this.assetmanager.anims["npcIdleDSeen"], this.assetmanager.anims["npcIdleLSeen"], this.assetmanager.anims["npcIdleUSeen"], this.assetmanager.anims["npcIdleRSeen"]]));
+            this.NPCs.push(new NPC(gridToScreen(this.tempi), this.tempi, 5, [this.assetmanager.anims["npcAll"],
+                this.assetmanager.anims["npcFollowAnim"],
+                this.assetmanager.anims["npcIdleDSeen"],
+                this.assetmanager.anims["npcIdleLSeen"],
+                this.assetmanager.anims["npcIdleUSeen"],
+                this.assetmanager.anims["npcIdleRSeen"]]));
         }
     };
     SneakySnakeGame.prototype.restartGame = function () {
@@ -229,6 +239,7 @@ var SneakySnakeGame = (function () {
         clearInterval(this.fpsID);
         // Make new world
         this.world = this.worldGen();
+        //this.viewWorld(this.world);
         // Reset everything
         this.staticObjs = [];
         this.dynamicObjs = [];
@@ -250,7 +261,8 @@ var SneakySnakeGame = (function () {
     SneakySnakeGame.prototype.viewWorld = function (w) {
         var wall = "id ='wall";
         var door = "id ='door";
-        for (var y = 0; y <= this.floorSize; y++) {
+        $(".output p").remove();
+        for (var y = this.floorSize; y >= 0; y--) {
             var outP = "<p>";
             for (var x = 0; x <= this.floorSize; x++) {
                 outP += "<span class='tileType" + ((w.floors[0].grid[x][y].wall) ? (w.floors[0].grid[x][y].door) ? "02" : "01" : "00") + "'" + " " + ((w.floors[0].grid[x][y].wall) ? (w.floors[0].grid[x][y].door) ? door : wall : "") + "'>";
@@ -261,6 +273,9 @@ var SneakySnakeGame = (function () {
             $(".output").prepend(outP);
             outP = "";
         }
+        $(".output p").css({
+            margin: "0px"
+        });
         $(".tileType00").css({
             color: "black"
         });
@@ -295,6 +310,7 @@ var SneakySnakeGame = (function () {
         // end show collision map
         // Tick player
         this.player.tick(this.input, this.collisionMap);
+        // Tick NPC's, if any can see the player, kill the player
         for (this.tempi = 0; this.tempi < this.NPCs.length; this.tempi++) {
             this.NPCs[this.tempi].tick(this.input, this.player, this.collisionMap[this.currentFloor]);
             if (this.NPCs[this.tempi].seen) {
@@ -339,14 +355,12 @@ var SneakySnakeGame = (function () {
                         highscore = [that.player.following.length];
                     }
                     else {
-                        highscore = JSON.parse(localStorage.getItem("highscore"));
+                        highscore = JSON.parse(localStorage.getItem("highscore") || "0");
                         highscore.push(that.player.following.length);
-                        highscore = highscore.sort(function (a, b) {
-                            return a - b;
-                        }); // The function allows the sort to be on numbers instead of strings... I know it's dumb but that's how it works
+                        highscore = highscore.sort(function (a, b) { return a - b; }); // The function allows the sort to be on numbers instead of strings... I know it's dumb but that's how it works
                     }
                 else {
-                    highscore = JSON.parse(localStorage.getItem("highscore"));
+                    highscore = JSON.parse(localStorage.getItem("highscore") || "0");
                 }
                 // Don't let it get too long, there's only so much space in localstorage
                 if (highscore.length > 5)
@@ -364,7 +378,7 @@ var SneakySnakeGame = (function () {
                     that.renderer.ctx.fillText("Score: " + that.player.following.length, that.renderer.canvas.width / 2.4, that.renderer.canvas.height / 2 + 30);
                 else
                     that.renderer.ctx.fillText("Cheater: " + that.player.following.length, that.renderer.canvas.width / 2.4, that.renderer.canvas.height / 2 + 30);
-                sHighscore = (typeof (localStorage) !== "undefined") ? highscore[highscore.length - 1] : that.player.following.length;
+                sHighscore = (typeof (localStorage) !== "undefined") ? "" + highscore[highscore.length - 1] : "" + that.player.following.length;
                 that.renderer.ctx.fillText("Highscore: " + sHighscore, that.renderer.canvas.width / 2.8, that.renderer.canvas.height / 2 + 100);
                 that.renderer.ctx.drawImage(that.assetmanager.anims["tapToRestart"].image, 386, 220, that.assetmanager.anims["tapToRestart"].frameSize.x / 2, that.assetmanager.anims["tapToRestart"].frameSize.y / 2);
             }, 400);
@@ -379,9 +393,7 @@ var SneakySnakeGame = (function () {
         $("#game").zoomTo({ "scalemode": "both" });
         // Start tick function
         var self = this;
-        this.tickID = setInterval(function () {
-            self.tick();
-        }, this.interval);
+        this.tickID = setInterval(function () { self.tick(); }, this.interval);
         this.fpsID = setInterval(function () {
             self.lastFPS = self.fps;
             self.fps = 0;
@@ -391,7 +403,7 @@ var SneakySnakeGame = (function () {
         $(this.renderer.canvas).unbind("click");
     };
     return SneakySnakeGame;
-})();
+}());
 $(function game() {
     var game = new SneakySnakeGame();
     // Start game when all assets are loaded
@@ -460,4 +472,5 @@ $(function game() {
         $("#menu").zoomTo({ "scalemode": "both" });
     });
 });
+
 //# sourceMappingURL=game.js.map

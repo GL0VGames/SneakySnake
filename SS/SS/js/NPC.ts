@@ -138,7 +138,7 @@ class NPC extends Obj {
         }
     }
 
-    constructor(sVect: Vector2, gVect: Vector2, z: number, anims: Array<Animation>) {
+    constructor(sVect: Vector2, gVect: Vector2, z: number, anims: Array<SSAnimation>) {
         super(sVect.x, sVect.y, anims, z);
         this.gPos = gVect;
         this.pos = sVect;

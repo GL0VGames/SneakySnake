@@ -1,9 +1,18 @@
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var $;
 // Given integers low and high, returns a random integer in the interval [low, high]
 function randIntBetween(low, high) {
@@ -20,7 +29,7 @@ function collide(obj, NPCs) {
     }
     return false;
 }
-var Vector2 = (function () {
+var Vector2 = /** @class */ (function () {
     function Vector2(x, y) {
         this.x = x;
         this.y = y;
@@ -41,8 +50,8 @@ var Vector2 = (function () {
         return (this.x == rhs.x) && (this.y == rhs.y);
     };
     return Vector2;
-})();
-var Input = (function () {
+}());
+var Input = /** @class */ (function () {
     function Input() {
         this.mouseDown = false;
         this.mouseClicked = false;
@@ -70,10 +79,10 @@ var Input = (function () {
         this.mouseClicked = true;
     };
     return Input;
-})();
-var Animation = (function () {
+}());
+var SSAnimation = /** @class */ (function () {
     // Frames must be greater than 0 for animations
-    function Animation(st, width, height, off_x, off_y, frames, name) {
+    function SSAnimation(st, width, height, off_x, off_y, frames, name) {
         // For automatic anims
         this.frameCounter = 0;
         this.static = st;
@@ -82,16 +91,16 @@ var Animation = (function () {
         this.frameCounterMax = frames;
         this.name = name;
     }
-    Animation.prototype.translate = function (ofst) {
+    SSAnimation.prototype.translate = function (ofst) {
         this.offset = ofst;
     };
-    Animation.prototype.setImage = function (img) {
+    SSAnimation.prototype.setImage = function (img) {
         this.image = img;
         this.sheetWidth = Math.floor(img.width / this.frameSize.x);
     };
-    return Animation;
-})();
-var Obj = (function () {
+    return SSAnimation;
+}());
+var Obj = /** @class */ (function () {
     function Obj(x, y, anims, z) {
         this.zIndex = 5;
         this.pos = new Vector2(x, y);
@@ -104,52 +113,56 @@ var Obj = (function () {
         this.zIndex = z;
     };
     return Obj;
-})();
-var CollisionTile = (function (_super) {
+}());
+var CollisionTile = /** @class */ (function (_super) {
     __extends(CollisionTile, _super);
     function CollisionTile(x, y, anims) {
-        _super.call(this, x, y, anims);
-        this.bStatic = true;
-        this.zIndex = 3;
+        var _this = _super.call(this, x, y, anims) || this;
+        _this.bStatic = true;
+        _this.zIndex = 3;
+        return _this;
     }
     return CollisionTile;
-})(Obj);
-var FloorTile = (function (_super) {
+}(Obj));
+var FloorTile = /** @class */ (function (_super) {
     __extends(FloorTile, _super);
     function FloorTile(x, y, anims) {
-        _super.call(this, x, y, anims);
-        this.bStatic = true;
-        this.zIndex = 0;
+        var _this = _super.call(this, x, y, anims) || this;
+        _this.bStatic = true;
+        _this.zIndex = 0;
+        return _this;
     }
     FloorTile.prototype.tick = function () {
         this.pos.x++;
     };
     return FloorTile;
-})(Obj);
-var WallTile = (function (_super) {
+}(Obj));
+var WallTile = /** @class */ (function (_super) {
     __extends(WallTile, _super);
     function WallTile(x, y, anims) {
-        _super.call(this, x, y, anims);
-        this.bStatic = true;
-        this.zIndex = 5;
+        var _this = _super.call(this, x, y, anims) || this;
+        _this.bStatic = true;
+        _this.zIndex = 5;
+        return _this;
     }
     return WallTile;
-})(Obj);
-var DoorTile = (function (_super) {
+}(Obj));
+var DoorTile = /** @class */ (function (_super) {
     __extends(DoorTile, _super);
     function DoorTile(x, y, anims) {
-        _super.call(this, x, y, anims);
-        this.bStatic = true;
-        this.zIndex = 5;
+        var _this = _super.call(this, x, y, anims) || this;
+        _this.bStatic = true;
+        _this.zIndex = 5;
+        return _this;
     }
     return DoorTile;
-})(Obj);
+}(Obj));
 function gridToScreen(xOrVect, y) {
     var out;
     if (typeof xOrVect != "number")
         out = new Vector2((600 + 32 * xOrVect.x - 32 * xOrVect.y) - 87, (16 * xOrVect.x + 16 * xOrVect.y) + 44);
     else
-        out = new Vector2((600 + 32 * xOrVect - 32 * y) - 87, (16 * xOrVect + 16 * y) + 44);
+        out = new Vector2((600 + 32 * xOrVect - 32 * (y || 0)) - 87, (16 * xOrVect + 16 * (y || 0)) + 44);
     return out;
 }
 function div(a, b) {
@@ -190,7 +203,7 @@ var RTypes;
     RTypes[RTypes["DOOR"] = 2] = "DOOR";
 })(RTypes || (RTypes = {}));
 ;
-var AssetManager = (function () {
+var AssetManager = /** @class */ (function () {
     function AssetManager(ctx, canvas) {
         // Loading Bar Vars
         this.barTickSize = 0;
@@ -234,47 +247,47 @@ var AssetManager = (function () {
             arrowUpRightPress: "images/arrows/arrow-upright-press.png",
             arrowUpRightNo: "images/arrows/arrow-upright-press1.png",
             gameOver: "images/gameover.png",
-            tapToRestart: "images/taptorestart.png",
+            tapToRestart: "images/taptorestart.png"
         };
         this.anims = {
-            none: new Animation(true, 64, 32, 32, 16, 0, "none"),
-            floor: new Animation(true, 64, 32, 32, 16, 0, "floor"),
-            wall: new Animation(true, 64, 64, 32, 48, 0, "wall"),
-            teleporter: new Animation(true, 64, 48, 32, 32, 0, "teleporter"),
-            playerIdleR: new Animation(true, 64, 64, 32, 44, 0, "playerIdleR"),
-            playerIdleD: new Animation(true, 64, 64, 32, 44, 0, "playerIdleD"),
-            playerIdleU: new Animation(true, 64, 64, 32, 44, 0, "playerIdleU"),
-            playerWalkR: new Animation(true, 64, 64, 32, 64, 0, "playerWalkR"),
-            playerWalkD: new Animation(true, 64, 64, 32, 64, 0, "playerWalkD"),
-            playerWalkU: new Animation(true, 64, 64, 32, 64, 0, "playerWalkU"),
-            filled: new Animation(true, 64, 32, 32, 16, 0, "filled"),
-            empty: new Animation(true, 64, 32, 32, 16, 0, "empty"),
-            npcFollow: new Animation(true, 64, 64, 32, 40, 0, "npcFollow"),
-            npcFollowAnim: new Animation(false, 64, 64, 32, 40, 0, "npcFollowAnim"),
-            npcAll: new Animation(false, 64, 64, 32, 40, -1, "npcAll"),
-            npcIdleDSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleDSeen"),
-            npcIdleLSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleLSeen"),
-            npcIdleUSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleUSeen"),
-            npcIdleRSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleRSeen"),
-            arrowDownLeft: new Animation(true, 91, 77, 45, 38, 0, "arrowDownLeft"),
-            arrowDownLeftPress: new Animation(true, 91, 77, 45, 38, 0, "arrowDownLeftPress"),
-            arrowDownLeftNo: new Animation(true, 91, 77, 45, 38, 0, "arrowDownLeftNo"),
-            arrowDownRight: new Animation(true, 91, 77, 45, 38, 0, "arrowDownRight"),
-            arrowDownRightPress: new Animation(true, 91, 77, 45, 38, 0, "arrowDownRightPress"),
-            arrowDownRightNo: new Animation(true, 91, 77, 45, 38, 0, "arrowDownRightNo"),
-            arrowUpLeft: new Animation(true, 91, 76, 45, 38, 0, "arrowUpLeft"),
-            arrowUpLeftPress: new Animation(true, 91, 76, 45, 38, 0, "arrowUpLeftPress"),
-            arrowUpLeftNo: new Animation(true, 91, 76, 45, 38, 0, "arrowUpLeftNo"),
-            arrowUpRight: new Animation(true, 91, 76, 45, 38, 0, "arrowUpRight"),
-            arrowUpRightPress: new Animation(true, 91, 76, 45, 38, 0, "arrowUpRightPress"),
-            arrowUpRightNo: new Animation(true, 91, 76, 45, 38, 0, "arrowUpRightNo"),
-            gameOver: new Animation(true, 420, 40, 0, 0, 0, "gameOver"),
-            tapToRestart: new Animation(true, 486, 60, 0, 0, 0, "tapToRestart"),
+            none: new SSAnimation(true, 64, 32, 32, 16, 0, "none"),
+            floor: new SSAnimation(true, 64, 32, 32, 16, 0, "floor"),
+            wall: new SSAnimation(true, 64, 64, 32, 48, 0, "wall"),
+            teleporter: new SSAnimation(true, 64, 48, 32, 32, 0, "teleporter"),
+            playerIdleR: new SSAnimation(true, 64, 64, 32, 44, 0, "playerIdleR"),
+            playerIdleD: new SSAnimation(true, 64, 64, 32, 44, 0, "playerIdleD"),
+            playerIdleU: new SSAnimation(true, 64, 64, 32, 44, 0, "playerIdleU"),
+            playerWalkR: new SSAnimation(true, 64, 64, 32, 64, 0, "playerWalkR"),
+            playerWalkD: new SSAnimation(true, 64, 64, 32, 64, 0, "playerWalkD"),
+            playerWalkU: new SSAnimation(true, 64, 64, 32, 64, 0, "playerWalkU"),
+            filled: new SSAnimation(true, 64, 32, 32, 16, 0, "filled"),
+            empty: new SSAnimation(true, 64, 32, 32, 16, 0, "empty"),
+            npcFollow: new SSAnimation(true, 64, 64, 32, 40, 0, "npcFollow"),
+            npcFollowAnim: new SSAnimation(false, 64, 64, 32, 40, 0, "npcFollowAnim"),
+            npcAll: new SSAnimation(false, 64, 64, 32, 40, -1, "npcAll"),
+            npcIdleDSeen: new SSAnimation(true, 64, 64, 32, 60, 0, "npcIdleDSeen"),
+            npcIdleLSeen: new SSAnimation(true, 64, 64, 32, 60, 0, "npcIdleLSeen"),
+            npcIdleUSeen: new SSAnimation(true, 64, 64, 32, 60, 0, "npcIdleUSeen"),
+            npcIdleRSeen: new SSAnimation(true, 64, 64, 32, 60, 0, "npcIdleRSeen"),
+            arrowDownLeft: new SSAnimation(true, 91, 77, 45, 38, 0, "arrowDownLeft"),
+            arrowDownLeftPress: new SSAnimation(true, 91, 77, 45, 38, 0, "arrowDownLeftPress"),
+            arrowDownLeftNo: new SSAnimation(true, 91, 77, 45, 38, 0, "arrowDownLeftNo"),
+            arrowDownRight: new SSAnimation(true, 91, 77, 45, 38, 0, "arrowDownRight"),
+            arrowDownRightPress: new SSAnimation(true, 91, 77, 45, 38, 0, "arrowDownRightPress"),
+            arrowDownRightNo: new SSAnimation(true, 91, 77, 45, 38, 0, "arrowDownRightNo"),
+            arrowUpLeft: new SSAnimation(true, 91, 76, 45, 38, 0, "arrowUpLeft"),
+            arrowUpLeftPress: new SSAnimation(true, 91, 76, 45, 38, 0, "arrowUpLeftPress"),
+            arrowUpLeftNo: new SSAnimation(true, 91, 76, 45, 38, 0, "arrowUpLeftNo"),
+            arrowUpRight: new SSAnimation(true, 91, 76, 45, 38, 0, "arrowUpRight"),
+            arrowUpRightPress: new SSAnimation(true, 91, 76, 45, 38, 0, "arrowUpRightPress"),
+            arrowUpRightNo: new SSAnimation(true, 91, 76, 45, 38, 0, "arrowUpRightNo"),
+            gameOver: new SSAnimation(true, 420, 40, 0, 0, 0, "gameOver"),
+            tapToRestart: new SSAnimation(true, 486, 60, 0, 0, 0, "tapToRestart")
         };
         this.audio = {}; // Can't do : Array<HTMLAudioElement> because that doesn't support .addEventListenerxr some odd reason
         this.audioURLs = {
             "main": "sounds/theme2.wav",
-            "seen": "sounds/spotted.wav",
+            "seen": "sounds/spotted.wav"
         };
         // Loading bar canvas vars;
         this.x = 0;
@@ -319,6 +332,7 @@ var AssetManager = (function () {
         $("body").on("assetLoaded", function (e, d) {
             if (d.num >= that.total && !that.doneLoading) {
                 that.doneLoading = true;
+                // Assign image to anim
                 for (var j in that.anims)
                     that.anims[j].setImage(that.images[j]);
                 $("body").trigger("assetsFinished");
@@ -327,6 +341,7 @@ var AssetManager = (function () {
     };
     AssetManager.prototype.preloader = function (ctx, canvas) {
         var that = this;
+        // Preload all images and put into anims
         for (var i in this.anims) {
             this.images[i] = new Image();
             this.images[i].onload = function () {
@@ -335,6 +350,7 @@ var AssetManager = (function () {
             this.images[i].src = this.imageURLs[i];
             this.imagesLength++;
         }
+        // Preload all sounds
         for (var i in this.audioURLs) {
             this.audio[i] = new Audio();
             this.audio[i].addEventListener('canplaythrough', that.updateBar(ctx, canvas), false);
@@ -354,8 +370,8 @@ var AssetManager = (function () {
             $(this.images[0]).remove();
     };
     return AssetManager;
-})();
-var Renderer = (function () {
+}());
+var Renderer = /** @class */ (function () {
     function Renderer() {
         this.canvas = document.getElementById("canvas");
         this.canvas.width = 1024;
@@ -410,8 +426,8 @@ var Renderer = (function () {
         }
     };
     return Renderer;
-})();
-var AnimationManager = (function () {
+}());
+var AnimationManager = /** @class */ (function () {
     function AnimationManager(anims, currentAnim) {
         this.frame = 0;
         this.anims = anims;
@@ -463,18 +479,18 @@ var AnimationManager = (function () {
         }
     };
     return AnimationManager;
-})();
+}());
 // Basic tile for each grid point on a floor
-var GridTile = (function () {
+var GridTile = /** @class */ (function () {
     function GridTile() {
         this.wall = false;
         this.door = false;
-        this.type = 0 /* FLOOR */;
+        this.type = RTypes.FLOOR;
     }
     return GridTile;
-})();
+}());
 // Floors in a building, contains a 2d array of GridTiles called grid
-var Floor = (function () {
+var Floor = /** @class */ (function () {
     function Floor(floorSize) {
         this.grid = [];
         for (var j = 0; j <= floorSize; j++) {
@@ -482,7 +498,7 @@ var Floor = (function () {
             for (var k = 0; k <= floorSize; k++) {
                 this.grid[j][k] = new GridTile();
                 this.grid[j][k].wall = (j == 0 || j == floorSize) ? true : (k == 0 || k == floorSize) ? true : false;
-                this.grid[j][k].type = (j == 0 || j == floorSize) ? 1 /* WALL */ : (k == 0 || k == floorSize) ? 1 /* WALL */ : 0 /* FLOOR */;
+                this.grid[j][k].type = (j == 0 || j == floorSize) ? RTypes.WALL : (k == 0 || k == floorSize) ? RTypes.WALL : RTypes.FLOOR;
             }
         }
         var dir = Math.round(Math.random());
@@ -529,9 +545,10 @@ var Floor = (function () {
             if (this.grid[x - 1][y + 1].wall || (this.grid[x - 1][y + 2].wall && (Math.random() * 10) > percent) || this.grid[x - 1][y - 1].wall || (this.grid[x - 1][y - 2].wall && (Math.random() * 10) > percent))
                 return;
         }
+        // Make a wall until you hit another wall in the specified direction 
         while (!this.grid[x][y].wall) {
             this.grid[x][y].wall = !this.grid[x][y].wall;
-            this.grid[x][y].type = 1 /* WALL */;
+            this.grid[x][y].type = RTypes.WALL;
             if (dir == 0)
                 y++;
             else if (dir == 1)
@@ -546,50 +563,50 @@ var Floor = (function () {
         // To move the door if a wall runs into a door (not for spawning from a door)
         if (dir == 0 && (y + 1 < floorSize) && this.grid[x][y].door) {
             this.grid[x][y].door = false;
-            this.grid[x][y].type = 1 /* WALL */;
+            this.grid[x][y].type = RTypes.WALL;
             if (this.grid[x + 1][y + 1].wall) {
                 this.grid[x - 1][y].door = true;
-                this.grid[x - 1][y].type = 2 /* DOOR */;
+                this.grid[x - 1][y].type = RTypes.DOOR;
             }
             else {
                 this.grid[x + 1][y].door = true;
-                this.grid[x + 1][y].type = 2 /* DOOR */;
+                this.grid[x + 1][y].type = RTypes.DOOR;
             }
         }
         else if (dir == 1 && (x + 1 < floorSize) && this.grid[x][y].door) {
             this.grid[x][y].door = false;
-            this.grid[x][y].type = 1 /* WALL */;
+            this.grid[x][y].type = RTypes.WALL;
             if (this.grid[x + 1][y + 1].wall) {
                 this.grid[x][y - 1].door = true;
-                this.grid[x][y - 1].type = 2 /* DOOR */;
+                this.grid[x][y - 1].type = RTypes.DOOR;
             }
             else {
                 this.grid[x][y + 1].door = true;
-                this.grid[x][y + 1].type = 2 /* DOOR */;
+                this.grid[x][y + 1].type = RTypes.DOOR;
             }
         }
         else if (dir == 2 && (y - 1 > 0) && this.grid[x][y].door) {
             this.grid[x][y].door = false;
-            this.grid[x][y].type = 1 /* WALL */;
+            this.grid[x][y].type = RTypes.WALL;
             if (this.grid[x + 1][y - 1].wall) {
                 this.grid[x - 1][y].door = true;
-                this.grid[x - 1][y].type = 2 /* DOOR */;
+                this.grid[x - 1][y].type = RTypes.DOOR;
             }
             else {
                 this.grid[x + 1][y].door = true;
-                this.grid[x + 1][y].type = 2 /* DOOR */;
+                this.grid[x + 1][y].type = RTypes.DOOR;
             }
         }
         else if (dir == 3 && (x - 1 > 0) && this.grid[x][y].door) {
             this.grid[x][y].door = false;
-            this.grid[x][y].type = 1 /* WALL */;
+            this.grid[x][y].type = RTypes.WALL;
             if (this.grid[x - 1][y + 1].wall) {
                 this.grid[x][y - 1].door = true;
-                this.grid[x][y - 1].type = 2 /* DOOR */;
+                this.grid[x][y - 1].type = RTypes.DOOR;
             }
             else {
                 this.grid[x][y + 1].door = true;
-                this.grid[x][y + 1].type = 2 /* DOOR */;
+                this.grid[x][y + 1].type = RTypes.DOOR;
             }
         }
         // Make a door in the middle-ish
@@ -621,26 +638,26 @@ var Floor = (function () {
         // Set door
         if (dir == 0 || dir == 2) {
             this.grid[x][start.y + door1].door = true;
-            this.grid[x][start.y + door1].type = 2 /* DOOR */;
+            this.grid[x][start.y + door1].type = RTypes.DOOR;
             if (length > (floorSize * .75)) {
                 this.grid[x][start.y + door2].door = true;
-                this.grid[x][start.y + door2].type = 2 /* DOOR */;
+                this.grid[x][start.y + door2].type = RTypes.DOOR;
             }
             else if (length > (floorSize / 2) && ((Math.random() * 10) > 2.5)) {
                 this.grid[x][start.y + door2].door = true;
-                this.grid[x][start.y + door2].type = 2 /* DOOR */;
+                this.grid[x][start.y + door2].type = RTypes.DOOR;
             }
         }
         else if (dir == 1 || dir == 3) {
             this.grid[start.x + door1][y].door = true;
-            this.grid[start.x + door1][y].type = 2 /* DOOR */;
+            this.grid[start.x + door1][y].type = RTypes.DOOR;
             if (length > (floorSize * .75)) {
                 this.grid[start.x + door2][y].door = true;
-                this.grid[start.x + door2][y].type = 2 /* DOOR */;
+                this.grid[start.x + door2][y].type = RTypes.DOOR;
             }
             else if (length > (floorSize / 2) && ((Math.random() * 10) > 2.5)) {
                 this.grid[start.x + door2][y].door = true;
-                this.grid[start.x + door2][y].type = 2 /* DOOR */;
+                this.grid[start.x + door2][y].type = RTypes.DOOR;
             }
         }
         // Do the recursion
@@ -651,6 +668,7 @@ var Floor = (function () {
             // Recurse left
             this.partition(x - 1, start.y + newCord2, 3, floorSize);
         }
+        // Recursive y
         else if (dir == 1 || dir == 3) {
             // Recurse up
             this.partition(start.x + newCord1, y + 1, 0, floorSize);
@@ -659,9 +677,9 @@ var Floor = (function () {
         }
     };
     return Floor;
-})();
+}());
 // Top level object, post: building complete with floors and rooms
-var Building = (function () {
+var Building = /** @class */ (function () {
     function Building(floorSize, assets) {
         this.floors = [];
         this.numFloors = (Math.floor(Math.random() * 8)) + 10; // Anywhere from 10-18 floors
@@ -675,7 +693,7 @@ var Building = (function () {
             this.collisionMap[i] = [];
             for (var x = 0; x < this.floors[i].grid.length; x++) {
                 for (var y = 0; y < this.floors[i].grid.length; y++) {
-                    tempCollish.push((this.floors[i].grid[y][x].type == 1 /* WALL */) ? new CollisionTile(gridToScreen(y, x).x, gridToScreen(y, x).y, [assets.anims["filled"]]) : new CollisionTile(gridToScreen(y, x).x, gridToScreen(y, x).y, [assets.anims["empty"]]));
+                    tempCollish.push((this.floors[i].grid[y][x].type == RTypes.WALL) ? new CollisionTile(gridToScreen(y, x).x, gridToScreen(y, x).y, [assets.anims["filled"]]) : new CollisionTile(gridToScreen(y, x).x, gridToScreen(y, x).y, [assets.anims["empty"]]));
                 }
                 this.collisionMap[i].push(tempCollish);
                 tempCollish = [];
@@ -684,5 +702,6 @@ var Building = (function () {
         return this;
     }
     return Building;
-})();
+}());
+
 //# sourceMappingURL=ArgyleEngine.js.map

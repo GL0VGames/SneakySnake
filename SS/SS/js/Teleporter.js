@@ -1,17 +1,28 @@
 /// <reference path="ArgyleEngine.ts"/>
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
-var Teleporter = (function (_super) {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var Teleporter = /** @class */ (function (_super) {
     __extends(Teleporter, _super);
     // Pretty basic, just needs to be here for clarity in the rest of the code, maybe it'll have code of it's own at some point but not for now
     function Teleporter(x, y, anims) {
-        _super.call(this, x, y, anims);
-        this.zIndex = 5;
+        var _this = _super.call(this, x, y, anims) || this;
+        _this.zIndex = 5;
+        return _this;
     }
     return Teleporter;
-})(Obj);
+}(Obj));
+
 //# sourceMappingURL=Teleporter.js.map
