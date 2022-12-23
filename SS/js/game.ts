@@ -109,6 +109,7 @@ class SneakySnakeGame {
 
         // Make new world
         this.world = this.worldGen();
+		// In dev to see a top-down representation of the world, uncomment the following line
 		//this.viewWorld(this.world);
 
         // Reset everything

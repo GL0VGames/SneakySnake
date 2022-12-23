@@ -19,5 +19,5 @@ Clone the repo first.
 **Graham Barber**: Design, Production Workflow, Project Management <br />
 **Ben Arvey**: Programmer <br />
 **Damian Kulp**: Programmer <br />
-**Michelle Moreland**: Art <br />
+**Mikey Moreland**: Art <br />
 **Dylan Shumway**: Design, Sound/Music, Legal Things
