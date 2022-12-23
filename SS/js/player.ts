@@ -10,7 +10,7 @@ class Player extends Obj {
     public speedBoost: number = .1; // Added to player speed whenever they pick up an NPC
     private lastKey: string;
 
-    constructor(x: number, y: number, anims: Array<SSAnimation>) {
+    constructor(x: number, y: number, anims: Array<ArgAnimation>) {
         super(x, y, anims, 5);
         this.bStatic = false;
         this.gDestination = new Vector2(1, 1);
