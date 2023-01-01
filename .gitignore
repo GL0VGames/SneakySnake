@@ -192,3 +192,5 @@ ModelManifest.xml
 
 # Custom ignores
 dist/
+SS/js/*.js
+SS/js/*.js.map

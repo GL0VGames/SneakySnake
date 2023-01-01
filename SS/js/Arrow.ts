@@ -13,7 +13,7 @@ class Arrow extends Obj {
 		this.animMan.gotoAnim(0);
 	}
 
-    constructor(pos: Vector2, anims: Array<Animation>) {
+    constructor(pos: Vector2, anims: Array<ArgAnimation>) {
         super(pos.x, pos.y, anims);
     }
 }

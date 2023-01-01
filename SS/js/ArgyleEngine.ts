@@ -78,7 +78,7 @@ class Input {
     }
 }
 
-class Animation {
+class ArgAnimation {
     public static: boolean;
     public frameSize: Vector2;
     public offset: Vector2;
@@ -117,7 +117,7 @@ class Obj {
     public setZ(z): void {
         this.zIndex = z;
     }
-    constructor(x: number, y: number, anims: Array<Animation>, z?: number) {
+    constructor(x: number, y: number, anims: Array<ArgAnimation>, z?: number) {
         this.pos = new Vector2(x, y);
         this.zIndex = 0;
 		this.animMan = new AnimationManager(anims);
@@ -128,7 +128,7 @@ class Obj {
 
 class CollisionTile extends Obj {
     bStatic = true;
-    constructor(x: number, y: number, anims: Array<Animation>) {
+    constructor(x: number, y: number, anims: Array<ArgAnimation>) {
         super(x, y, anims);
         this.zIndex = 3;
     }
@@ -139,7 +139,7 @@ class FloorTile extends Obj {
     public tick() {
         this.pos.x++;
     }
-    constructor(x: number, y: number, anims: Array<Animation>) {
+    constructor(x: number, y: number, anims: Array<ArgAnimation>) {
         super(x, y, anims);
         this.zIndex = 0;
     }
@@ -147,7 +147,7 @@ class FloorTile extends Obj {
 
 class WallTile extends Obj {
     bStatic = true;
-    constructor(x: number, y: number, anims: Array<Animation>) {
+    constructor(x: number, y: number, anims: Array<ArgAnimation>) {
         super(x, y, anims);
         this.zIndex = 5;
     }
@@ -155,7 +155,7 @@ class WallTile extends Obj {
 
 class DoorTile extends Obj {
     bStatic = true;
-    constructor(x: number, y: number, anims: Array<Animation>) {
+    constructor(x: number, y: number, anims: Array<ArgAnimation>) {
         super(x, y, anims);
         this.zIndex = 5;
     }
@@ -167,7 +167,7 @@ function gridToScreen(xOrVect: any, y?: number): Vector2 {
     if (typeof xOrVect != "number")
         out = new Vector2((600 + 32 * xOrVect.x - 32 * xOrVect.y) - 87, (16 * xOrVect.x + 16 * xOrVect.y) + 44);
     else 
-        out = new Vector2((600 + 32 * xOrVect - 32 * y) - 87, (16 * xOrVect + 16 * y) + 44);
+        out = new Vector2((600 + 32 * xOrVect - 32 * (y || 0)) - 87, (16 * xOrVect + 16 * (y || 0)) + 44);
 
     return out;
 }
@@ -247,40 +247,40 @@ class AssetManager {
         gameOver: "images/gameover.png",
         tapToRestart: "images/taptorestart.png",
     };
-    public anims: { [index: string]: Animation; } = { //index matches imageURL index
-        none: new Animation(true, 64, 32, 32, 16, 0, "none"),
-        floor: new Animation(true, 64, 32, 32, 16, 0, "floor"),
-        wall: new Animation(true, 64, 64, 32, 48, 0, "wall"),
-        teleporter: new Animation(true, 64, 48, 32, 32, 0, "teleporter"),
-        playerIdleR: new Animation(true, 64, 64, 32, 44, 0, "playerIdleR"),
-        playerIdleD: new Animation(true, 64, 64, 32, 44, 0, "playerIdleD"),
-        playerIdleU: new Animation(true, 64, 64, 32, 44, 0, "playerIdleU"),
-        playerWalkR: new Animation(true, 64, 64, 32, 64, 0, "playerWalkR"),
-        playerWalkD: new Animation(true, 64, 64, 32, 64, 0, "playerWalkD"),
-        playerWalkU: new Animation(true, 64, 64, 32, 64, 0, "playerWalkU"),
-        filled: new Animation(true, 64, 32, 32, 16, 0, "filled"),
-        empty: new Animation(true, 64, 32, 32, 16, 0, "empty"),
-        npcFollow: new Animation(true, 64, 64, 32, 40, 0, "npcFollow"),
-		npcFollowAnim: new Animation(false, 64, 64, 32, 40, 0, "npcFollowAnim"),
-		npcAll: new Animation(false, 64, 64, 32, 40, -1, "npcAll"),
-        npcIdleDSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleDSeen"),
-        npcIdleLSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleLSeen"),
-        npcIdleUSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleUSeen"),
-        npcIdleRSeen: new Animation(true, 64, 64, 32, 60, 0, "npcIdleRSeen"),
-		arrowDownLeft: new Animation(true, 91, 77, 45, 38, 0, "arrowDownLeft"),
-        arrowDownLeftPress: new Animation(true, 91, 77, 45, 38, 0, "arrowDownLeftPress"),
-        arrowDownLeftNo: new Animation(true, 91, 77, 45, 38, 0, "arrowDownLeftNo"),
-        arrowDownRight: new Animation(true, 91, 77, 45, 38, 0, "arrowDownRight"),
-        arrowDownRightPress: new Animation(true, 91, 77, 45, 38, 0, "arrowDownRightPress"),
-        arrowDownRightNo: new Animation(true, 91, 77, 45, 38, 0, "arrowDownRightNo"),
-        arrowUpLeft: new Animation(true, 91, 76, 45, 38, 0, "arrowUpLeft"),
-        arrowUpLeftPress: new Animation(true, 91, 76, 45, 38, 0, "arrowUpLeftPress"),
-        arrowUpLeftNo: new Animation(true, 91, 76, 45, 38, 0, "arrowUpLeftNo"),
-        arrowUpRight: new Animation(true, 91, 76, 45, 38, 0, "arrowUpRight"),
-        arrowUpRightPress: new Animation(true, 91, 76, 45, 38, 0, "arrowUpRightPress"),
-        arrowUpRightNo: new Animation(true, 91, 76, 45, 38, 0, "arrowUpRightNo"),
-        gameOver: new Animation(true, 420, 40, 0, 0, 0, "gameOver"),
-        tapToRestart: new Animation(true, 486, 60, 0, 0, 0, "tapToRestart"),
+    public anims: { [index: string]: ArgAnimation; } = { //index matches imageURL index
+        none: new ArgAnimation(true, 64, 32, 32, 16, 0, "none"),
+        floor: new ArgAnimation(true, 64, 32, 32, 16, 0, "floor"),
+        wall: new ArgAnimation(true, 64, 64, 32, 48, 0, "wall"),
+        teleporter: new ArgAnimation(true, 64, 48, 32, 32, 0, "teleporter"),
+        playerIdleR: new ArgAnimation(true, 64, 64, 32, 44, 0, "playerIdleR"),
+        playerIdleD: new ArgAnimation(true, 64, 64, 32, 44, 0, "playerIdleD"),
+        playerIdleU: new ArgAnimation(true, 64, 64, 32, 44, 0, "playerIdleU"),
+        playerWalkR: new ArgAnimation(true, 64, 64, 32, 64, 0, "playerWalkR"),
+        playerWalkD: new ArgAnimation(true, 64, 64, 32, 64, 0, "playerWalkD"),
+        playerWalkU: new ArgAnimation(true, 64, 64, 32, 64, 0, "playerWalkU"),
+        filled: new ArgAnimation(true, 64, 32, 32, 16, 0, "filled"),
+        empty: new ArgAnimation(true, 64, 32, 32, 16, 0, "empty"),
+        npcFollow: new ArgAnimation(true, 64, 64, 32, 40, 0, "npcFollow"),
+		npcFollowAnim: new ArgAnimation(false, 64, 64, 32, 40, 0, "npcFollowAnim"),
+		npcAll: new ArgAnimation(false, 64, 64, 32, 40, -1, "npcAll"),
+        npcIdleDSeen: new ArgAnimation(true, 64, 64, 32, 60, 0, "npcIdleDSeen"),
+        npcIdleLSeen: new ArgAnimation(true, 64, 64, 32, 60, 0, "npcIdleLSeen"),
+        npcIdleUSeen: new ArgAnimation(true, 64, 64, 32, 60, 0, "npcIdleUSeen"),
+        npcIdleRSeen: new ArgAnimation(true, 64, 64, 32, 60, 0, "npcIdleRSeen"),
+		arrowDownLeft: new ArgAnimation(true, 91, 77, 45, 38, 0, "arrowDownLeft"),
+        arrowDownLeftPress: new ArgAnimation(true, 91, 77, 45, 38, 0, "arrowDownLeftPress"),
+        arrowDownLeftNo: new ArgAnimation(true, 91, 77, 45, 38, 0, "arrowDownLeftNo"),
+        arrowDownRight: new ArgAnimation(true, 91, 77, 45, 38, 0, "arrowDownRight"),
+        arrowDownRightPress: new ArgAnimation(true, 91, 77, 45, 38, 0, "arrowDownRightPress"),
+        arrowDownRightNo: new ArgAnimation(true, 91, 77, 45, 38, 0, "arrowDownRightNo"),
+        arrowUpLeft: new ArgAnimation(true, 91, 76, 45, 38, 0, "arrowUpLeft"),
+        arrowUpLeftPress: new ArgAnimation(true, 91, 76, 45, 38, 0, "arrowUpLeftPress"),
+        arrowUpLeftNo: new ArgAnimation(true, 91, 76, 45, 38, 0, "arrowUpLeftNo"),
+        arrowUpRight: new ArgAnimation(true, 91, 76, 45, 38, 0, "arrowUpRight"),
+        arrowUpRightPress: new ArgAnimation(true, 91, 76, 45, 38, 0, "arrowUpRightPress"),
+        arrowUpRightNo: new ArgAnimation(true, 91, 76, 45, 38, 0, "arrowUpRightNo"),
+        gameOver: new ArgAnimation(true, 420, 40, 0, 0, 0, "gameOver"),
+        tapToRestart: new ArgAnimation(true, 486, 60, 0, 0, 0, "tapToRestart"),
     };
     public audio: any = {}; // Can't do : Array<HTMLAudioElement> because that doesn't support .addEventListenerxr some odd reason
     private audioURLs: any = {
@@ -388,7 +388,7 @@ class Renderer {
     public ctx: CanvasRenderingContext2D;
 	private assets: AssetManager;
 
-    public draw(objs: Array<Obj>, anims: { [index: string]: Animation; }, fps?: number) {
+    public draw(objs: Array<Obj>, anims: { [index: string]: ArgAnimation; }, fps?: number) {
         // draw background
         this.ctx.fillStyle = "black";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -416,7 +416,7 @@ class Renderer {
 
         for (var i: number = 0; i < objs.length; i++) {
             var obj: Obj = objs[i];
-            var anim: Animation = obj.animMan.anims[obj.animMan.currentAnim];
+            var anim: ArgAnimation = obj.animMan.anims[obj.animMan.currentAnim];
 
 			// For automatic anims only (so not npc's or the player or anything like that atm)
             if (!anim.static && anim.frameCounterMax > 0 && anim.frameCounter == (anim.frameCounterMax - 1)) {
@@ -448,14 +448,14 @@ class Renderer {
         this.canvas.width = 1024;
         this.canvas.height = 600;
         $(this.canvas).css({"display":"block","width":"1024","height":"600","margin-left":"auto", "margin-right":"auto"});
-        this.ctx = this.canvas.getContext("2d");
+        this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
     }
 }
 
 class AnimationManager {
 	public frame: number = 0;
 	public framePosition: Vector2;
-	public anims: Array<Animation>;
+	public anims: Array<ArgAnimation>;
 	public currentAnim: number;
 
 	public nextAnim() {
@@ -508,7 +508,7 @@ class AnimationManager {
 		}
 	}
 
-	constructor(anims: Array<Animation>, currentAnim?: number) {
+	constructor(anims: Array<ArgAnimation>, currentAnim?: number) {
 		this.anims = anims;
 		this.currentAnim = (typeof (currentAnim) !== "undefined") ? currentAnim : 0;
 		this.framePosition = new Vector2(0, 0);
@@ -723,7 +723,7 @@ class Floor {
 class Building {
     floors: Array<Floor>;
     numFloors: number;
-    collisionMap: Array<Array<Array<string>>>;
+    collisionMap: Array<Array<Array<CollisionTile>>>;
 
     constructor(floorSize: number, assets: AssetManager) {
         this.floors = [];
@@ -734,7 +734,7 @@ class Building {
         }
 
         var tempArr = [];
-        var tempCollish = [];
+        var tempCollish: CollisionTile[] = [];
         this.collisionMap = [];
         for (var i = 0; i < this.numFloors; i++) {
             this.collisionMap[i] = [];

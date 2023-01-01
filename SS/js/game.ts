@@ -23,7 +23,7 @@ class SneakySnakeGame {
     private currTeleporter: Teleporter;
 	public fps: number = 0;
 	public lastFPS: number = 0;
-	public fpsID: number;
+	public fpsID: NodeJS.Timer;
 	private bFPS: boolean = false;
 	public muted: boolean = false;
 	public paused: boolean = true;
@@ -72,7 +72,7 @@ class SneakySnakeGame {
         var tempy = Math.floor(Math.random() * this.floorSize);
 
         // Move followers (if any) to 1,1
-        var tempNPC = [];
+        var tempNPC: NPC[] = [];
         for (var i = 0; i < this.NPCs.length; i++)
             if (this.NPCs[i].bFollowing) {
                 this.NPCs[i].pos = gridToScreen(1, 1);
@@ -109,6 +109,8 @@ class SneakySnakeGame {
 
         // Make new world
         this.world = this.worldGen();
+		// In dev to see a top-down representation of the world, uncomment the following line
+		//this.viewWorld(this.world);
 
         // Reset everything
         this.staticObjs = [];
@@ -134,8 +136,8 @@ class SneakySnakeGame {
     public viewWorld(w: Building): void {
         var wall: string = "id ='wall";
         var door: string = "id ='door"
-        //$("p").remove();
-        for (var y: number = 0; y <= this.floorSize; y++) {
+        $(".output p").remove();
+        for (var y: number = this.floorSize; y >= 0; y--) {
             var outP: string = "<p>";
             for (var x: number = 0; x <= this.floorSize; x++) {
                 outP += "<span class='tileType" + ((w.floors[0].grid[x][y].wall) ? (w.floors[0].grid[x][y].door) ? "02" : "01" : "00") + "'" + " " + ((w.floors[0].grid[x][y].wall) ? (w.floors[0].grid[x][y].door) ? door : wall : "") + "'>";
@@ -146,6 +148,9 @@ class SneakySnakeGame {
             $(".output").prepend(outP);
             outP = "";
         }
+		$(".output p").css({
+			margin: "0px"
+		});
         $(".tileType00").css({
             color: "black"
         });
@@ -230,7 +235,7 @@ class SneakySnakeGame {
             this.assetmanager.audio.seen.play();
 
             var that = this;
-            var highscore = [];
+            var highscore: number[] = [];
             var sHighscore = "[]";
 
             if (typeof (localStorage) !== "undefined") {
@@ -239,12 +244,12 @@ class SneakySnakeGame {
                     if (typeof (localStorage["highscore"]) == "undefined") {
                         highscore = [that.player.following.length];
                     } else {
-                        highscore = JSON.parse(localStorage.getItem("highscore"));
+                        highscore = JSON.parse(localStorage.getItem("highscore") || "0");
                         highscore.push(that.player.following.length);
                         highscore = highscore.sort(function (a, b) { return a - b }); // The function allows the sort to be on numbers instead of strings... I know it's dumb but that's how it works
                     }
                 else {
-                    highscore = JSON.parse(localStorage.getItem("highscore"));
+                    highscore = JSON.parse(localStorage.getItem("highscore") || "0");
                 }
                 // Don't let it get too long, there's only so much space in localstorage
                 if (highscore.length > 5)
@@ -262,7 +267,7 @@ class SneakySnakeGame {
 					that.renderer.ctx.fillText("Score: " + that.player.following.length, that.renderer.canvas.width / 2.4, that.renderer.canvas.height / 2 + 30);
 				else
                     that.renderer.ctx.fillText("Cheater: " + that.player.following.length, that.renderer.canvas.width / 2.4, that.renderer.canvas.height / 2 + 30);
-                sHighscore = (typeof (localStorage) !== "undefined") ? highscore[highscore.length - 1] : that.player.following.length;
+                sHighscore = (typeof (localStorage) !== "undefined") ? ""+highscore[highscore.length - 1] : ""+that.player.following.length;
                 that.renderer.ctx.fillText("Highscore: " + sHighscore, that.renderer.canvas.width / 2.8, that.renderer.canvas.height / 2 + 100);
                 that.renderer.ctx.drawImage(that.assetmanager.anims["tapToRestart"].image, 386, 220, that.assetmanager.anims["tapToRestart"].frameSize.x / 2, that.assetmanager.anims["tapToRestart"].frameSize.y / 2);
             }, 400);
