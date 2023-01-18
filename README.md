@@ -6,6 +6,8 @@ A procedurally generated game first written for the CodeDay: Portland event in F
 
 Sneak around the enemies to make your way to the teleporter, without being seen, to get to the next level. Walking over the enemies increases your score and moving speed, but also makes you longer. The resulting tail can be seen by enemies, so plan carefully, and see how long your tail can get!
 
+Play [here](http://gl0vgames.github.io/SneakySnake/)!
+
 ## Dev
 
 Clone the repo first.
