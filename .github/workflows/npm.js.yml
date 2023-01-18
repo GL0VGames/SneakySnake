@@ -37,7 +37,7 @@ jobs:
       uses: actions/upload-pages-artifact@v1.0.7
       with:
         # Path of the directory containing the static assets.
-        path: ./dist # default is _site/
+        path: ./dist/client # default is _site/
   
   # Deployment job
   deploy:
